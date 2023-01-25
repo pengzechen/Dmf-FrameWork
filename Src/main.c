@@ -10,7 +10,6 @@ void func1(int a, const Request *req) {
 
 
 void mfunction(char *out, char *in) {
-	// 
 	strcpy(out, in);
 }
 
