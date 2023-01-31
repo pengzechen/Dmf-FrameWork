@@ -36,6 +36,7 @@ typedef struct _ModelData {
 	long int  LIdata;
 	double Ddata;
 	long double LDdata;		// type5
+	
 } ModelData;
 
 typedef struct _testModel {
@@ -50,6 +51,16 @@ typedef struct _testModel {
 
 extern void exeSql(char* sql);
 
+void ModelInit(ModelPtr mPtr);
 
+int ModelConnection(ModelPtr mPtr);
+
+int ModelQuery(ModelPtr mPtr, char* sql);
+
+static void GetModelResultInfo(ModelPtr mPtr);
+
+int GetModelResult(ModelPtr mPtr);
+
+void ModelClose(ModelPtr mPtr);
 
 #endif

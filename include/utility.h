@@ -9,8 +9,6 @@
 
 
 
-
-
 extern void serverTime(char* str);
 
 #endif

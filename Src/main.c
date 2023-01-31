@@ -1,5 +1,4 @@
 
-
 #include "server.h"
 
 
@@ -10,6 +9,7 @@ void func1(int a, const Request *req) {
 
 
 void mfunction(char *out, char *in) {
+	
 	strcpy(out, in);
 }
 
@@ -41,25 +41,39 @@ void func2(int a, const Request *req) {
 
 
 void func3(int a, const Request *req) {
+	
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
 	SetType(&res, "text/html;utf-8;");
-	SetCookie(&res, "dmf", "cookie data");
+	SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
+	
 	SetBody(&res, "test");
 	ResParse(&res);
 	
-	exeSql("select * from test;");
+	// exeSql("select * from test;");
 }
 
 
-ContFun cf[] = {&func1, &func2, &func3};
-
-
-char* keys[] = {"/func1", "/func2", "/func3"};
-
-
 int main() {
-	SimpleServerMake(cf, keys);
+	ContFun cf[] = {&func1, &func2, &func3};
+	char* keys[] = {"/func1", "/func2", "/func3"};
+	// SimpleServerMake(cf, keys);
+	
+	
+	ContFunMap cmp;
+	cmp.cf[0] = &func1;
+	cmp.cf[1] = &func2;
+	cmp.cf[2] = &func3;
+	cmp.cf[3] = NULL;
+	
+	cmp.keys[0] = "/func1";
+	cmp.keys[1] = "/func2";
+	cmp.keys[2] = "/func3";
+	cmp.keys[3] = NULL;
+	
+	
+	iocpServerMake(cmp);
+	
 	return 0;
 }

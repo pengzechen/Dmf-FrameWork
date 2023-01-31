@@ -25,7 +25,7 @@ extern void Res_init(int fd, Response* res){
 }
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void ResHandel( int acceptFd, char* res_str ) {
+static void ResHandel( int acceptFd, char* res_str ){
 	send(acceptFd, res_str, strlen(res_str),0);
 	closesocket(acceptFd);
 }
@@ -59,7 +59,7 @@ extern void SetBody(Response* res, char* body){
 	strcat(res->body, body);
 }
 
-//将结构体中的变量组合成字符串 发送
+// 将结构体中的变量组合成字符串 发送
 extern void ResParse(Response* res){
 	char final_str[FINAL_STR_SIZE] = {'\0'};
 	strcat(final_str, res->Head_code);

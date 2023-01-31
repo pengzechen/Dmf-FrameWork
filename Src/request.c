@@ -480,7 +480,7 @@ void ParseHttp(Request *request, char *data) {
 }
 
 
-void freeReq(Request *req){
+void freeReq(Request *req) {
 	
 	free(req->body.body);
 	

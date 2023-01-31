@@ -12,9 +12,20 @@
 #include <string.h>
 #include <dirent.h>
 
+
+
 typedef void (*ContFun)(int acceptFd, const Request *req );
 
+typedef struct _ContFunMap {
+	
+	ContFun cf[20];
+	char* keys[20];
+	
+} ContFunMap;
+
 void Rou_init( ContFun cf[], char* keys[], int num, int acceptFd, Request *req);
+
+void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
 
 static int searchLocalFile(char* local_paths[]);
 

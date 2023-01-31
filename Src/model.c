@@ -7,10 +7,6 @@ void ModelInit(ModelPtr mPtr){
 	mysql_init(mPtr->my_connection);
 }
 
-
-
-
-
 // 返回值非零 连接成功
 int ModelConnection(ModelPtr mPtr){
 	if(mysql_real_connect(mPtr->my_connection, HOST, USERNAME, PASSWORD, DATABASE, 0,NULL, CLIENT_FOUND_ROWS))
@@ -22,17 +18,10 @@ int ModelConnection(ModelPtr mPtr){
 	}
 }
 
-
-
-
-
 // 返回值为0执行成功
 int ModelQuery(ModelPtr mPtr, char* sql){
 	return mysql_query(mPtr->my_connection, sql);
 }
-
-
-
 
 
 static void GetModelResultInfo(ModelPtr mPtr){
@@ -51,16 +40,10 @@ int GetModelResult(ModelPtr mPtr){
 }
 
 
-
-
-
 void ModelClose(ModelPtr mPtr){
 	mysql_close(mPtr->my_connection);
 	free(mPtr->my_connection);
 }
-
-
-
 
 
 void exeSql(char* sql) {

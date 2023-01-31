@@ -37,7 +37,6 @@ void SetBody(Response* res, char* body);
 
 void ResParse(Response* res);
 
-
 void Res_row( int acceptFd, char* res_str);
 
 void Res_NotFound(int acceptFd);

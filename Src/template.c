@@ -168,10 +168,12 @@ char* parseContext(char *context, struct Kvmap *kv, int kv_num) {
 	return result;
 }
 
+
 void function(char *out, char *in) {
 	// 
 	strcpy(out, in);
 }
+
 
 void usage() {
 	

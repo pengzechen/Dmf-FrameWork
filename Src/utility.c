@@ -19,6 +19,7 @@ int file(){
 	fclose(fp);
 }
 
+
 void serverTime(char* str){
 	char *wday[] = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"}; //指针数组-字符串
     time_t timep;
