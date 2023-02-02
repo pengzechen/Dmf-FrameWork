@@ -130,7 +130,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 		
 		ParseHttp(&req1, PerIoData->Buffer);
 		serverTime(time);
-		printf("[%s][Server: Info] %s %d\n",time , req1.path, strlen(PerIoData->Buffer));
+		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentProcessId ());
 		memset(time, 0, 30);
 		
 		Rou_iocp_init(PerIoData->cmp, PerHandleData->Socket, &req1);

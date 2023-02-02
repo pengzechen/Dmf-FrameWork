@@ -28,6 +28,7 @@ static void GetModelResultInfo(ModelPtr mPtr){
 	mPtr->row = mysql_num_rows(mPtr->res_ptr);
 	mPtr->column = mysql_num_fields(mPtr->res_ptr);
 }
+
 // 保存查询到的信息 行数 列数
 int GetModelResult(ModelPtr mPtr){
 	mPtr->res_ptr = mysql_store_result(mPtr->my_connection);
