@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-/*引入连接Mysql的头文件和lib包*/
+/* 引入连接Mysql的头文件和lib包 */
 #include "mysql/mysql.h"
 #pragma comment(lib,"libmysql.lib")
 
@@ -24,27 +24,6 @@ typedef struct _Model {
 } Model;
 
 typedef Model* ModelPtr;
-
-
-typedef struct _ModelData {
-	int column;
-	int type;
-
-	
-	char* Cdata;			// type1
-	int Idate;
-	long int  LIdata;
-	double Ddata;
-	long double LDdata;		// type5
-	
-} ModelData;
-
-typedef struct _testModel {
-	ModelData *md;
-	
-	int id;
-	
-} testModel;
 
 
 //  mysql_affected_rows(&my_connection)  返回int
