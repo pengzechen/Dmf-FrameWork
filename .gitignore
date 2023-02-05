@@ -64,3 +64,4 @@ include/mysql/mysql/plugin_auth.h.pp
 include/mysql/mysql/plugin_ftparser.h.pp
 include/mysql/mysql/plugin_keyring.h.pp
 include/mysql/mysql/services.h.pp
+bin/sessions/*

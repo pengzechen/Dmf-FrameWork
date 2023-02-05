@@ -9,7 +9,7 @@
 
 // the max number of key_values in each session file
 #define SIGNAL_SESSION_MAX_NUM 64
-#define SESSION_DIR "./session"
+#define SESSION_DIR "./sessions/"
 
 #define SESSION_NAME_LEN 64
 
@@ -25,9 +25,9 @@ typedef struct _SessionPart {
 } SessionPart ;
 
 
-extern int get_random_str(char* random_str, const int random_len);
-extern int createSession(char * session_name);
-extern int sessionInit();
+int get_random_str(char* random_str, const int random_len);
+int createSession(char * session_name);
+void sessionInit();
 
 
 #endif /* SESSION */

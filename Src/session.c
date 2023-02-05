@@ -42,19 +42,17 @@ extern int createSession(char * session_name) {
         sp.start = 0;
         sp.len = 0;
         sp.session_type = Sstring; // default c_string
-        fwrite(sp, sizeof(SessionPart), 1, fp);
+        fwrite(&sp, sizeof(SessionPart), 1, fp);
     }
 	fclose(fp);
 
     return 0;
 }
 
-extern int sessionInit(){
+extern void sessionInit(){
     char random_str[11];
     memset(random_str, 0, 11);
     get_random_str(random_str, 10);
 
     createSession(random_str);
-    return 0;
-
 }

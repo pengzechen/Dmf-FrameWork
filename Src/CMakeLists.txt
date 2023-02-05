@@ -7,4 +7,4 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 link_directories("${PROJECT_SOURCE_DIR}/lib")
 
 #指定生成目标
-add_executable(server server.c request.c template.c response.c router.c model.c main.c utility.c)
+add_executable(server server.c request.c template.c response.c router.c model.c main.c utility.c session.c)

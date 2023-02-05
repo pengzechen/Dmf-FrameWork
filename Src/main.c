@@ -4,7 +4,7 @@
 
 void func1(int a, const Request *req) {
 	
-	sessionInit();
+	
 	Res_row(a, "This is a test str");
 }
 
@@ -61,7 +61,7 @@ int main() {
 	char* keys[] = {"/func1", "/func2", "/func3"};
 	// SimpleServerMake(cf, keys);
 	
-	
+	sessionInit();
 	ContFunMap cmp;
 	cmp.cf[0] = &func1;
 	cmp.cf[1] = &func2;
