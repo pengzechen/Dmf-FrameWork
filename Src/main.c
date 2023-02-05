@@ -4,6 +4,7 @@
 
 void func1(int a, const Request *req) {
 	
+	sessionInit();
 	Res_row(a, "This is a test str");
 }
 

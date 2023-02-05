@@ -67,7 +67,7 @@ void exeSql(char* sql) {
 	} 
 	
 
-    MYSQL_ROW result_row;	/*按行返回查询信息*/ 
+    MYSQL_ROW result_row;	/* 按行返回查询信息 */ 
 	// 存在则输出
 	if (GetModelResult(mPtr)) {
 
