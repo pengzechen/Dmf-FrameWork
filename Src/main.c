@@ -58,7 +58,6 @@ void func3(int a, const Request *req) {
 
 	SetBody(&res, "test");
 	ResParse(&res);
-	
 	// exeSql("select * from test;");
 }
 
@@ -66,7 +65,6 @@ void sessiontest(int a, const Request* req){
 	SessionAll();
 	Res_row(a, "This is a test str");
 }
-
 
 int main() {
 	ContFun cf[] = {&func1, &func2, &func3, &sessiontest};
