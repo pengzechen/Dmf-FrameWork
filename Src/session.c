@@ -150,6 +150,11 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
 
     printf("%s, Hash int %d\n", random_str, a % HASH_DEC_LEN);
 
+    time_t session_create_time;
+	session_create_time = time(NULL);
+	int ii = time(&session_create_time);
+    
+
 
     HashNode* new_node = CreateNewHashNode();
     new_node->key = malloc(sizeof(char)*strlen(key));

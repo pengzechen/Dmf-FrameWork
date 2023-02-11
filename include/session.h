@@ -30,4 +30,6 @@ extern void SessionAll();
 
 char* getSession(char*, char*);
 
+
+
 #endif /* SESSION */
