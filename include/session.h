@@ -7,8 +7,7 @@
 #include <sys/time.h>
 
 
-#define HASH_MXA_LEN 19
-
+#define HASH_DEC_LEN 19
 
 
 // Hash Map defination 
@@ -17,13 +16,17 @@ typedef struct HashNode
     char* key;
     char* value;
     struct HashNode* next; // 当key相同时，指向集合中的下一个节点
-}HashNode;
 
+} HashNode ;
 
+// 全局变量
+HashNode session_all_dec[ HASH_DEC_LEN ];
 
+extern void SessionInit(HashNode* session_all_dec);
 
+void SessionCreate(char* ,char*, char*);
 
-void sessionInit(char* );
+extern void SessionAll();
 
 char* getSession(char*, char*);
 

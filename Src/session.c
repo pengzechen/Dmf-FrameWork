@@ -119,17 +119,83 @@ static unsigned int BKDRHash(char *str)
     return (hash & 0x7FFFFFFF);
 }
 
+extern void SessionInit(HashNode* session_all_dec)
+{
+    for(int i=0; i<HASH_DEC_LEN; i++) {
+        session_all_dec[i].key = NULL;
+        session_all_dec[i].value = NULL;
+        session_all_dec[i].next = NULL;
+    }
+    printf("[Server: Info] session init successfully...\n");
+}
 
-extern void sessionInit(char* random_str) {
+static HashNode* CreateNewHashNode()
+{
+    HashNode *p = malloc(sizeof(HashNode)*1);
+    if(p == NULL){
+        return NULL;
+    }else{
+        p->key = NULL;
+        p->next = NULL;
+        p->value = NULL;
+    }
+    return p;
+}
+
+extern void SessionCreate(char* random_str,char* key, char* value) {
     
     get_random_str(random_str, 10);
 
     unsigned int a = BKDRHash(random_str);
 
-    printf("%s, Hash int %d\n", random_str, a % HASH_MXA_LEN);
+    printf("%s, Hash int %d\n", random_str, a % HASH_DEC_LEN);
+
+
+    HashNode* new_node = CreateNewHashNode();
+    new_node->key = malloc(sizeof(char)*strlen(key));
+    new_node->value = malloc(sizeof(char)*strlen(value));
+    strcpy(new_node->key, key);
+    strcpy(new_node->value, value);
+
+    if(session_all_dec[a % HASH_DEC_LEN].next == NULL){
+        // 某个节点第一次添加数据
+        session_all_dec[a % HASH_DEC_LEN].next = new_node;
+    }else{
+        // 从头部插入新节点
+        new_node->next = session_all_dec[a % HASH_DEC_LEN].next;
+        session_all_dec[a % HASH_DEC_LEN].next = new_node;
+    }
+        
+}
+
+// debug 使用
+extern void SessionAll(){
+    HashNode* temp;
+
+    for(int i=0; i< HASH_DEC_LEN; i++){
+        temp = &session_all_dec[i];
+        printf("%d: ", i);
+        while(temp->next != NULL){
+            temp = temp->next; 
+            printf(" [%s: %s]->", temp->key, temp->value);
+        }
+        printf("\n");
+    }
 }
 
 
-char* getSession(char* session_str, char* name){
+char* getSession(char* session_str, char* key) {
+
+    // 计算当前 session 序号是多少
+    unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
+    HashNode* temp;
+    temp = &session_all_dec[index];
+    while(temp->next != NULL){
+        temp = temp->next; 
+        if(strcmp(temp->key, key)==0){
+            return temp->value;
+        }
+    }
     return NULL;
+    
 }

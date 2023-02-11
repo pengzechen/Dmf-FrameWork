@@ -55,7 +55,7 @@ extern void SetCookie(Response* res, char* name, char* value){
 
 void SetSession(Response*res , char* key, char* value){
 	char Session_str[11] = {'\0'};
-	sessionInit(Session_str);
+	SessionCreate(Session_str, key, value);
 	SetCookie(res, "dmfsession", Session_str);
 	
 }

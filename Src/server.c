@@ -3,6 +3,7 @@
 
 clock_t start, stop;
 
+
 void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	start = clock();    /*  开始计时  */
 	
@@ -160,6 +161,9 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 
 
 int iocpServerMake(ContFunMap cmp){
+
+	SessionInit(session_all_dec);
+	
 	
 	WSADATA wsd;
 	if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)

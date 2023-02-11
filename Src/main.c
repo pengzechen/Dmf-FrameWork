@@ -60,22 +60,32 @@ void func3(int a, const Request *req) {
 	// exeSql("select * from test;");
 }
 
+void sessiontest(int a, const Request* req){
+
+	SessionAll();
+	Res_row(a, "This is a test str");
+}
+
 
 int main() {
-	ContFun cf[] = {&func1, &func2, &func3};
-	char* keys[] = {"/func1", "/func2", "/func3"};
+	ContFun cf[] = {&func1, &func2, &func3, &sessiontest};
+	char* keys[] = {"/func1", "/func2", "/func3", "/sessiontest"};
 	// SimpleServerMake(cf, keys);
+
+	
 	
 	ContFunMap cmp;
 	cmp.cf[0] = &func1;
 	cmp.cf[1] = &func2;
 	cmp.cf[2] = &func3;
-	cmp.cf[3] = NULL;
+	cmp.cf[3] = &sessiontest;
+	cmp.cf[4] = NULL;
 	
 	cmp.keys[0] = "/func1";
 	cmp.keys[1] = "/func2";
 	cmp.keys[2] = "/func3";
-	cmp.keys[3] = NULL;
+	cmp.keys[3] = "/sessiontest";
+	cmp.keys[4] = NULL;
 	
 	
 	iocpServerMake(cmp);
