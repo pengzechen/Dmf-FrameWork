@@ -6,6 +6,7 @@
 
 
 #include "template.h"		// 以模板作为响应
+#include "session.h"
 #include "utility.h"      // 引入时间
 #include <string.h>
 #include <stdio.h>
@@ -32,6 +33,8 @@ void SetHead(Response* res, char* code);
 void SetType(Response* res, char* type);
 
 void SetCookie(Response* res, char* name, char* value);
+
+void SetSession(Response*res , char* key, char* value);
 
 void SetBody(Response* res, char* body);
 

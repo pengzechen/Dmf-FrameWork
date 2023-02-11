@@ -1,19 +1,23 @@
 
 #include "server.h"
 
-
 void func1(int a, const Request *req) {
-	
-	
+	for(int i=0; i<=req->p_int; i++){
+		if(strcmp(req->params[i].key, "Cookie")==0){
+			printf("%s\n", req->params[i].data);
+		}
+	}
+
+	// char session_res[100] = {'\0'}; 
+	// strcpy(session_res, getSession(key, "name"));
+	// printf("%s", session_res);
 	Res_row(a, "This is a test str");
 }
-
 
 void mfunction(char *out, char *in) {
 	
 	strcpy(out, in);
 }
-
 
 void func2(int a, const Request *req) {
 	struct Kvmap kv[4];
@@ -40,15 +44,16 @@ void func2(int a, const Request *req) {
 	Res_render(a, NULL, kv, 4);
 }
 
-
 void func3(int a, const Request *req) {
 	
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
 	SetType(&res, "text/html;utf-8;");
-	SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	
+
+	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
+	SetSession(&res, "name", "pengzechen");
+
 	SetBody(&res, "test");
 	ResParse(&res);
 	
@@ -61,7 +66,6 @@ int main() {
 	char* keys[] = {"/func1", "/func2", "/func3"};
 	// SimpleServerMake(cf, keys);
 	
-	sessionInit();
 	ContFunMap cmp;
 	cmp.cf[0] = &func1;
 	cmp.cf[1] = &func2;

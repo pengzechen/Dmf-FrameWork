@@ -1,33 +1,30 @@
 #ifndef SESSION
 #define SESSION
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/time.h>
 
-// the max number of key_values in each session file
-#define SIGNAL_SESSION_MAX_NUM 64
-#define SESSION_DIR "./sessions/"
 
-#define SESSION_NAME_LEN 64
-
-typedef enum _SessionType {
-    Sint = 1, Sstring, Sfloat
-} SessionType;
-
-typedef struct _SessionPart {
-    char name[ SESSION_NAME_LEN ];
-    SessionType session_type;
-    unsigned int start;
-    unsigned int len;
-} SessionPart ;
+#define HASH_MXA_LEN 19
 
 
-int get_random_str(char* random_str, const int random_len);
-int createSession(char * session_name);
-void sessionInit();
 
+// Hash Map defination 
+typedef struct HashNode
+{
+    char* key;
+    char* value;
+    struct HashNode* next; // 当key相同时，指向集合中的下一个节点
+}HashNode;
+
+
+
+
+
+void sessionInit(char* );
+
+char* getSession(char*, char*);
 
 #endif /* SESSION */

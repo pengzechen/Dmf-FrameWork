@@ -53,6 +53,14 @@ extern void SetCookie(Response* res, char* name, char* value){
 	strcat(res->Set_cookie, "\r\n");
 }
 
+void SetSession(Response*res , char* key, char* value){
+	char Session_str[11] = {'\0'};
+	sessionInit(Session_str);
+	SetCookie(res, "dmfsession", Session_str);
+	
+}
+
+
 // 设置 body
 extern void SetBody(Response* res, char* body){
 	strcat(res->body, "\r\n");
