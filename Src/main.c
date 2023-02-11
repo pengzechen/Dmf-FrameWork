@@ -2,15 +2,23 @@
 #include "server.h"
 
 void func1(int a, const Request *req) {
+	char *str1;
 	for(int i=0; i<=req->p_int; i++){
 		if(strcmp(req->params[i].key, "Cookie")==0){
-			printf("%s\n", req->params[i].data);
+			
+			str1=strstr(req->params[i].data, "dmfsession=");
+			printf("%s ", str1+11);
 		}
 	}
 
-	// char session_res[100] = {'\0'}; 
-	// strcpy(session_res, getSession(key, "name"));
-	// printf("%s", session_res);
+	char* session_res = NULL;
+	session_res = getSession(str1+11, "name");
+	if( session_res == NULL){
+		printf("no such key\n");
+	}else{
+		printf("%s \n", session_res);
+	}
+
 	Res_row(a, "This is a test str");
 }
 
@@ -61,7 +69,6 @@ void func3(int a, const Request *req) {
 }
 
 void sessiontest(int a, const Request* req){
-
 	SessionAll();
 	Res_row(a, "This is a test str");
 }

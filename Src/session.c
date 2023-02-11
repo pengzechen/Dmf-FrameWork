@@ -185,7 +185,6 @@ extern void SessionAll(){
 
 
 char* getSession(char* session_str, char* key) {
-
     // 计算当前 session 序号是多少
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
@@ -197,5 +196,4 @@ char* getSession(char* session_str, char* key) {
         }
     }
     return NULL;
-    
 }
