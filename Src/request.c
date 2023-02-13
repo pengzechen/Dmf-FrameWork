@@ -379,13 +379,10 @@ void ParseHttp(Request *request, char *data) {
 				for(int k=p_int;k>=0; k--){
 					if( strcmp(request->params[k].key, "Content-Length") == 0){
 						int len = atoi(request->params[k].data);
-						
 						if( len <= BODY_MAX){
 							request->body.length = len;
 							request->body.body=(char *)malloc(len + 1);
-							
 							memset(request->body.body, 0, len + 1 );
-							
 							memcpy(request->body.body, p, len);
 						}else{
 							printf("too big %d Bytes\n", len);
@@ -395,23 +392,18 @@ void ParseHttp(Request *request, char *data) {
 				for(int k=p_int;k>=0; k--){
 					if( strcmp(request->params[k].key, "Content-Type") == 0) {
 						if(strstr(request->params[k].data, "multipart/form-data") != NULL){
-							
 							char *b;
 							char boundary[64];
 							b = strstr(request->params[k].data, "boundary=");
-							
 							memset(boundary, 0, 64);
 							memcpy(boundary, b+9, strlen(b) - 9);
-							
 							MultiParse(request, boundary);
-
 						}
 					}
 				}
 				state = 1;
 				break;
 		}
-		
 		if(write){
 			temp[i] = *p;
 			i++;
@@ -419,17 +411,15 @@ void ParseHttp(Request *request, char *data) {
 			i=0;
 			memset(temp, 0, 512);
 		}
-
 		p ++;
 		pp = p+1;
-		
 		num++;
-
 		if(state == 1)
 			break;
 	}
 	
-	
+/*
+
 	switch(state){
 		case 1:
 			break;
@@ -449,7 +439,11 @@ void ParseHttp(Request *request, char *data) {
 			printf("unknow error: %d\n", state);
 			break;
 	}
-	
+*/
+	if(state == 10){
+		printf("[Server: Info] connection break \n");
+	}
+
 	
 	request->q_int = q_int;
 	request->p_int = p_int;

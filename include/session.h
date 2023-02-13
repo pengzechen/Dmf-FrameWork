@@ -9,13 +9,18 @@
 
 #define HASH_DEC_LEN 19
 
+typedef struct _SessionData {
+    char* key;
+    char* data;
+    struct _SessionData* next;
+} SessionData;
 
 // Hash Map defination 
-typedef struct HashNode
+typedef struct _HashNode
 {
     char* key;
-    char* value;
-    struct HashNode* next; // 当下标相同时，指向集合中的下一个节点
+    SessionData* value;
+    struct _HashNode* next; // 当下标相同时，指向集合中的下一个节点
 
 } HashNode ;
 

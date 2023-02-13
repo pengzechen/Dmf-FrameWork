@@ -6,17 +6,20 @@ void func1(int a, const Request *req) {
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
 			str1=strstr(req->params[i].data, "dmfsession=");
-			printf("%s ", str1+11);
+			if(str1 != NULL){
+				printf("%s ", str1+11);
+				char* session_res = NULL;
+				session_res = getSession(str1+11, "name");
+				if( session_res == NULL){
+					printf("no such key\n");
+				}else{
+					printf("%s \n", session_res);
+				}
+			}
 		}
 	}
 
-	char* session_res = NULL;
-	session_res = getSession(str1+11, "name");
-	if( session_res == NULL){
-		printf("no such key\n");
-	}else{
-		printf("%s \n", session_res);
-	}
+	
 
 	Res_row(a, "This is a test str");
 }
@@ -54,7 +57,7 @@ void func3(int a, const Request *req) {
 	SetType(&res, "text/html;utf-8;");
 
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, "name", "pengzechen");
+	SetSession(&res, "name", "pengzechenjkhlkjklhjk");
 
 	SetBody(&res, "test");
 	ResParse(&res);
@@ -71,7 +74,13 @@ int main() {
 	char* keys[] = {"/func1", "/func2", "/func3", "/sessiontest"};
 	// SimpleServerMake(cf, keys);
 
-	
+	#ifdef __WIN32__
+    printf( "Windows\n");
+    #elif __linux__
+    printf(  "Linux\n");
+    #elif __APPLE__
+    printf(  "Apple\n");
+    #endif
 	
 	ContFunMap cmp;
 	cmp.cf[0] = &func1;

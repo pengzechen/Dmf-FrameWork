@@ -150,17 +150,21 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
 
     printf("%s, Hash int %d\n", random_str, a % HASH_DEC_LEN);
 
-    time_t session_create_time;
-	session_create_time = time(NULL);
-	int ii = time(&session_create_time);
+    //time_t session_create_time;
+	//session_create_time = time(NULL);
+	//int ii = time(&session_create_time);
     
-
-
     HashNode* new_node = CreateNewHashNode();
-    new_node->key = malloc(sizeof(char)*strlen(key));
-    new_node->value = malloc(sizeof(char)*strlen(value));
-    strcpy(new_node->key, key);
-    strcpy(new_node->value, value);
+    
+    new_node->key = malloc(sizeof(char)*strlen(random_str));
+    strcpy(new_node->key, random_str);
+
+    new_node->value = malloc(sizeof(SessionData));
+    new_node->value->next = NULL;
+    new_node->value->key = malloc(sizeof(char)*strlen(key));
+    new_node->value->data = malloc(sizeof(char)*strlen(value));
+    strcpy(new_node->value->key, key);
+    strcpy(new_node->value->data, value);
 
     if(session_all_dec[a % HASH_DEC_LEN].next == NULL){
         // 某个节点第一次添加数据
@@ -182,7 +186,7 @@ extern void SessionAll(){
         printf("%d: ", i);
         while(temp->next != NULL){
             temp = temp->next; 
-            printf(" [%s: %s]->", temp->key, temp->value);
+            printf("[%s: %d]->", temp->key, &temp->value);
         }
         printf("\n");
     }
@@ -194,10 +198,18 @@ char* getSession(char* session_str, char* key) {
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
     temp = &session_all_dec[index];
+
+    SessionData *session_data_temp;
     while(temp->next != NULL){
         temp = temp->next; 
-        if(strcmp(temp->key, key)==0){
-            return temp->value;
+        if(strcmp(temp->key, session_str)==0){
+            session_data_temp = temp->value;
+            do{
+                if(strcmp(session_data_temp->key, key) == 0){
+                    return session_data_temp->data;
+                }
+                session_data_temp = session_data_temp->next;
+            }while((session_data_temp->next != NULL ));
         }
     }
     return NULL;
