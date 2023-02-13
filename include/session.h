@@ -15,7 +15,7 @@ typedef struct HashNode
 {
     char* key;
     char* value;
-    struct HashNode* next; // 当key相同时，指向集合中的下一个节点
+    struct HashNode* next; // 当下标相同时，指向集合中的下一个节点
 
 } HashNode ;
 
