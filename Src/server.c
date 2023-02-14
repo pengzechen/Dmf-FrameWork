@@ -131,7 +131,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 		
 		ParseHttp(&req1, PerIoData->Buffer);
 		serverTime(time);
-		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentProcessId ());
+		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
 		memset(time, 0, 30);
 		
 		Rou_iocp_init(PerIoData->cmp, PerHandleData->Socket, &req1);
@@ -176,7 +176,8 @@ int iocpServerMake(ContFunMap cmp){
 	SYSTEM_INFO SystemInfo;
 	GetSystemInfo(&SystemInfo);
 
-	for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
+	// for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
+	for(int i = 0; i < 4; i++){
 		
 		   HANDLE hProcessIO = CreateThread(NULL, 0, ProcessIO, CompletionPort, 0, NULL);
 		   if(hProcessIO)
