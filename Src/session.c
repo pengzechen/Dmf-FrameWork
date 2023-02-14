@@ -145,9 +145,7 @@ static HashNode* CreateNewHashNode()
 extern void SessionCreate(char* random_str,char* key, char* value) {
     
     get_random_str(random_str, 10);
-
     unsigned int a = BKDRHash(random_str);
-
     printf("%s, Hash int %d\n", random_str, a % HASH_DEC_LEN);
 
     //time_t session_create_time;
@@ -155,7 +153,7 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
 	//int ii = time(&session_create_time);
     
     HashNode* new_node = CreateNewHashNode();
-    
+
     new_node->key = malloc(sizeof(char)*strlen(random_str));
     strcpy(new_node->key, random_str);
 
@@ -202,7 +200,7 @@ char* getSession(char* session_str, char* key) {
     SessionData *session_data_temp;
     while(temp->next != NULL){
         temp = temp->next; 
-        if(strcmp(temp->key, session_str)==0){
+        if(strcmp(temp->key, session_str) == 0){
             session_data_temp = temp->value;
             do{
                 if(strcmp(session_data_temp->key, key) == 0){

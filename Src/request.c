@@ -388,6 +388,7 @@ void ParseHttp(Request *request, char *data) {
 							printf("too big %d Bytes\n", len);
 						}
 					}
+					break;
 				}
 				for(int k=p_int;k>=0; k--){
 					if( strcmp(request->params[k].key, "Content-Type") == 0) {
@@ -400,6 +401,7 @@ void ParseHttp(Request *request, char *data) {
 							MultiParse(request, boundary);
 						}
 					}
+					break;
 				}
 				state = 1;
 				break;

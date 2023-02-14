@@ -86,7 +86,7 @@ SOCKET BindServerOverlapped(int nPort){
 	return sServer;
 }
 
- 
+
 DWORD WINAPI ProcessIO(LPVOID lpParam){
 	
     HANDLE CompletionPort = (HANDLE)lpParam;
@@ -176,8 +176,8 @@ int iocpServerMake(ContFunMap cmp){
 	SYSTEM_INFO SystemInfo;
 	GetSystemInfo(&SystemInfo);
 
-	// for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
+	// for(int i = 0; i < 4; i++){
 		
 		   HANDLE hProcessIO = CreateThread(NULL, 0, ProcessIO, CompletionPort, 0, NULL);
 		   if(hProcessIO)
