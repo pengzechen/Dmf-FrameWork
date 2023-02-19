@@ -10,6 +10,7 @@
 					[
 						1
 					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10.0"
@@ -19,6 +20,7 @@
 				},
 				{
 					"build" : "Src",
+					"jsonFile" : "directory-Src-Debug-6ac98766994f3396fe25.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.10.0"
@@ -53,7 +55,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "server::@fffd7673bb2fd0d58c2a",
-					"jsonFile" : "target-server-Debug-cfa18edd097a778d4563.json",
+					"jsonFile" : "target-server-Debug-c5fb10b43e4ea246982e.json",
 					"name" : "server",
 					"projectIndex" : 0
 				}
@@ -69,6 +71,6 @@
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 2
+		"minor" : 4
 	}
 }

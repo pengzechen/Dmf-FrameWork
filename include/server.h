@@ -16,7 +16,7 @@
 #include "session.h"
 #include "model.h"
 #include "utility.h"
-
+#include "cpool.h"
 
 #pragma comment(lib, "ws2_32.lib")      //windows下调用动态库
 #include<WinSock2.h>

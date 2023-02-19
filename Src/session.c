@@ -207,8 +207,11 @@ char* getSession(char* session_str, char* key) {
                     return session_data_temp->data;
                 }
                 session_data_temp = session_data_temp->next;
+                
             }while((session_data_temp->next != NULL ));
         }
+        printf("999\n");
     }
+    
     return NULL;
 }

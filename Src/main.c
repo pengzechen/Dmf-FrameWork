@@ -1,6 +1,7 @@
 
 #include "server.h"
 
+
 void func1(int a, const Request *req) {
 	char *str1;
 	for(int i=0; i<=req->p_int; i++) {
@@ -9,7 +10,7 @@ void func1(int a, const Request *req) {
 			if(str1 != NULL){
 				printf("%s ", str1+11);
 				char* session_res = NULL;
-				session_res = getSession(str1+11, "name");
+				session_res = getSession(str1+11, "login");
 				if( session_res == NULL){
 					printf("no such key\n");
 				}else{
@@ -57,7 +58,7 @@ void func3(int a, const Request *req) {
 	SetType(&res, "text/html;utf-8;");
 
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, "name", "pengzechenjkhlkjklhjk");
+	SetSession(&res, "login", "true");
 
 	SetBody(&res, "test");
 	ResParse(&res);
@@ -95,6 +96,8 @@ int main() {
 	cmp.keys[3] = "/sessiontest";
 	cmp.keys[4] = NULL;
 	
+
+	mysql_pool_init();
 	
 	iocpServerMake(cmp);
 	
