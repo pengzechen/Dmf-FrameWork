@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/request/bin/server.exe"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe"
 		},
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/request/bin/server.pdb"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -59,7 +59,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "C:/Users/92706/Desktop/TEMP/C_learn/request/include"
+					"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include"
 				}
 			],
 			"language" : "C",
@@ -92,7 +92,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "-LC:\\Users\\92706\\Desktop\\TEMP\\C_learn\\request\\lib",
+				"fragment" : "-LC:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\lib",
 				"role" : "libraryPath"
 			},
 			{

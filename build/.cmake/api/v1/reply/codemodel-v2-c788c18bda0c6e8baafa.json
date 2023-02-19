@@ -53,7 +53,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "server::@fffd7673bb2fd0d58c2a",
-					"jsonFile" : "target-server-Debug-905d093b613902cc4415.json",
+					"jsonFile" : "target-server-Debug-cfa18edd097a778d4563.json",
 					"name" : "server",
 					"projectIndex" : 0
 				}
@@ -63,8 +63,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/92706/Desktop/TEMP/C_learn/request/build",
-		"source" : "C:/Users/92706/Desktop/TEMP/C_learn/request"
+		"build" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+		"source" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request"
 	},
 	"version" : 
 	{
