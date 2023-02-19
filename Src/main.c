@@ -98,7 +98,13 @@ int main() {
 	
 
 	mysql_pool_init();
-	
+	mysql_conn* conn1 = get_mysql_connection();
+	int a = mysql_query(&conn1->conn, "select * from test;");
+	MYSQL_RES* res_ptr;
+	res_ptr = mysql_store_result(&conn1->conn);
+	printf("%d %d\n", a, mysql_num_rows(res_ptr));
+	release_mysql_connection(conn1);
+
 	iocpServerMake(cmp);
 	
 	return 0;

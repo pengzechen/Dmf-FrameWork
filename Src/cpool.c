@@ -86,8 +86,8 @@ void mysql_pool_init()
 	mysql_conn * conn;    //定义一个conn变量，他是指向mysql_conn变量的指针
 	strncpy(pool_mysql.host,"localhost",sizeof(pool_mysql.host));   //为什么要这么写？而且这是把host写死了吧？
 	strncpy(pool_mysql.username,"root",sizeof(pool_mysql.username));
-	strncpy(pool_mysql.password,"root",sizeof(pool_mysql.password));
-	strncpy(pool_mysql.database,"testdb",sizeof(pool_mysql.database));
+	strncpy(pool_mysql.password,"dmfserver2023",sizeof(pool_mysql.password));
+	strncpy(pool_mysql.database,"test",sizeof(pool_mysql.database));
 
 	pool_mysql.port = 3306;
 	pool_mysql.max_connections = MAX_KEEP_CONNECTIONS;
@@ -98,6 +98,7 @@ void mysql_pool_init()
 	pthread_mutex_init(&pool_mysql.lock,NULL);
 	pthread_cond_init(&pool_mysql.idle_signal,NULL);
 	pthread_mutex_lock(&pool_mysql.lock);
+	pool_mysql.min_connections = 1;
 
 	for (int i = 0; i < pool_mysql.min_connections; ++i)    //初始化时创建几个连接并加入池中
 	{
@@ -105,6 +106,7 @@ void mysql_pool_init()
 		if (conn)
 		{
 			conn_push(conn);
+			printf("ok \n");
 		}
 	}
 
