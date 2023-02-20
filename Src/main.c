@@ -20,8 +20,6 @@ void func1(int a, const Request *req) {
 		}
 	}
 
-	
-
 	Res_row(a, "This is a test str");
 }
 
