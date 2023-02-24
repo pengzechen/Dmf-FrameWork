@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.10.0)
 
 #指定项目名称
-project(CMakeDemo)
+project(DmfServer)
 
 #指定版本信息
 set(CMAKE_SYSTEM_VERSION 1)

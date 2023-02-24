@@ -875,7 +875,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "CMakeDemo"
+			"value" : "DmfServer"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1279,6 +1279,30 @@
 		},
 		{
 			"name" : "CMakeDemo_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request"
+		},
+		{
+			"name" : "DmfServer_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build"
+		},
+		{
+			"name" : "DmfServer_SOURCE_DIR",
 			"properties" : 
 			[
 				{
