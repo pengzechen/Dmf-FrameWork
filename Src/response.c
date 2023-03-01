@@ -81,7 +81,7 @@ extern void ResParse(Response* res){
 	ResHandel(res->fd, final_str);
 }
 
-
+// 以纯的字符串返回
 extern void Res_row(int acceptFd, char* res_str) {
 	char final_str[FINAL_STR_SIZE] = {'\0'};
 	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );

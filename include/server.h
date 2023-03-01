@@ -18,7 +18,7 @@
 #include "utility.h"
 #include "cpool.h"
 
-#pragma comment(lib, "ws2_32.lib")      //windows下调用动态库
+// #pragma comment(lib, "ws2_32.lib")      //windows下调用动态库
 #include<WinSock2.h>
 #include<stdio.h>
 #include<string.h>
