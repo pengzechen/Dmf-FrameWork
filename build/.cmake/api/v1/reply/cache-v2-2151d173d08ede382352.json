@@ -415,7 +415,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -lws2_32 -llibmysql -lpthreadVC2 -llibssl -llibcrypto"
+			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
 		},
 		{
 			"name" : "CMAKE_DLLTOOL",
@@ -655,7 +655,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/CMakeDemo"
+			"value" : "C:/Program Files (x86)/DmfServer"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1123,7 +1123,7 @@
 				}
 			],
 			"type" : "BOOL",
-			"value" : "OFF"
+			"value" : "NO"
 		},
 		{
 			"name" : "CMAKE_SKIP_RPATH",
@@ -1139,7 +1139,7 @@
 				}
 			],
 			"type" : "BOOL",
-			"value" : "OFF"
+			"value" : "NO"
 		},
 		{
 			"name" : "CMAKE_STATIC_LINKER_FLAGS",
@@ -1251,43 +1251,7 @@
 				}
 			],
 			"type" : "BOOL",
-			"value" : "OFF"
-		},
-		{
-			"name" : "CMakeDemo_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build"
-		},
-		{
-			"name" : "CMakeDemo_IS_TOP_LEVEL",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "ON"
-		},
-		{
-			"name" : "CMakeDemo_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request"
+			"value" : "FALSE"
 		},
 		{
 			"name" : "DmfServer_BINARY_DIR",

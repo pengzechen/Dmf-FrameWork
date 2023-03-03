@@ -1,6 +1,21 @@
 
 #include "server.h"
 
+void setsession(int a, const Request *req) {
+	
+	Response res;
+	Res_init(a, &res);
+	SetHead(&res, "200");
+	SetType(&res, "text/html;utf-8;");
+
+	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
+	SetSession(&res, "login", "true");
+
+	SetBody(&res, "test");
+	ResParse(&res);
+	// exeSql("select * from test;");
+}
+
 void getsession(int a, const Request *req) {
 	char *str1;
 	for(int i=0; i<=req->p_int; i++) {
@@ -21,6 +36,13 @@ void getsession(int a, const Request *req) {
 
 	Res_row(a, "This is a test str");
 }
+
+void sessiondebug(int a, const Request* req){
+	SessionAll();
+	Res_row(a, "This is a test str");
+}
+
+
 
 void mfunction(char *out, char *in) {
 	
@@ -47,25 +69,7 @@ void template(int a, const Request *req) {
 	Res_render(a, NULL, kv, 4);
 }
 
-void setsession(int a, const Request *req) {
-	
-	Response res;
-	Res_init(a, &res);
-	SetHead(&res, "200");
-	SetType(&res, "text/html;utf-8;");
 
-	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, "login", "true");
-
-	SetBody(&res, "test");
-	ResParse(&res);
-	// exeSql("select * from test;");
-}
-
-void sessiondebug(int a, const Request* req){
-	SessionAll();
-	Res_row(a, "This is a test str");
-}
 
 void datamodeltest(int a, const Request* req){
 	ObjectNode* root = CreateRootNode("root", D_NODE, NULL);
@@ -102,6 +106,8 @@ void mysqltest(int a, const Request* req) {
 }
 
 
+
+
 int main() {
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
@@ -123,6 +129,7 @@ int main() {
 	cmp.keys[4] = "/mysqltest";
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = NULL;
+
 	iocpServerMake(cmp);
 	
 	return 0;
