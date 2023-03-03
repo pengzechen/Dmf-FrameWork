@@ -415,7 +415,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -lws2_32 -llibmysql -lpthreadVC2"
+			"value" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -lws2_32 -llibmysql -lpthreadVC2 -llibssl -llibcrypto"
 		},
 		{
 			"name" : "CMAKE_DLLTOOL",

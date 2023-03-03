@@ -1,8 +1,7 @@
 
 #include "server.h"
 
-
-void func1(int a, const Request *req) {
+void getsession(int a, const Request *req) {
 	char *str1;
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
@@ -28,7 +27,7 @@ void mfunction(char *out, char *in) {
 	strcpy(out, in);
 }
 
-void func2(int a, const Request *req) {
+void template(int a, const Request *req) {
 	struct Kvmap kv[4];
 	kv[0].key = "name";
 	kv[0].value = "pzcbnvvhjv";
@@ -48,7 +47,7 @@ void func2(int a, const Request *req) {
 	Res_render(a, NULL, kv, 4);
 }
 
-void func3(int a, const Request *req) {
+void setsession(int a, const Request *req) {
 	
 	Response res;
 	Res_init(a, &res);
@@ -63,46 +62,67 @@ void func3(int a, const Request *req) {
 	// exeSql("select * from test;");
 }
 
-void sessiontest(int a, const Request* req){
+void sessiondebug(int a, const Request* req){
 	SessionAll();
 	Res_row(a, "This is a test str");
 }
 
-int main() {
-	ContFun cf[] = {&func1, &func2, &func3, &sessiontest};
-	char* keys[] = {"/func1", "/func2", "/func3", "/sessiontest"};
-	// SimpleServerMake(cf, keys);
+void datamodeltest(int a, const Request* req){
+	ObjectNode* root = CreateRootNode("root", D_NODE, NULL);
+	ObjectNode* mn2 = CreateObjectNode("Child", D_NODE, NULL);
+	ObjectNode* mn3 = CreateObjectNode("Bro1", D_INT, (void*)(int*)14);
+	ObjectNode* mn4 = CreateObjectNode("Bro2", D_INT, (void*)(int*)146);
+	ObjectNode* mn5 = CreateObjectNode("Bro3", D_INT, (void*)(int*)1464);
 
-	#ifdef __WIN32__
-    printf( "Windows\n");
-    #elif __linux__
-    printf(  "Linux\n");
-    #elif __APPLE__
-    printf(  "Apple\n");
-    #endif
-	
-	ContFunMap cmp;
-	cmp.cf[0] = &func1;
-	cmp.cf[1] = &func2;
-	cmp.cf[2] = &func3;
-	cmp.cf[3] = &sessiontest;
-	cmp.cf[4] = NULL;
-	
-	cmp.keys[0] = "/func1";
-	cmp.keys[1] = "/func2";
-	cmp.keys[2] = "/func3";
-	cmp.keys[3] = "/sessiontest";
-	cmp.keys[4] = NULL;
-	
+	AppendChild(root, mn2);
+	AppendBro(mn2, mn3);
+	AppendBro(mn2, mn4);
+	AppendBro(mn2, mn5);
 
+
+	ShowNodeData(root);
+	ShowNodeData(root->mnChild);
+	ShowNodeData(root->mnChild->mnBro);
+	ShowNodeData(root->mnChild->mnBro->mnBro);
+	ShowNodeData(root->mnChild->mnBro->mnBro->mnBro);
+
+	Res_row(a, "This is a test str");
+}
+
+void mysqltest(int a, const Request* req) {
 	mysql_pool_init();
 	mysql_conn* conn1 = get_mysql_connection();
-	int a = mysql_query(&conn1->conn, "select * from test;");
+	int aa = mysql_query(&conn1->conn, "select * from test;");
 	MYSQL_RES* res_ptr;
 	res_ptr = mysql_store_result(&conn1->conn);
-	printf("%d %d\n", a, mysql_num_rows(res_ptr));
-	release_mysql_connection(conn1);
+	printf("%d %d\n", aa, mysql_num_rows(res_ptr));
 
+	Res_row(a, "ok");
+	release_mysql_connection(conn1);
+}
+
+
+int main() {
+	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest};
+	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
+	// SimpleServerMake(cf, keys);
+	// SSLservermake(cf, keys);
+	
+	ContFunMap cmp;
+	cmp.cf[0] = &getsession;
+	cmp.cf[1] = &template;
+	cmp.cf[2] = &setsession;
+	cmp.cf[3] = &sessiondebug;
+	cmp.cf[4] = &mysqltest;
+	cmp.cf[5] = &datamodeltest;
+	cmp.cf[6] = NULL;
+	cmp.keys[0] = "/getsession";
+	cmp.keys[1] = "/template";
+	cmp.keys[2] = "/setsession";
+	cmp.keys[3] = "/sessiondebug";
+	cmp.keys[4] = "/mysqltest";
+	cmp.keys[5] = "/datamodeltest";
+	cmp.keys[6] = NULL;
 	iocpServerMake(cmp);
 	
 	return 0;

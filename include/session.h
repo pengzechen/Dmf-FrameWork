@@ -7,7 +7,7 @@
 #include <sys/time.h>
 
 
-#define HASH_DEC_LEN 19
+#define HASH_DEC_LEN 199
 
 typedef struct _SessionData {
     char* key;

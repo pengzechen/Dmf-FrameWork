@@ -3,6 +3,95 @@
 
 clock_t start, stop;
 
+void SSLservermake(ContFun cf[], char* keys[]){
+	unsigned int myport, lisnum;
+
+	SSL_CTX *ctx;
+
+    /* SSL 库初始化 */
+    SSL_library_init();
+    /* 载入所有 SSL 算法 */
+    OpenSSL_add_all_algorithms();
+    /* 载入所有 SSL 错误消息 */
+    SSL_load_error_strings();
+    /* 以 SSL V2 和 V3 标准兼容方式产生一个 SSL_CTX ，即 SSL Content Text */
+    ctx = SSL_CTX_new(SSLv23_server_method());
+    /* 也可以用 SSLv2_server_method() 或 SSLv3_server_method() 单独表示 V2 或 V3标准 */
+    if (ctx == NULL) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+
+	
+	
+    /* 载入用户的数字证书， 此证书用来发送给客户端。 证书里包含有公钥 */
+    if (SSL_CTX_use_certificate_file(ctx, "localhost.pem", SSL_FILETYPE_PEM) <= 0) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+    /* 载入用户私钥 */
+    if (SSL_CTX_use_PrivateKey_file(ctx, "localhost-key.pem", SSL_FILETYPE_PEM) <= 0) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+    /* 检查用户私钥是否正确 */
+    if (!SSL_CTX_check_private_key(ctx)) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+
+	SOCKET sListen, sAccept;
+    struct sockaddr_in ser, cli;
+	WSADATA wsaData;
+	WSAStartup(MAKEWORD(2, 2), &wsaData);
+    char buf[MAXBUF + 1]; 
+
+    /* 开启一个 socket 监听 */
+	sListen = socket(AF_INET, SOCK_STREAM, 0);
+
+    ser.sin_family = AF_INET; 
+    ser.sin_port = htons(443); 
+    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
+
+    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
+    listen(sListen,5);
+	
+	int iLen = sizeof(cli);
+    while (1) {
+        SSL *ssl;
+
+        sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
+
+        ssl = SSL_new(ctx);
+        SSL_set_fd(ssl, sAccept);
+        
+        int ret = SSL_accept(ssl);
+       
+        printf("error code: %d %d\n", SSL_get_error(ssl, ret), ret);
+
+        memset(buf, 0, MAXBUF + 1);
+        int len = SSL_read(ssl, buf, MAXBUF);
+        // printf("%s\n", buf);
+        
+
+        char res[128] = "HTTP/1.1 200 OK\r\n"
+                        "Content-Type:text/html\r\n"
+                        "Server:Dmfserver\r\n"
+                        "\r\n OK OK";
+        len = SSL_write(ssl, res, strlen(res));
+        
+
+        SSL_shutdown(ssl);
+        SSL_free(ssl);
+        close(sAccept);
+    }
+
+
+    close(sListen);
+
+    SSL_CTX_free(ctx);
+}
+
 
 void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	start = clock();    /*  开始计时  */
