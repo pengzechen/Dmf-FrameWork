@@ -13,7 +13,7 @@ elr_counter_t elr_atomic_dec(elr_atomic_t* v)
 }
 
 /*
-** ��ʼ�������壬����0��ʾ��ʼ��ʧ��
+** 初始化互斥体，返回0表示初始化失败
 */
 int  elr_mtx_init(elr_mtx *mtx)
 {

@@ -9,10 +9,10 @@
 #include "elr_mpl/elr_mtx.h"
 #endif // ELR_USE_THREAD
 
-/*����ڴ���Ƭ�ĳߴ�*/
+/*最大内存切片的尺寸*/
 /** max memory node size. it can be changed to fit the memory consume more.  */
 #define ELR_MAX_SLICE_SIZE       32768  /*32KB*/
-/*����ڴ���Ƭ����Ŀ*/
+/*最大内存切片的数目*/
 /** max memory slice size. it can be changed to fit the memory consume more. */
 #define ELR_MAX_SLICE_COUNT      64  /*64*/
 
@@ -26,13 +26,13 @@ typedef struct __elr_mem_node
     struct __elr_mem_pool       *owner;
     struct __elr_mem_node       *prev;
     struct __elr_mem_node       *next;
-	/*���е��ڴ���Ƭ����ͷ*/
+	/*空闲的内存切片链表头*/
     struct __elr_mem_slice      *free_slice_head;
-	/*���е��ڴ���Ƭ����β*/
+	/*空闲的内存切片链表尾*/
     struct __elr_mem_slice      *free_slice_tail;
-	/*����ʹ�õ�slice������*/
+	/*正在使用的slice的数量*/
     size_t                       using_slice_count;
-	/*ʹ�ù���slice������*/
+	/*使用过的slice的数量*/
     size_t                       used_slice_count;
     char                        *first_avail;
 }
@@ -42,9 +42,9 @@ typedef struct __elr_mem_slice
 {
     struct __elr_mem_slice      *prev;
     struct __elr_mem_slice      *next;
-	/*�ڴ���Ƭ�������ڴ�ڵ�*/
+	/*内存切片所属的内存节点*/
     elr_mem_node                *node;
-	/*����Ƭ�ı�ǩ����ʼֵΪ0��ÿһ�δ��ڴ����ȡ���͹黹�����1*/
+	/*内切片的标签，初始值为0，每一次从内存池中取出和归还都会加1*/
 	int                          tag;
 }
 elr_mem_slice;
@@ -59,13 +59,13 @@ typedef struct __elr_mem_pool
     size_t                       slice_size;
 	size_t                       object_size;
     size_t                       node_size;
-	/*����elr_mem_node��ɵ�����*/
+	/*所有elr_mem_node组成的链表*/
     elr_mem_node                *first_node;
-	/*�ոմ�����elr_mem_node*/
+	/*刚刚创建的elr_mem_node*/
     elr_mem_node                *newly_alloc_node;
-	/*���е��ڴ���Ƭ����*/
+	/*空闲的内存切片链表*/
     elr_mem_slice               *first_free_slice;
-	/*���ɱ��ڴ�ض�����ڴ���Ƭ�ı�ǩ*/
+	/*容纳本内存池对象的内存切片的标签*/
 	int                          slice_tag;
 #ifdef ELR_USE_THREAD
     elr_mtx                                pool_mutex;
@@ -74,10 +74,10 @@ typedef struct __elr_mem_pool
 elr_mem_pool;
 
 
-/*ȫ���ڴ��*/
+/*全局内存池*/
 static elr_mem_pool   g_mem_pool;
 
-/*ȫ���ڴ�����ü���*/
+/*全局内存池引用计数*/
 #ifdef ELR_USE_THREAD
 static elr_atomic_t     g_mpl_refs = ELR_ATOMIC_ZERO;
 #else
@@ -85,21 +85,21 @@ static long           g_mpl_refs = 0;
 #endif // ELR_USE_THREAD
 
 
-/*Ϊ�ڴ������һ���ڴ�ڵ�*/
+/*为内存池申请一个内存节点*/
 void                      _elr_alloc_mem_node(elr_mem_pool *pool);
-/*�Ƴ�һ��δʹ�õ�NODE������0��ʾû���Ƴ�*/
+/*移除一个未使用的NODE，返回0表示没有移除*/
 int                       _elr_remove_unused_node(elr_mem_node* node);
-/*���ڴ�صĸոմ������ڴ�ڵ��з���һ���ڴ���Ƭ*/
+/*在内存池的刚刚创建的内存节点中分配一个内存切片*/
 elr_mem_slice*            _elr_slice_from_node(elr_mem_pool *pool);
-/*���ڴ���з���һ���ڴ���Ƭ���÷��������������������*/
+/*在内存池中分配一个内存切片，该方法将会调用上述两方法*/
 elr_mem_slice*            _elr_slice_from_pool(elr_mem_pool *pool);
-/*�����ڴ�أ�inter��ʾ�Ƿ����ڲ�����*/
+/*销毁内存池，inter表示是否是内部调用*/
 void                      _elr_inter_mpl_destory(elr_mem_pool *pool, int inter);
 
 /*
-** ��ʼ���ڴ�أ��ڲ�����һ��ȫ���ڴ�ء�
-** �÷������Ա��ظ����á�
-** ����ڴ��ģ���Ѿ���ʼ���������������ü���Ȼ�󷵻ء�
+** 初始化内存池，内部创建一个全局内存池。
+** 该方法可以被重复调用。
+** 如果内存池模块已经初始化，仅仅增加引用计数然后返回。
 */
 ELR_MPL_API int elr_mpl_init()
 {
@@ -140,8 +140,8 @@ ELR_MPL_API int elr_mpl_init()
 }
 
 /*
-** ����һ���ڴ�أ���ָ�������䵥Ԫ��С��
-** ��һ��������ʾ���ڴ�أ������ΪNULL����ʾ�������ڴ�صĸ��ڴ����ȫ���ڴ�ء�
+** 创建一个内存池，并指定最大分配单元大小。
+** 第一个参数表示父内存池，如果其为NULL，表示创建的内存池的父内存池是全局内存池。
 */
 ELR_MPL_API elr_mpl_t elr_mpl_create(elr_mpl_ht fpool,size_t obj_size)
 {
@@ -208,9 +208,9 @@ ELR_MPL_API elr_mpl_t elr_mpl_create(elr_mpl_ht fpool,size_t obj_size)
 }
 
 /*
-** �ж��ڴ���Ƿ�����Ч�ģ�һ���ڴ�����ɺ��������á�
-** ����0��ʾ��Ч
-** pool����ΪNULL
+** 判断内存池是否是有效的，一般在创建完成后立即调用。
+** 返回0表示无效
+** pool不可为NULL
 */
 ELR_MPL_API int  elr_mpl_avail(elr_mpl_ht hpool)
 {
@@ -233,7 +233,7 @@ ELR_MPL_API int  elr_mpl_avail(elr_mpl_ht hpool)
 }
 
 /*
-** ���ڴ���������ڴ档
+** 从内存池中申请内存。
 */
 ELR_MPL_API void*  elr_mpl_alloc(elr_mpl_ht hpool)
 {
@@ -250,7 +250,7 @@ ELR_MPL_API void*  elr_mpl_alloc(elr_mpl_ht hpool)
 
 
 /*
-** ��ȡ���ڴ����������ڴ��ĳߴ硣
+** 获取从内存池中申请的内存块的尺寸。
 */
 ELR_MPL_API size_t elr_mpl_size(void* mem)
 {
@@ -260,7 +260,7 @@ ELR_MPL_API size_t elr_mpl_size(void* mem)
 }
 
 /*
-** ���ڴ��˻ظ��ڴ�ء�ִ�и÷���Ҳ���ܽ��ڴ��˻ظ�ϵͳ��
+** 将内存退回给内存池。执行该方法也可能将内存退回给系统。
 */
 ELR_MPL_API void  elr_mpl_free(void* mem)
 {
@@ -302,7 +302,7 @@ ELR_MPL_API void  elr_mpl_free(void* mem)
 }
 
 /*
-** �����ڴ�غ������ڴ�ء�
+** 销毁内存池和其子内存池。
 */
 ELR_MPL_API void elr_mpl_destroy(elr_mpl_ht hpool)
 {
@@ -351,8 +351,8 @@ ELR_MPL_API void elr_mpl_destroy(elr_mpl_ht hpool)
 }
 
 /*
-** ��ֹ�ڴ��ģ�飬������ȫ���ڴ�ؼ������ڴ�ء�
-** �����д����������ڴ�����û����ʾ���ͷţ�ִ�д˲�����Ҳ�ᱻ�ͷš�
+** 终止内存池模块，会销毁全局内存池及其子内存池。
+** 程序中创建的其它内存池如果没有显示的释放，执行此操作后也会被释放。
 */
 ELR_MPL_API void elr_mpl_finalize()
 {
@@ -405,7 +405,7 @@ void _elr_alloc_mem_node(elr_mem_pool *pool)
     }
 }
 
-/*�Ƴ�һ��δʹ�õ�NODE������0��ʾû���Ƴ�*/
+/*移除一个未使用的NODE，返回0表示没有移除*/
 int _elr_remove_unused_node(elr_mem_node* pnode)
 {
 	int  free_node_flag = 0;
@@ -471,7 +471,7 @@ elr_mem_slice* _elr_slice_from_node(elr_mem_pool *pool)
 }
 
 /*
-** ���ڴ���������ڴ档
+** 从内存池中申请内存。
 */
 elr_mem_slice* _elr_slice_from_pool(elr_mem_pool* pool)
 
@@ -559,7 +559,7 @@ void _elr_inter_mpl_destory(elr_mem_pool *pool,int inter)
 		temp_node = pool->first_node ;
 	}
 
-	/*������Ǹ��ڵ�*/
+	/*如果不是根节点*/
 	if(pool != &g_mem_pool)
 		elr_mpl_free(pool);
 

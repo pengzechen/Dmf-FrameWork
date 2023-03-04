@@ -31,7 +31,7 @@ typedef LONG                  elr_counter_t;
 #endif
 
 /*
-** ԭ����������
+** 原子自增操作
 */
 /*! \brief atomic increment operation.
  *  \param v pointer to a atomic counter type variable.
@@ -42,7 +42,7 @@ typedef LONG                  elr_counter_t;
 elr_counter_t elr_atomic_inc(elr_atomic_t* v);
 
 /*
-** ԭ���Լ�����
+** 原子自减操作
 */
 /*! \brief atomic decrement operation.
  *  \param v pointer to a atomic counter type variable.
@@ -53,8 +53,8 @@ elr_counter_t elr_atomic_inc(elr_atomic_t* v);
 elr_counter_t elr_atomic_dec(elr_atomic_t* v);
 
 /*
-** ��ʼ�������壬����0��ʾ��ʼ��ʧ��
-** �����ʼ��ʧ�ܾͲ���Ҫ�ٵ���elr_mtx_finalize
+** 初始化互斥体，返回0表示初始化失败
+** 如果初始化失败就不需要再调用elr_mtx_finalize
 */
 /*! \brief initialize a mutex.
  *  \param mtx pointer to a mutex.

@@ -1,6 +1,6 @@
 /*! \file elr_mpl.h.
  *  \brief the interface define header file of the memory pool.
- *  \author ÌÆÈñ
+ *  \author å”é”
  *  \date   2013-06-14
  *
  *  memory of the memory pool is managed with node and slice. node is big 
@@ -110,10 +110,10 @@ elr_mpl_t,*elr_mpl_ht;
 #define ELR_MPL_INITIALIZER   {NULL,0}
 
 /*
-** ³õÊ¼»¯ÄÚ´æ³Ø£¬ÄÚ²¿´´½¨Ò»¸öÈ«¾ÖÄÚ´æ³Ø¡£
-** ¸Ã·½·¨¿ÉÒÔ±»ÖØ¸´µ÷ÓÃ£¬Èç¹ûÄÚ´æ³ØÄ£¿éÒÑ¾­³õÊ¼»¯£¬¸Ã·½·¨Ö±½Ó·µ»Ø¡£
-** È«¾ÖÄÚ´æ³ØÖĞ²»ÈİÄÉÄÚ´æ¿é£¬ÓÃÓÚÈİÄÉËùÓĞ´´½¨µÄÄÚ´æ³Ø¡£
-** ·µ»Ø0±íÊ¾³õÊ¼»¯Ê§°Ü
+** åˆå§‹åŒ–å†…å­˜æ± ï¼Œå†…éƒ¨åˆ›å»ºä¸€ä¸ªå…¨å±€å†…å­˜æ± ã€‚
+** è¯¥æ–¹æ³•å¯ä»¥è¢«é‡å¤è°ƒç”¨ï¼Œå¦‚æœå†…å­˜æ± æ¨¡å—å·²ç»åˆå§‹åŒ–ï¼Œè¯¥æ–¹æ³•ç›´æ¥è¿”å›ã€‚
+** å…¨å±€å†…å­˜æ± ä¸­ä¸å®¹çº³å†…å­˜å—ï¼Œç”¨äºå®¹çº³æ‰€æœ‰åˆ›å»ºçš„å†…å­˜æ± ã€‚
+** è¿”å›0è¡¨ç¤ºåˆå§‹åŒ–å¤±è´¥
 */
 /*! \brief initialize memory pool module.
  *  \retval zero if failed.
@@ -126,8 +126,8 @@ elr_mpl_t,*elr_mpl_ht;
 ELR_MPL_API int elr_mpl_init();
 
 /*
-** ´´½¨Ò»¸öÄÚ´æ³Ø£¬²¢Ö¸¶¨·ÖÅäµ¥Ôª´óĞ¡¡£
-** µÚÒ»¸ö²ÎÊı±íÊ¾¸¸ÄÚ´æ³Ø£¬Èç¹ûÆäÎªNULL£¬±íÊ¾´´½¨µÄÄÚ´æ³ØµÄ¸¸ÄÚ´æ³ØÊÇÈ«¾ÖÄÚ´æ³Ø¡£
+** åˆ›å»ºä¸€ä¸ªå†…å­˜æ± ï¼Œå¹¶æŒ‡å®šåˆ†é…å•å…ƒå¤§å°ã€‚
+** ç¬¬ä¸€ä¸ªå‚æ•°è¡¨ç¤ºçˆ¶å†…å­˜æ± ï¼Œå¦‚æœå…¶ä¸ºNULLï¼Œè¡¨ç¤ºåˆ›å»ºçš„å†…å­˜æ± çš„çˆ¶å†…å­˜æ± æ˜¯å…¨å±€å†…å­˜æ± ã€‚
 */
 /*! \brief create a memory pool.
  *  \param fpool the parent pool of the about to created pool.
@@ -139,9 +139,9 @@ ELR_MPL_API int elr_mpl_init();
 ELR_MPL_API elr_mpl_t elr_mpl_create(elr_mpl_ht fpool,size_t obj_size);
 
 /*
-** ÅĞ¶ÏÄÚ´æ³ØÊÇ·ñÊÇÓĞĞ§µÄ£¬Ò»°ãÔÚ´´½¨Íê³ÉºóÁ¢¼´µ÷ÓÃ¡£
-** ·µ»Ø0±íÊ¾ÎŞĞ§
-** pool²»¿ÉÎªNULL
+** åˆ¤æ–­å†…å­˜æ± æ˜¯å¦æ˜¯æœ‰æ•ˆçš„ï¼Œä¸€èˆ¬åœ¨åˆ›å»ºå®Œæˆåç«‹å³è°ƒç”¨ã€‚
+** è¿”å›0è¡¨ç¤ºæ— æ•ˆ
+** poolä¸å¯ä¸ºNULL
 */
 /*! \brief verifies that a memory pool is valid or not.
  *  \param pool  pointer to a elr_mpl_t type variable.
@@ -150,8 +150,8 @@ ELR_MPL_API elr_mpl_t elr_mpl_create(elr_mpl_ht fpool,size_t obj_size);
 ELR_MPL_API int  elr_mpl_avail(elr_mpl_ht pool);
 
 /*
-** ´ÓÄÚ´æ³ØÖĞÉêÇëÄÚ´æ£¬Æä´óĞ¡ÎªÄÚ´æ³ØµÄ·ÖÅäµ¥Ôª´óĞ¡¡£
-** pool²»¿ÉÎªNULL
+** ä»å†…å­˜æ± ä¸­ç”³è¯·å†…å­˜ï¼Œå…¶å¤§å°ä¸ºå†…å­˜æ± çš„åˆ†é…å•å…ƒå¤§å°ã€‚
+** poolä¸å¯ä¸ºNULL
 */
 /*! \brief alloc a memory block from a memory pool.
  *  \param pool  pointer to a elr_mpl_t type variable.
@@ -163,7 +163,7 @@ ELR_MPL_API int  elr_mpl_avail(elr_mpl_ht pool);
 ELR_MPL_API void* elr_mpl_alloc(elr_mpl_ht pool);
 
 /*
-** »ñÈ¡´ÓÄÚ´æ³ØÖĞÉêÇëµÄÄÚ´æ¿éµÄ³ß´ç¡£
+** è·å–ä»å†…å­˜æ± ä¸­ç”³è¯·çš„å†…å­˜å—çš„å°ºå¯¸ã€‚
 */
 /*! \brief get the size of a memory block from a memory pool.
  *  \param mem pointer to a memory block from a memory pool.
@@ -172,22 +172,22 @@ ELR_MPL_API void* elr_mpl_alloc(elr_mpl_ht pool);
 ELR_MPL_API size_t elr_mpl_size(void* mem);
 
 /*
-** ½«ÄÚ´æÍË»Ø¸øÄÚ´æ³Ø¡£
+** å°†å†…å­˜é€€å›ç»™å†…å­˜æ± ã€‚
 */
 /*! \brief give back a memory block to it`s from memory pool.
  */
 ELR_MPL_API void elr_mpl_free(void* mem);
 
 /*
-** Ïú»ÙÄÚ´æ³ØºÍÆä×ÓÄÚ´æ³Ø¡£
+** é”€æ¯å†…å­˜æ± å’Œå…¶å­å†…å­˜æ± ã€‚
 */
 /*! \brief destroy a memory pool and it`s child pools.
  */
 ELR_MPL_API void elr_mpl_destroy(elr_mpl_ht pool);
 
 /*
-** ÖÕÖ¹ÄÚ´æ³ØÄ£¿é£¬»áÏú»ÙÈ«¾ÖÄÚ´æ³Ø¼°Æä×ÓÄÚ´æ³Ø¡£
-** ³ÌĞòÖĞ´´½¨µÄÆäËüÄÚ´æ³ØÈç¹ûÃ»ÓĞÏÔÊ¾µÄÊÍ·Å£¬Ö´ĞĞ´Ë²Ù×÷ºóÒ²»á±»ÊÍ·Å¡£
+** ç»ˆæ­¢å†…å­˜æ± æ¨¡å—ï¼Œä¼šé”€æ¯å…¨å±€å†…å­˜æ± åŠå…¶å­å†…å­˜æ± ã€‚
+** ç¨‹åºä¸­åˆ›å»ºçš„å…¶å®ƒå†…å­˜æ± å¦‚æœæ²¡æœ‰æ˜¾ç¤ºçš„é‡Šæ”¾ï¼Œæ‰§è¡Œæ­¤æ“ä½œåä¹Ÿä¼šè¢«é‡Šæ”¾ã€‚
 */
 /*! \brief finalize memory pool module.
  * 
