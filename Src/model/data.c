@@ -73,13 +73,13 @@ void ShowNodeData(ObjectNode* mn)
 	if(mn == NULL) return;
 	switch(mn->ndt){
 		case D_CHAR:
-			printf("%s: %s \n", mn->NodeName, mn->nd.d_str);
+			//printf("%s: %s \n", mn->NodeName, mn->nd.d_str);
 			break;
 		case D_INT:
-			printf("%s: %d \n", mn->NodeName, mn->nd.d_int);
+			//printf("%s: %d \n", mn->NodeName, mn->nd.d_int);
 			break;
 		case D_NODE:
-			printf("%s: Object \n", mn->NodeName);
+			//printf("%s: Object \n", mn->NodeName);
 			break;
 		default:
 			// No such type

@@ -2,15 +2,15 @@
 #ifndef RESPONSE
 #define RESPONSE
 
-#define FINAL_STR_SIZE 4096
+#define FINAL_STR_SIZE 4096*5
 
 
 #include "template.h"		// 以模板作为响应
 #include "session.h"
-#include "utility.h"      // 引入时间
+#include "utility.h"        // 引入时间
 #include <string.h>
 #include <stdio.h>
-#include<WinSock2.h>		// 为了使用 send
+#include <WinSock2.h>		// 为了使用 send
 
 typedef struct _Response {
 	char Server[32];
@@ -28,22 +28,22 @@ void Res_init(int fd, Response* res);
 
 static void ResHandel( int acceptFd, char* res_str );
 
-void SetHead(Response* res, char* code);
+extern void SetHead(Response* res, char* code);
 
-void SetType(Response* res, char* type);
+extern void SetType(Response* res, char* type);
 
-void SetCookie(Response* res, char* name, char* value);
+extern void SetCookie(Response* res, char* name, char* value);
 
-void SetSession(Response*res , char* key, char* value);
+extern void SetSession(Response*res , char* key, char* value);
 
-void SetBody(Response* res, char* body);
+extern void SetBody(Response* res, char* body);
 
-void ResParse(Response* res);
+extern void ResParse(Response* res);
 
-void Res_row( int acceptFd, char* res_str);
+extern void Res_row( int acceptFd, char* res_str);
 
-void Res_NotFound(int acceptFd);
+extern void Res_NotFound(int acceptFd);
 
-void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
+extern void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
 
 #endif

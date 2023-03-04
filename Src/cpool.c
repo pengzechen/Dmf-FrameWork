@@ -98,7 +98,7 @@ void mysql_pool_init()
 	pthread_mutex_init(&pool_mysql.lock,NULL);
 	pthread_cond_init(&pool_mysql.idle_signal,NULL);
 	pthread_mutex_lock(&pool_mysql.lock);
-	pool_mysql.min_connections = 1;
+	pool_mysql.min_connections = 20;
 
 	for (int i = 0; i < pool_mysql.min_connections; ++i)    //初始化时创建几个连接并加入池中
 	{
@@ -106,11 +106,12 @@ void mysql_pool_init()
 		if (conn)
 		{
 			conn_push(conn);
-			printf("ok \n");
 		}
 	}
 
 	pthread_mutex_unlock(&pool_mysql.lock);
+
+	printf("[Server: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.min_connections);
 }
 
 
@@ -129,6 +130,7 @@ mysql_conn * get_mysql_connection_block()
 {
 	pthread_mutex_lock(&pool_mysql.lock);
 	mysql_conn *conn = conn_pop();
+	// printf("current free connections %d\n ", pool_mysql.free_connections);
 	if (conn == NULL)
 	{
 		pool_mysql.is_idle_block++;

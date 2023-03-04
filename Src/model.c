@@ -71,18 +71,18 @@ void exeSql(char* sql) {
 	// 存在则输出
 	if (GetModelResult(mPtr)) {
 
-		for (int i = 0; i < mPtr->row; i++) {
-			// 一行数据
-			result_row = mysql_fetch_row(mPtr->res_ptr);
+		// for (int i = 0; i < mPtr->row; i++) {
+		// 	// 一行数据
+		// 	result_row = mysql_fetch_row(mPtr->res_ptr);
 			
-			for (int j = 0; j < mPtr->column; j++) {
-				printf( "%s ", result_row[j] );
-			}
+		// 	for (int j = 0; j < mPtr->column; j++) {
+		// 		printf( "%s ", result_row[j] );
+		// 	}
 			
-			printf("\n");
-		}
+		// 	printf("\n");
+		// }
 	}
-
+	mysql_free_result(mPtr->res_ptr);
 
 	ModelClose(mPtr);
 

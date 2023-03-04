@@ -76,7 +76,7 @@ void Rou_iocp_init(
 
 			if( strcmp(req->path, local_path[i]) == 0){
 				
-				char name[512] = {'\0'};
+				char name[1024] = {'\0'};
 				strcat(name, STATIC_DIR);
 				strcat(name, local_path[i]);
 				char* block = loadFile(name);

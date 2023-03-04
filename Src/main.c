@@ -37,7 +37,7 @@ void getsession(int a, const Request *req) {
 	Res_row(a, "This is a test str");
 }
 
-void sessiondebug(int a, const Request* req){
+void sessiondebug(int a, const Request* req) {
 	SessionAll();
 	Res_row(a, "This is a test str");
 }
@@ -71,7 +71,7 @@ void template(int a, const Request *req) {
 
 
 
-void datamodeltest(int a, const Request* req){
+void datamodeltest(int a, const Request* req) {
 	ObjectNode* root = CreateRootNode("root", D_NODE, NULL);
 	ObjectNode* mn2 = CreateObjectNode("Child", D_NODE, NULL);
 	ObjectNode* mn3 = CreateObjectNode("Bro1", D_INT, (void*)(int*)14);
@@ -94,25 +94,42 @@ void datamodeltest(int a, const Request* req){
 }
 
 void mysqltest(int a, const Request* req) {
-	mysql_pool_init();
-	mysql_conn* conn1 = get_mysql_connection();
-	int aa = mysql_query(&conn1->conn, "select * from test;");
-	MYSQL_RES* res_ptr;
-	res_ptr = mysql_store_result(&conn1->conn);
-	printf("%d %d\n", aa, mysql_num_rows(res_ptr));
+	
+	mysql_conn* conn1 = get_mysql_connection_block();
+	mysql_query(&conn1->conn, "select * from test;");
+	MYSQL_RES* res_ptr = mysql_store_result(&conn1->conn);
+	//printf("   query result %d\n", mysql_num_rows(res_ptr));
+	mysql_free_result(res_ptr);
+	free(res_ptr);
 
 	Res_row(a, "ok");
 	release_mysql_connection(conn1);
 }
 
+void mysqltest1(int a, const Request* req) {
+	
+	exeSql("select * from test;");
+
+	Res_row(a, "ok");
+}
 
 
+void elrtest(int a, const Request* req)
+{
+	//char* str = (char*) malloc (sizeof(char)* 50);
+
+	//free(str);
+
+	Res_row(a, "test ok");
+}
 
 int main() {
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
+
+	//elr_mpl_init();
 	
 	ContFunMap cmp;
 	cmp.cf[0] = &getsession;
@@ -121,14 +138,16 @@ int main() {
 	cmp.cf[3] = &sessiondebug;
 	cmp.cf[4] = &mysqltest;
 	cmp.cf[5] = &datamodeltest;
-	cmp.cf[6] = NULL;
+	cmp.cf[6] = &elrtest;
+	cmp.cf[7] = NULL;
 	cmp.keys[0] = "/getsession";
 	cmp.keys[1] = "/template";
 	cmp.keys[2] = "/setsession";
 	cmp.keys[3] = "/sessiondebug";
 	cmp.keys[4] = "/mysqltest";
 	cmp.keys[5] = "/datamodeltest";
-	cmp.keys[6] = NULL;
+	cmp.keys[6] = "/elrtest";
+	cmp.keys[7] = NULL;
 
 	iocpServerMake(cmp);
 	

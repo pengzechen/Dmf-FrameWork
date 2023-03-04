@@ -252,6 +252,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 int iocpServerMake(ContFunMap cmp){
 
 	SessionInit(session_all_dec);
+	mysql_pool_init();
 	
 	
 	WSADATA wsd;
@@ -266,7 +267,7 @@ int iocpServerMake(ContFunMap cmp){
 	GetSystemInfo(&SystemInfo);
 
 	for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
-	// for(int i = 0; i < 4; i++){
+	// for(int i=0; i<30; i++){
 		
 		   HANDLE hProcessIO = CreateThread(NULL, 0, ProcessIO, CompletionPort, 0, NULL);
 		   if(hProcessIO)
@@ -287,8 +288,8 @@ int iocpServerMake(ContFunMap cmp){
 	while(1){
 		
 		// 等待客户端接入
-		//sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
-		sClient = accept(sListen, 0, 0);
+		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
+		//sClient = accept(sListen, 0, 0);
 
 		PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
 		PerHandleData->Socket = sClient;

@@ -34,7 +34,7 @@ void destroy_mysql_connection(mysql_conn *conn);
 void destroy_mysql_pool();
 void release_mysql_connection(mysql_conn *conn);
 mysql_conn * get_mysql_connection();
-
+mysql_conn * get_mysql_connection_block();
 MYSQL_RES * mysql_execute_query(const char *sql,unsigned long length,int * flag);
 
 #endif  //MYSQL_POOL_H

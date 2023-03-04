@@ -53,7 +53,7 @@ extern void SetCookie(Response* res, char* name, char* value){
 	strcat(res->Set_cookie, "\r\n");
 }
 
-void SetSession(Response*res , char* key, char* value){
+extern void SetSession(Response*res , char* key, char* value){
 	char Session_str[11] = {'\0'};
 	SessionCreate(Session_str, key, value);
 	SetCookie(res, "dmfsession", Session_str);
