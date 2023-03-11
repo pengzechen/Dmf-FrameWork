@@ -20,6 +20,7 @@
 #include "utility.h"
 #include "cpool.h"
 #include <model/data.h>
+#include <elr_mpl/elr_mpl.h>
 
 // #pragma comment(lib, "ws2_32.lib")      //windows下调用动态库
 #include<WinSock2.h>

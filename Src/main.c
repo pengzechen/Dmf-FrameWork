@@ -1,8 +1,8 @@
 
 #include "server.h"
 
-void setsession(int a, const Request *req) {
-	
+void setsession(int a, const Request *req) 
+{
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
@@ -33,11 +33,11 @@ void getsession(int a, const Request *req) {
 			}
 		}
 	}
-
 	Res_row(a, "This is a test str");
 }
 
-void sessiondebug(int a, const Request* req) {
+void sessiondebug(int a, const Request* req) 
+{
 	SessionAll();
 	Res_row(a, "This is a test str");
 }
@@ -49,7 +49,8 @@ void mfunction(char *out, char *in) {
 	strcpy(out, in);
 }
 
-void template(int a, const Request *req) {
+void template(int a, const Request *req) 
+{
 	struct Kvmap kv[4];
 	kv[0].key = "name";
 	kv[0].value = "pzcbnvvhjv";
@@ -71,7 +72,8 @@ void template(int a, const Request *req) {
 
 
 
-void datamodeltest(int a, const Request* req) {
+void datamodeltest(int a, const Request* req) 
+{
 	ObjectNode* root = CreateRootNode("root", D_NODE, NULL);
 	ObjectNode* mn2 = CreateObjectNode("Child", D_NODE, NULL);
 	ObjectNode* mn3 = CreateObjectNode("Bro1", D_INT, (void*)(int*)14);
@@ -93,7 +95,8 @@ void datamodeltest(int a, const Request* req) {
 	Res_row(a, "This is a test str");
 }
 
-void mysqltest(int a, const Request* req) {
+void mysqltest(int a, const Request* req) 
+{
 	
 	mysql_conn* conn1 = get_mysql_connection_block();
 	mysql_query(&conn1->conn, "select * from test;");
@@ -106,7 +109,8 @@ void mysqltest(int a, const Request* req) {
 	release_mysql_connection(conn1);
 }
 
-void mysqltest1(int a, const Request* req) {
+void mysqltest1(int a, const Request* req) 
+{
 	
 	exeSql("select * from test;");
 
@@ -128,8 +132,6 @@ int main() {
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
-
-	//elr_mpl_init();
 	
 	ContFunMap cmp;
 	cmp.cf[0] = &getsession;
