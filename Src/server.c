@@ -254,6 +254,7 @@ int iocpServerMake(ContFunMap cmp){
 	SessionInit(session_all_dec);
 	mysql_pool_init();
 	elr_mpl_init();
+	ConfInit();
 	
 	
 	WSADATA wsd;

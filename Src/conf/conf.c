@@ -1,7 +1,10 @@
-#include "libxml/parser.h"
-#include "libxml/tree.h"
-#include "libxml/xpath.h"
+
+#include <conf/conf.h>
+
+void ConfInit(){
+
+    xmlKeepBlanksDefault(0);
+    printf("[Server: Info] conf init successfully...");
+}
 
 
-
-	// xmlKeepBlanksDefault(0);
