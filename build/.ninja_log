@@ -1,0 +1,20 @@
+# ninja log v5
+22	390	7010057839673764	Src/CMakeFiles/server.dir/request.c.obj	ae9a82b5e49ee29d
+53	416	7010057839953737	Src/CMakeFiles/server.dir/session.c.obj	5ef16270ccc79d54
+71	430	7010057839953737	Src/CMakeFiles/server.dir/utility.c.obj	b928fbd9fab40dc6
+16	458	7010057840193752	Src/CMakeFiles/server.dir/model.c.obj	35dc0e7fb0873539
+3	468	7010057840553716	Src/CMakeFiles/server.dir/cpool.c.obj	cf8e3a92eac11b68
+63	478	7010057840513681	Src/CMakeFiles/server.dir/template.c.obj	3899d5804a090cb6
+36	568	7010057841313709	Src/CMakeFiles/server.dir/router.c.obj	aebdfccaaec0ad87
+29	570	7010057841422859	Src/CMakeFiles/server.dir/response.c.obj	5ffac75293b1965f
+9	607	7010057842085940	Src/CMakeFiles/server.dir/main.c.obj	dbfa99816ef8514d
+392	629	7010057842325914	Src/CMakeFiles/server.dir/model/data.c.obj	d4a1ec8858eeb15e
+45	654	7010057842565922	Src/CMakeFiles/server.dir/server.c.obj	f66715014c89a70d
+416	671	7010057842725902	Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj	9e0b3a77537b937b
+459	686	7010057842885917	Src/CMakeFiles/server.dir/conf/conf.c.obj	2dcb0e77d46ce432
+469	697	7010057843005929	Src/CMakeFiles/server.dir/conf/test.c.obj	acae66add694c1d
+430	759	7010057843605888	Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj	74b00e956d37c3e9
+759	1018	7010057846116483	C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe	eb3132321d6d3b7a
+14	161	7010058472761968	Src/CMakeFiles/server.dir/conf/test.c.obj	acae66add694c1d
+5	184	7010058472962121	Src/CMakeFiles/server.dir/conf/conf.c.obj	2dcb0e77d46ce432
+184	374	7010058474812338	C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe	eb3132321d6d3b7a

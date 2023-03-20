@@ -1,0 +1,5 @@
+C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/CMakeFiles/edit_cache.dir
+C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/CMakeFiles/rebuild_cache.dir
+C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/CMakeFiles/server.dir
+C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/CMakeFiles/edit_cache.dir
+C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/CMakeFiles/rebuild_cache.dir
