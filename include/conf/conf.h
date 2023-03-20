@@ -29,7 +29,6 @@ typedef struct Server_Conf {
 // conf 全局的配置变量
 Server_Conf g_server_conf_all;
 
-
 extern void test();
 extern void ConfInit();
 

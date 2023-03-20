@@ -2,13 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Src/libDmfServer.dll"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe"
 		},
 		{
-			"path" : "Src/libDmfServer.dll.a"
-		},
-		{
-			"path" : "Src/libDmfServer.pdb"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -16,7 +13,7 @@
 	{
 		"commands" : 
 		[
-			"ADD_LIBRARY",
+			"add_executable",
 			"link_directories",
 			"add_definitions",
 			"include_directories"
@@ -33,19 +30,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 25,
+				"line" : 32,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 6,
+				"line" : 8,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 17,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
@@ -68,9 +65,6 @@
 			"defines" : 
 			[
 				{
-					"define" : "DmfServer_EXPORTS"
-				},
-				{
 					"backtrace" : 3,
 					"define" : "HAVE_STRUCT_TIMESPEC"
 				}
@@ -85,15 +79,33 @@
 			"language" : "C",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14
 			]
 		}
 	],
-	"id" : "DmfServer::@fffd7673bb2fd0d58c2a",
+	"id" : "server::@fffd7673bb2fd0d58c2a",
 	"link" : 
 	{
 		"commandFragments" : 
 		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
 			{
 				"fragment" : "",
 				"role" : "flags"
@@ -145,8 +157,8 @@
 		],
 		"language" : "C"
 	},
-	"name" : "DmfServer",
-	"nameOnDisk" : "libDmfServer.dll",
+	"name" : "server",
+	"nameOnDisk" : "server.exe",
 	"paths" : 
 	{
 		"build" : "Src",
@@ -158,7 +170,21 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14
 			]
 		}
 	],
@@ -167,9 +193,93 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Src/view.c",
+			"path" : "Src/cpool.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/main.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/model.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/request.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/response.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/router.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/server.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/session.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/template.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/utility.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/model/data.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/elr_mpl/elr_mpl.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/elr_mpl/elr_mtx.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/conf/conf.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/conf/test.c",
 			"sourceGroupIndex" : 0
 		}
 	],
-	"type" : "SHARED_LIBRARY"
+	"type" : "EXECUTABLE"
 }

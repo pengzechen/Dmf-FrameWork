@@ -1,6 +1,7 @@
 
 #include "server.h"
 
+#include <windows.h>
 
 void setsession(int a, const Request *req)
 {
@@ -128,6 +129,8 @@ void elrtest(int a, const Request* req)
 	Res_row(a, "test ok");
 }
 
+
+typedef void(*View)(int, const Request*);
 int main() {
 
 	ConfInit();	
@@ -135,9 +138,13 @@ int main() {
 	mysql_pool_init();
 	elr_mpl_init();
 
+	HMODULE handle = LoadLibrary("./views/libviews.dll");
+	View lib = (View)GetProcAddress(handle, "viewtest");
 
-	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, NULL};
-	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", NULL};
+	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};
+	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", "/lib", NULL};
+	
+	
 	SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	

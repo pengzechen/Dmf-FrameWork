@@ -3,6 +3,7 @@
 
 void ConfInit()
 {
+
     xmlKeepBlanksDefault(0);
     xmlDocPtr doc = xmlReadFile("./conf.xml", "gbk", XML_PARSE_NOBLANKS);
     if (doc != NULL) {

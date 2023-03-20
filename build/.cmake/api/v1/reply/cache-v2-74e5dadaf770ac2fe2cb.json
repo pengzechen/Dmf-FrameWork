@@ -139,10 +139,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "CXX compiler"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "STRING",
+			"type" : "FILEPATH",
 			"value" : "D:/program_/MinGW/bin/g++.exe"
 		},
 		{
@@ -283,10 +283,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "C compiler"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "STRING",
+			"type" : "FILEPATH",
 			"value" : "D:/program_/MinGW/bin/gcc.exe"
 		},
 		{
@@ -795,7 +795,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "2"
+			"value" : "3"
 		},
 		{
 			"name" : "CMAKE_OBJCOPY",
@@ -1278,18 +1278,6 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "DmfServer_LIB_DEPENDS",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Dependencies for the target"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "general;libssl;general;libmysql;general;pthreadVC2;general;ws2_32;general;libcrypto;general;libxml2;general;iconv;"
-		},
-		{
 			"name" : "DmfServer_SOURCE_DIR",
 			"properties" : 
 			[
@@ -1312,6 +1300,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "TRUE"
+		},
+		{
+			"name" : "views_LIB_DEPENDS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Dependencies for the target"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "general;libssl;general;libmysql;general;pthreadVC2;general;ws2_32;general;libcrypto;general;libxml2;general;iconv;"
 		}
 	],
 	"kind" : "cache",

@@ -1,11 +1,6 @@
 [
 {
   "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
-  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DDmfServer_EXPORTS -DHAVE_STRUCT_TIMESPEC -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\CMakeFiles\\DmfServer.dir\\view.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\view.c",
-  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\view.c"
-},
-{
-  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
   "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\CMakeFiles\\server.dir\\cpool.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c",
   "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c"
 },
@@ -56,11 +51,6 @@
 },
 {
   "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
-  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\CMakeFiles\\server.dir\\view.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\view.c",
-  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\view.c"
-},
-{
-  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
   "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\CMakeFiles\\server.dir\\model\\data.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\model\\data.c",
   "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\model\\data.c"
 },
@@ -83,5 +73,35 @@
   "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
   "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\CMakeFiles\\server.dir\\conf\\test.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\test.c",
   "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\test.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\view.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\views\\view.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\views\\view.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\cpool.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\response.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\response.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\response.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\session.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\session.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\session.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\template.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\template.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\template.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\utility.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\utility.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\utility.c"
 }
 ]

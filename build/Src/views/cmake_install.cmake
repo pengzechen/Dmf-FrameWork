@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src
+# Install script for directory: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,11 +35,5 @@ endif()
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "D:/program_/MinGW/bin/objdump.exe")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/views/cmake_install.cmake")
-
 endif()
 

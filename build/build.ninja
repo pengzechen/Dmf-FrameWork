@@ -70,46 +70,6 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 # =============================================================================
-# Object build statements for SHARED_LIBRARY target DmfServer
-
-
-#############################################
-# Order-only phony target for DmfServer
-
-build cmake_object_order_depends_target_DmfServer: phony || Src/CMakeFiles/DmfServer.dir
-
-build Src/CMakeFiles/DmfServer.dir/view.c.obj: C_COMPILER__DmfServer_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/view.c || cmake_object_order_depends_target_DmfServer
-  DEFINES = -DDmfServer_EXPORTS -DHAVE_STRUCT_TIMESPEC
-  DEP_FILE = Src\CMakeFiles\DmfServer.dir\view.c.obj.d
-  FLAGS = -g   -fexec-charset=gbk
-  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
-  OBJECT_DIR = Src\CMakeFiles\DmfServer.dir
-  OBJECT_FILE_DIR = Src\CMakeFiles\DmfServer.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\DmfServer.dir\
-  TARGET_PDB = Src\libDmfServer.pdb
-
-
-# =============================================================================
-# Link build statements for SHARED_LIBRARY target DmfServer
-
-
-#############################################
-# Link the shared library Src\libDmfServer.dll
-
-build Src/libDmfServer.dll Src/libDmfServer.dll.a: C_SHARED_LIBRARY_LINKER__DmfServer_Debug Src/CMakeFiles/DmfServer.dir/view.c.obj
-  LANGUAGE_COMPILE_FLAGS = -g
-  LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
-  LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
-  OBJECT_DIR = Src\CMakeFiles\DmfServer.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  RESTAT = 1
-  TARGET_COMPILE_PDB = Src\CMakeFiles\DmfServer.dir\
-  TARGET_FILE = Src\libDmfServer.dll
-  TARGET_IMPLIB = Src\libDmfServer.dll.a
-  TARGET_PDB = Src\libDmfServer.pdb
-
-# =============================================================================
 # Object build statements for EXECUTABLE target server
 
 
@@ -125,8 +85,6 @@ build Src/CMakeFiles/server.dir/cpool.c.obj: C_COMPILER__server_Debug C$:/Users/
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/main.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/main.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -135,8 +93,6 @@ build Src/CMakeFiles/server.dir/main.c.obj: C_COMPILER__server_Debug C$:/Users/9
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/model.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/model.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -145,8 +101,6 @@ build Src/CMakeFiles/server.dir/model.c.obj: C_COMPILER__server_Debug C$:/Users/
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/request.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/request.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -155,8 +109,6 @@ build Src/CMakeFiles/server.dir/request.c.obj: C_COMPILER__server_Debug C$:/User
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/response.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/response.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -165,8 +117,6 @@ build Src/CMakeFiles/server.dir/response.c.obj: C_COMPILER__server_Debug C$:/Use
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/router.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/router.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -175,8 +125,6 @@ build Src/CMakeFiles/server.dir/router.c.obj: C_COMPILER__server_Debug C$:/Users
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/server.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/server.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -185,8 +133,6 @@ build Src/CMakeFiles/server.dir/server.c.obj: C_COMPILER__server_Debug C$:/Users
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/session.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/session.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -195,8 +141,6 @@ build Src/CMakeFiles/server.dir/session.c.obj: C_COMPILER__server_Debug C$:/User
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/template.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/template.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -205,8 +149,6 @@ build Src/CMakeFiles/server.dir/template.c.obj: C_COMPILER__server_Debug C$:/Use
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/utility.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/utility.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -215,18 +157,6 @@ build Src/CMakeFiles/server.dir/utility.c.obj: C_COMPILER__server_Debug C$:/User
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
-
-build Src/CMakeFiles/server.dir/view.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/view.c || cmake_object_order_depends_target_server
-  DEFINES = -DHAVE_STRUCT_TIMESPEC
-  DEP_FILE = Src\CMakeFiles\server.dir\view.c.obj.d
-  FLAGS = -g   -fexec-charset=gbk
-  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
-  OBJECT_DIR = Src\CMakeFiles\server.dir
-  OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/model/data.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/model/data.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -235,8 +165,6 @@ build Src/CMakeFiles/server.dir/model/data.c.obj: C_COMPILER__server_Debug C$:/U
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir\model
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/elr_mpl/elr_mpl.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -245,8 +173,6 @@ build Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj: C_COMPILER__server_Debug 
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir\elr_mpl
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/elr_mpl/elr_mtx.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -255,8 +181,6 @@ build Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj: C_COMPILER__server_Debug 
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir\elr_mpl
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/conf/conf.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/conf/conf.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -265,8 +189,6 @@ build Src/CMakeFiles/server.dir/conf/conf.c.obj: C_COMPILER__server_Debug C$:/Us
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir\conf
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 build Src/CMakeFiles/server.dir/conf/test.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/conf/test.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
@@ -275,8 +197,6 @@ build Src/CMakeFiles/server.dir/conf/test.c.obj: C_COMPILER__server_Debug C$:/Us
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\CMakeFiles\server.dir
   OBJECT_FILE_DIR = Src\CMakeFiles\server.dir\conf
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
 
 # =============================================================================
@@ -286,17 +206,16 @@ build Src/CMakeFiles/server.dir/conf/test.c.obj: C_COMPILER__server_Debug C$:/Us
 #############################################
 # Link the executable C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.exe
 
-build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe: C_EXECUTABLE_LINKER__server_Debug Src/CMakeFiles/server.dir/cpool.c.obj Src/CMakeFiles/server.dir/main.c.obj Src/CMakeFiles/server.dir/model.c.obj Src/CMakeFiles/server.dir/request.c.obj Src/CMakeFiles/server.dir/response.c.obj Src/CMakeFiles/server.dir/router.c.obj Src/CMakeFiles/server.dir/server.c.obj Src/CMakeFiles/server.dir/session.c.obj Src/CMakeFiles/server.dir/template.c.obj Src/CMakeFiles/server.dir/utility.c.obj Src/CMakeFiles/server.dir/view.c.obj Src/CMakeFiles/server.dir/model/data.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj Src/CMakeFiles/server.dir/conf/conf.c.obj Src/CMakeFiles/server.dir/conf/test.c.obj
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe: C_EXECUTABLE_LINKER__server_Debug Src/CMakeFiles/server.dir/cpool.c.obj Src/CMakeFiles/server.dir/main.c.obj Src/CMakeFiles/server.dir/model.c.obj Src/CMakeFiles/server.dir/request.c.obj Src/CMakeFiles/server.dir/response.c.obj Src/CMakeFiles/server.dir/router.c.obj Src/CMakeFiles/server.dir/server.c.obj Src/CMakeFiles/server.dir/session.c.obj Src/CMakeFiles/server.dir/template.c.obj Src/CMakeFiles/server.dir/utility.c.obj Src/CMakeFiles/server.dir/model/data.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj Src/CMakeFiles/server.dir/conf/conf.c.obj Src/CMakeFiles/server.dir/conf/test.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
   OBJECT_DIR = Src\CMakeFiles\server.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
   TARGET_FILE = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.exe
   TARGET_IMPLIB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\libserver.dll.a
-  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
+  TARGET_PDB = server.exe.dbg
 
 
 #############################################
@@ -323,15 +242,121 @@ build Src/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build Src/rebuild_cache: phony Src/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target views
+
+
+#############################################
+# Order-only phony target for views
+
+build cmake_object_order_depends_target_views: phony || Src/views/CMakeFiles/views.dir
+
+build Src/views/CMakeFiles/views.dir/view.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/view.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\view.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir
+
+build Src/views/CMakeFiles/views.dir/__/cpool.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/cpool.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\cpool.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+build Src/views/CMakeFiles/views.dir/__/response.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/response.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\response.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+build Src/views/CMakeFiles/views.dir/__/session.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/session.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\session.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+build Src/views/CMakeFiles/views.dir/__/template.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/template.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\template.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+build Src/views/CMakeFiles/views.dir/__/utility.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/utility.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\utility.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target views
+
+
+#############################################
+# Link the shared library C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll
+
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a: C_SHARED_LIBRARY_LINKER__views_Debug Src/views/CMakeFiles/views.dir/view.c.obj Src/views/CMakeFiles/views.dir/__/cpool.c.obj Src/views/CMakeFiles/views.dir/__/response.c.obj Src/views/CMakeFiles/views.dir/__/session.c.obj Src/views/CMakeFiles/views.dir/__/template.c.obj Src/views/CMakeFiles/views.dir/__/utility.c.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  RESTAT = 1
+  TARGET_FILE = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll
+  TARGET_IMPLIB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll.a
+  TARGET_PDB = views.dll.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build Src/views/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\build\Src\views && D:\program_\Cmake\bin\cmake-gui.exe -SC:\Users\92706\Desktop\TEMP\C_learn\Myserver\request -BC:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\build"
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build Src/views/edit_cache: phony Src/views/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build Src/views/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\build\Src\views && D:\program_\Cmake\bin\cmake.exe --regenerate-during-build -SC:\Users\92706\Desktop\TEMP\C_learn\Myserver\request -BC:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\build"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build Src/views/rebuild_cache: phony Src/views/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
 # Target aliases.
 
-build DmfServer: phony Src/libDmfServer.dll
-
-build libDmfServer.dll: phony Src/libDmfServer.dll
+build libviews.dll: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll
 
 build server: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
 
 build server.exe: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
+
+build views: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll
 
 # =============================================================================
 # Folder targets.
@@ -348,7 +373,14 @@ build all: phony Src/all
 #############################################
 # Folder: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src
 
-build Src/all: phony Src/libDmfServer.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
+build Src/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe Src/views/all
+
+# =============================================================================
+
+#############################################
+# Folder: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/views
+
+build Src/views/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll
 
 # =============================================================================
 # Built-in targets
@@ -357,14 +389,14 @@ build Src/all: phony Src/libDmfServer.dll C$:/Users/92706/Desktop/TEMP/C_learn/M
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.25.1/CMakeCCompiler.cmake CMakeFiles/3.25.1/CMakeCXXCompiler.cmake CMakeFiles/3.25.1/CMakeRCCompiler.cmake CMakeFiles/3.25.1/CMakeSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCCompilerABI.c D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCompilerIdDetection.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCXXCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompileFeatures.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompilerABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompilerId.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineRCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeFindBinUtils.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeGenericSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeInitializeConfigs.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeLanguageInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeNinjaFindMake.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseImplicitIncludeInfo.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseImplicitLinkInfo.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseLibraryArchitecture.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystem.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInitialize.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCXXCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCompilerCommon.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestRCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ADSP-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ARMCC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ARMClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/AppleClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Borland-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Bruce-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/CMakeCommonCompilerMacros.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Clang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Clang-DetermineCompilerInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Compaq-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Cray-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Embarcadero-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Fujitsu-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GHS-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-FindBinUtils.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/HP-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/HP-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IAR-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Intel-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/LCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/MSVC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/NVHPC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/NVIDIA-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/PGI-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/PathScale-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SCO-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SDCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SunPro-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/TI-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Tasking-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Watcom-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XL-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XL-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XLClang-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/zOS-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Internal/FeatureTesting.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-Determine-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-windres.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/WindowsPaths.cmake
+build build.ninja: RERUN_CMAKE | C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/CMakeLists.txt CMakeCache.txt CMakeFiles/3.25.1/CMakeCCompiler.cmake CMakeFiles/3.25.1/CMakeCXXCompiler.cmake CMakeFiles/3.25.1/CMakeRCCompiler.cmake CMakeFiles/3.25.1/CMakeSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeGenericSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeInitializeConfigs.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeLanguageInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInitialize.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/CMakeCommonCompilerMacros.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-windres.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/WindowsPaths.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.25.1/CMakeCCompiler.cmake CMakeFiles/3.25.1/CMakeCXXCompiler.cmake CMakeFiles/3.25.1/CMakeRCCompiler.cmake CMakeFiles/3.25.1/CMakeSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCCompilerABI.c D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXCompilerABI.cpp D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCompilerIdDetection.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCXXCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompileFeatures.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompilerABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineCompilerId.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineRCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeDetermineSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeFindBinUtils.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeGenericSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeInitializeConfigs.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeLanguageInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeNinjaFindMake.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseImplicitIncludeInfo.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseImplicitLinkInfo.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeParseLibraryArchitecture.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCCompiler.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystem.cmake.in D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInitialize.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCXXCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestCompilerCommon.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeTestRCCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ADSP-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ARMCC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/ARMClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/AppleClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Borland-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Bruce-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/CMakeCommonCompilerMacros.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Clang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Clang-DetermineCompilerInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Compaq-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Cray-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Embarcadero-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Fujitsu-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GHS-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-FindBinUtils.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/HP-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/HP-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IAR-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMClang-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Intel-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/LCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/MSVC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/NVHPC-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/NVIDIA-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/PGI-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/PathScale-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SCO-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SDCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SunPro-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/TI-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Tasking-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/Watcom-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XL-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XL-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XLClang-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/zOS-C-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Internal/FeatureTesting.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-Determine-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-windres.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/WindowsPaths.cmake: phony
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/CMakeLists.txt C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/CMakeLists.txt CMakeCache.txt CMakeFiles/3.25.1/CMakeCCompiler.cmake CMakeFiles/3.25.1/CMakeCXXCompiler.cmake CMakeFiles/3.25.1/CMakeRCCompiler.cmake CMakeFiles/3.25.1/CMakeSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCXXInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeCommonLanguageInclude.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeGenericSystem.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeInitializeConfigs.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeLanguageInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeRCInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInformation.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/CMakeSystemSpecificInitialize.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/CMakeCommonCompilerMacros.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Compiler/GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-C.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX-ABI.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU-CXX.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-GNU.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows-windres.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/Windows.cmake D$:/program_/Cmake/share/cmake-3.25/Modules/Platform/WindowsPaths.cmake: phony
 
 
 #############################################

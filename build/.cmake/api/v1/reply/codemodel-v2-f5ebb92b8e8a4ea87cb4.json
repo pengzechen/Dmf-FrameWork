@@ -20,6 +20,10 @@
 				},
 				{
 					"build" : "Src",
+					"childIndexes" : 
+					[
+						2
+					],
 					"jsonFile" : "directory-Src-Debug-6ac98766994f3396fe25.json",
 					"minimumCMakeVersion" : 
 					{
@@ -30,7 +34,21 @@
 					"source" : "Src",
 					"targetIndexes" : 
 					[
-						0,
+						0
+					]
+				},
+				{
+					"build" : "Src/views",
+					"jsonFile" : "directory-Src.views-Debug-9b160ca112b032e4768e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "Src/views",
+					"targetIndexes" : 
+					[
 						1
 					]
 				}
@@ -42,7 +60,8 @@
 					"directoryIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					],
 					"name" : "DmfServer",
 					"targetIndexes" : 
@@ -56,16 +75,16 @@
 			[
 				{
 					"directoryIndex" : 1,
-					"id" : "DmfServer::@fffd7673bb2fd0d58c2a",
-					"jsonFile" : "target-DmfServer-Debug-7369d44476cc726342aa.json",
-					"name" : "DmfServer",
+					"id" : "server::@fffd7673bb2fd0d58c2a",
+					"jsonFile" : "target-server-Debug-39939ec4c2e778b6365c.json",
+					"name" : "server",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 1,
-					"id" : "server::@fffd7673bb2fd0d58c2a",
-					"jsonFile" : "target-server-Debug-17cd618dc63070fd9027.json",
-					"name" : "server",
+					"directoryIndex" : 2,
+					"id" : "views::@92b6779f55cb2208c651",
+					"jsonFile" : "target-views-Debug-f2213d2d047d238b86c6.json",
+					"name" : "views",
 					"projectIndex" : 0
 				}
 			]

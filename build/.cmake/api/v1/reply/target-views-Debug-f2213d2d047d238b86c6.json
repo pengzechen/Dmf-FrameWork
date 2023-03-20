@@ -2,10 +2,13 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll"
 		},
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.pdb"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a"
+		},
+		{
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -13,13 +16,14 @@
 	{
 		"commands" : 
 		[
-			"add_executable",
+			"ADD_LIBRARY",
 			"link_directories",
 			"add_definitions",
 			"include_directories"
 		],
 		"files" : 
 		[
+			"Src/views/CMakeLists.txt",
 			"Src/CMakeLists.txt"
 		],
 		"nodes" : 
@@ -30,26 +34,29 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 28,
+				"line" : 3,
 				"parent" : 0
+			},
+			{
+				"file" : 1
 			},
 			{
 				"command" : 1,
-				"file" : 0,
-				"line" : 6,
-				"parent" : 0
+				"file" : 1,
+				"line" : 8,
+				"parent" : 2
 			},
 			{
 				"command" : 2,
-				"file" : 0,
-				"line" : 17,
-				"parent" : 0
+				"file" : 1,
+				"line" : 19,
+				"parent" : 2
 			},
 			{
 				"command" : 3,
-				"file" : 0,
+				"file" : 1,
 				"line" : 2,
-				"parent" : 0
+				"parent" : 2
 			}
 		]
 	},
@@ -65,14 +72,17 @@
 			"defines" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"define" : "HAVE_STRUCT_TIMESPEC"
+				},
+				{
+					"define" : "views_EXPORTS"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 4,
+					"backtrace" : 5,
 					"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include"
 				}
 			],
@@ -84,35 +94,21 @@
 				2,
 				3,
 				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				10,
-				11,
-				12,
-				13,
-				14,
-				15
+				5
 			]
 		}
 	],
-	"id" : "server::@fffd7673bb2fd0d58c2a",
+	"id" : "views::@92b6779f55cb2208c651",
 	"link" : 
 	{
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
-				"role" : "flags"
-			},
-			{
 				"fragment" : "",
 				"role" : "flags"
 			},
 			{
-				"backtrace" : 2,
+				"backtrace" : 3,
 				"fragment" : "-LC:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\lib",
 				"role" : "libraryPath"
 			},
@@ -158,12 +154,12 @@
 		],
 		"language" : "C"
 	},
-	"name" : "server",
-	"nameOnDisk" : "server.exe",
+	"name" : "views",
+	"nameOnDisk" : "libviews.dll",
 	"paths" : 
 	{
-		"build" : "Src",
-		"source" : "Src"
+		"build" : "Src/views",
+		"source" : "Src/views"
 	},
 	"sourceGroups" : 
 	[
@@ -176,22 +172,18 @@
 				2,
 				3,
 				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				10,
-				11,
-				12,
-				13,
-				14,
-				15
+				5
 			]
 		}
 	],
 	"sources" : 
 	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Src/views/view.c",
+			"sourceGroupIndex" : 0
+		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
@@ -201,37 +193,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Src/main.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/model.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/request.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
 			"path" : "Src/response.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/router.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/server.c",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -251,43 +213,7 @@
 			"compileGroupIndex" : 0,
 			"path" : "Src/utility.c",
 			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/view.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/model/data.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/elr_mpl/elr_mpl.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/elr_mpl/elr_mtx.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/conf/conf.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/conf/test.c",
-			"sourceGroupIndex" : 0
 		}
 	],
-	"type" : "EXECUTABLE"
+	"type" : "SHARED_LIBRARY"
 }
