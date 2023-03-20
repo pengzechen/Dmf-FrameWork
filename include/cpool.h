@@ -2,6 +2,7 @@
 #define MYSQL_POOL_H
 #include <mysql/mysql.h>
 #include <pthread.h>
+#include <conf/conf.h>
 #define MAX_KEEP_CONNECTIONS 4
 
 //定义mysql连接链表结构

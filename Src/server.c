@@ -251,11 +251,10 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 
 int iocpServerMake(ContFunMap cmp){
 
+	ConfInit();	
 	SessionInit(session_all_dec);
 	mysql_pool_init();
 	elr_mpl_init();
-	ConfInit();
-	
 	
 	WSADATA wsd;
 	if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)

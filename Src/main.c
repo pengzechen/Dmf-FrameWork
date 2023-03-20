@@ -2,12 +2,6 @@
 #include "server.h"
 
 
-
-#include "libxml/parser.h"
-#include "libxml/tree.h"
-#include "libxml/xpath.h"
-
-
 void setsession(int a, const Request *req) 
 {
 	Response res;
@@ -139,9 +133,6 @@ int main() {
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
-
-		
-
 	
 	ContFunMap cmp;
 	cmp.cf[0] = &getsession;
