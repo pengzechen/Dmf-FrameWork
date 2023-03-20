@@ -2,11 +2,11 @@
 
 #define _H_CONF_
 
+// #include <libxml/xpathInternals.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <string.h>
-
 
 typedef struct conf_model {
     char host[64];
@@ -25,10 +25,10 @@ typedef struct Server_Conf {
     conf_server _conf_server;
 } Server_Conf;
 
-// 全局的配置变量
-Server_Conf server_conf_all;
 
-// #include <libxml/xpathInternals.h>
+// conf 全局的配置变量
+Server_Conf g_server_conf_all;
+
 
 extern void test();
 extern void ConfInit();

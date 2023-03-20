@@ -241,6 +241,9 @@ DmfServer_BINARY_DIR:STATIC=C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request
 //Value Computed by CMake
 DmfServer_IS_TOP_LEVEL:STATIC=ON
 
+//Dependencies for the target
+DmfServer_LIB_DEPENDS:STATIC=general;libssl;general;libmysql;general;pthreadVC2;general;ws2_32;general;libcrypto;general;libxml2;general;iconv;
+
 //Value Computed by CMake
 DmfServer_SOURCE_DIR:STATIC=C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request
 

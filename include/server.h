@@ -37,8 +37,6 @@
 
 #elif __linux__
 
-#elif __APPLE__
-
 #endif
 
 typedef struct {

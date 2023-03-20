@@ -119,12 +119,12 @@ static unsigned int BKDRHash(char *str)
     return (hash & 0x7FFFFFFF);
 }
 
-extern void SessionInit(HashNode* session_all_dec)
+extern void SessionInit()
 {
     for(int i=0; i<HASH_DEC_LEN; i++) {
-        session_all_dec[i].key = NULL;
-        session_all_dec[i].value = NULL;
-        session_all_dec[i].next = NULL;
+        g_session_all_dec[i].key = NULL;
+        g_session_all_dec[i].value = NULL;
+        g_session_all_dec[i].next = NULL;
     }
     printf("[Server: Info] session init successfully...\n");
 }
@@ -164,13 +164,13 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
     strcpy(new_node->value->key, key);
     strcpy(new_node->value->data, value);
 
-    if(session_all_dec[a % HASH_DEC_LEN].next == NULL){
+    if(g_session_all_dec[a % HASH_DEC_LEN].next == NULL){
         // 某个节点第一次添加数据
-        session_all_dec[a % HASH_DEC_LEN].next = new_node;
+        g_session_all_dec[a % HASH_DEC_LEN].next = new_node;
     }else{
         // 从头部插入新节点
-        new_node->next = session_all_dec[a % HASH_DEC_LEN].next;
-        session_all_dec[a % HASH_DEC_LEN].next = new_node;
+        new_node->next = g_session_all_dec[a % HASH_DEC_LEN].next;
+        g_session_all_dec[a % HASH_DEC_LEN].next = new_node;
     }
         
 }
@@ -180,7 +180,7 @@ extern void SessionAll(){
     HashNode* temp;
 
     for(int i=0; i< HASH_DEC_LEN; i++){
-        temp = &session_all_dec[i];
+        temp = &g_session_all_dec[i];
         printf("%d: ", i);
         while(temp->next != NULL){
             temp = temp->next; 
@@ -195,7 +195,7 @@ char* getSession(char* session_str, char* key) {
     // 计算当前 session 序号是多少
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
-    temp = &session_all_dec[index];
+    temp = &g_session_all_dec[index];
 
     SessionData *session_data_temp;
     while(temp->next != NULL){

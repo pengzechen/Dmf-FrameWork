@@ -22,8 +22,6 @@ void SSLservermake(ContFun cf[], char* keys[]){
         exit(1);
     }
 
-	
-	
     /* 载入用户的数字证书， 此证书用来发送给客户端。 证书里包含有公钥 */
     if (SSL_CTX_use_certificate_file(ctx, "localhost.pem", SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
@@ -110,7 +108,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	printf("[%s][Server: Info] %s\n",time , req1.path);
 	
 	
-	Rou_init( cf, keys, 3, acceptFd, &req1);
+	Rou_init( cf, keys, acceptFd, &req1);
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
@@ -249,12 +247,8 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 }
 
 
-int iocpServerMake(ContFunMap cmp){
+int iocpServerMake(ContFunMap cmp) {
 
-	ConfInit();	
-	SessionInit(session_all_dec);
-	mysql_pool_init();
-	elr_mpl_init();
 	
 	WSADATA wsd;
 	if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)

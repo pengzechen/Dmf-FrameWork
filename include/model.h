@@ -7,7 +7,7 @@
 #include <stdlib.h>
 /* 引入连接Mysql的头文件和lib包 */
 #include "mysql/mysql.h"
-#pragma comment(lib,"libmysql.lib")
+// #pragma comment(lib,"libmysql.lib")
 
 /*定义一些数据库连接需要的宏*/
 #define HOST "localhost" 			/*MySql服务器地址*/

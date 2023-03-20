@@ -23,7 +23,7 @@ typedef struct _ContFunMap {
 	
 } ContFunMap;
 
-void Rou_init( ContFun cf[], char* keys[], int num, int acceptFd, Request *req);
+void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
 void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
 

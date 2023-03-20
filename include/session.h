@@ -24,16 +24,19 @@ typedef struct _HashNode
 
 } HashNode ;
 
-// 全局变量
-HashNode session_all_dec[ HASH_DEC_LEN ];
 
-extern void SessionInit(HashNode* session_all_dec);
+// session 全局变量
+HashNode g_session_all_dec[ HASH_DEC_LEN ];
 
-void SessionCreate(char* ,char*, char*);
+
+
+extern void SessionInit();
+
+extern void SessionCreate(char* ,char*, char*);
 
 extern void SessionAll();
 
-char* getSession(char*, char*);
+extern char* getSession(char*, char*);
 
 
 

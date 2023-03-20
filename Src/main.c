@@ -2,7 +2,7 @@
 #include "server.h"
 
 
-void setsession(int a, const Request *req) 
+void setsession(int a, const Request *req)
 {
 	Response res;
 	Res_init(a, &res);
@@ -129,9 +129,16 @@ void elrtest(int a, const Request* req)
 }
 
 int main() {
-	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest};
-	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest"};
-	// SimpleServerMake(cf, keys);
+
+	ConfInit();	
+	SessionInit();
+	mysql_pool_init();
+	elr_mpl_init();
+
+
+	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, NULL};
+	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", NULL};
+	SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	
 	ContFunMap cmp;
@@ -151,8 +158,6 @@ int main() {
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = "/elrtest";
 	cmp.keys[7] = NULL;
-
-	iocpServerMake(cmp);
-	
+	//iocpServerMake(cmp);
 	return 0;
 }

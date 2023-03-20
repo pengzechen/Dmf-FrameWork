@@ -84,12 +84,12 @@ mysql_conn * conn_pop()
 void mysql_pool_init()
 {
 	mysql_conn * conn;    //定义一个conn变量，他是指向mysql_conn变量的指针
-	strncpy(pool_mysql.host, server_conf_all._conf_model.host, sizeof(pool_mysql.host));
-	strncpy(pool_mysql.username, server_conf_all._conf_model.username, sizeof(pool_mysql.username));
-	strncpy(pool_mysql.password, server_conf_all._conf_model.password, sizeof(pool_mysql.password));
-	strncpy(pool_mysql.database, server_conf_all._conf_model.database, sizeof(pool_mysql.database));
-
-	pool_mysql.port = server_conf_all._conf_model.port;
+	strncpy(pool_mysql.host, g_server_conf_all._conf_model.host, sizeof(pool_mysql.host));
+	strncpy(pool_mysql.username, g_server_conf_all._conf_model.username, sizeof(pool_mysql.username));
+	strncpy(pool_mysql.password, g_server_conf_all._conf_model.password, sizeof(pool_mysql.password));
+	strncpy(pool_mysql.database, g_server_conf_all._conf_model.database, sizeof(pool_mysql.database));
+	pool_mysql.port = g_server_conf_all._conf_model.port;
+	
 	pool_mysql.max_connections = MAX_KEEP_CONNECTIONS;
 	pool_mysql.free_connections = 0;
 	pool_mysql.mysql_list = NULL;

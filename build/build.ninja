@@ -70,6 +70,46 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 # =============================================================================
+# Object build statements for SHARED_LIBRARY target DmfServer
+
+
+#############################################
+# Order-only phony target for DmfServer
+
+build cmake_object_order_depends_target_DmfServer: phony || Src/CMakeFiles/DmfServer.dir
+
+build Src/CMakeFiles/DmfServer.dir/view.c.obj: C_COMPILER__DmfServer_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/view.c || cmake_object_order_depends_target_DmfServer
+  DEFINES = -DDmfServer_EXPORTS -DHAVE_STRUCT_TIMESPEC
+  DEP_FILE = Src\CMakeFiles\DmfServer.dir\view.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\CMakeFiles\DmfServer.dir
+  OBJECT_FILE_DIR = Src\CMakeFiles\DmfServer.dir
+  TARGET_COMPILE_PDB = Src\CMakeFiles\DmfServer.dir\
+  TARGET_PDB = Src\libDmfServer.pdb
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target DmfServer
+
+
+#############################################
+# Link the shared library Src\libDmfServer.dll
+
+build Src/libDmfServer.dll Src/libDmfServer.dll.a: C_SHARED_LIBRARY_LINKER__DmfServer_Debug Src/CMakeFiles/DmfServer.dir/view.c.obj
+  LANGUAGE_COMPILE_FLAGS = -g
+  LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
+  OBJECT_DIR = Src\CMakeFiles\DmfServer.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  RESTAT = 1
+  TARGET_COMPILE_PDB = Src\CMakeFiles\DmfServer.dir\
+  TARGET_FILE = Src\libDmfServer.dll
+  TARGET_IMPLIB = Src\libDmfServer.dll.a
+  TARGET_PDB = Src\libDmfServer.pdb
+
+# =============================================================================
 # Object build statements for EXECUTABLE target server
 
 
@@ -178,6 +218,16 @@ build Src/CMakeFiles/server.dir/utility.c.obj: C_COMPILER__server_Debug C$:/User
   TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
   TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
 
+build Src/CMakeFiles/server.dir/view.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/view.c || cmake_object_order_depends_target_server
+  DEFINES = -DHAVE_STRUCT_TIMESPEC
+  DEP_FILE = Src\CMakeFiles\server.dir\view.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\CMakeFiles\server.dir
+  OBJECT_FILE_DIR = Src\CMakeFiles\server.dir
+  TARGET_COMPILE_PDB = Src\CMakeFiles\server.dir\
+  TARGET_PDB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.pdb
+
 build Src/CMakeFiles/server.dir/model/data.c.obj: C_COMPILER__server_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/model/data.c || cmake_object_order_depends_target_server
   DEFINES = -DHAVE_STRUCT_TIMESPEC
   DEP_FILE = Src\CMakeFiles\server.dir\model\data.c.obj.d
@@ -236,7 +286,7 @@ build Src/CMakeFiles/server.dir/conf/test.c.obj: C_COMPILER__server_Debug C$:/Us
 #############################################
 # Link the executable C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\server.exe
 
-build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe: C_EXECUTABLE_LINKER__server_Debug Src/CMakeFiles/server.dir/cpool.c.obj Src/CMakeFiles/server.dir/main.c.obj Src/CMakeFiles/server.dir/model.c.obj Src/CMakeFiles/server.dir/request.c.obj Src/CMakeFiles/server.dir/response.c.obj Src/CMakeFiles/server.dir/router.c.obj Src/CMakeFiles/server.dir/server.c.obj Src/CMakeFiles/server.dir/session.c.obj Src/CMakeFiles/server.dir/template.c.obj Src/CMakeFiles/server.dir/utility.c.obj Src/CMakeFiles/server.dir/model/data.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj Src/CMakeFiles/server.dir/conf/conf.c.obj Src/CMakeFiles/server.dir/conf/test.c.obj
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe: C_EXECUTABLE_LINKER__server_Debug Src/CMakeFiles/server.dir/cpool.c.obj Src/CMakeFiles/server.dir/main.c.obj Src/CMakeFiles/server.dir/model.c.obj Src/CMakeFiles/server.dir/request.c.obj Src/CMakeFiles/server.dir/response.c.obj Src/CMakeFiles/server.dir/router.c.obj Src/CMakeFiles/server.dir/server.c.obj Src/CMakeFiles/server.dir/session.c.obj Src/CMakeFiles/server.dir/template.c.obj Src/CMakeFiles/server.dir/utility.c.obj Src/CMakeFiles/server.dir/view.c.obj Src/CMakeFiles/server.dir/model/data.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mpl.c.obj Src/CMakeFiles/server.dir/elr_mpl/elr_mtx.c.obj Src/CMakeFiles/server.dir/conf/conf.c.obj Src/CMakeFiles/server.dir/conf/test.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
@@ -275,6 +325,10 @@ build Src/rebuild_cache: phony Src/CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build DmfServer: phony Src/libDmfServer.dll
+
+build libDmfServer.dll: phony Src/libDmfServer.dll
+
 build server: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
 
 build server.exe: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
@@ -294,7 +348,7 @@ build all: phony Src/all
 #############################################
 # Folder: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src
 
-build Src/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
+build Src/all: phony Src/libDmfServer.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
 
 # =============================================================================
 # Built-in targets

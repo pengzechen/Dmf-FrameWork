@@ -30,7 +30,8 @@
 					"source" : "Src",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -46,7 +47,8 @@
 					"name" : "DmfServer",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -54,8 +56,15 @@
 			[
 				{
 					"directoryIndex" : 1,
+					"id" : "DmfServer::@fffd7673bb2fd0d58c2a",
+					"jsonFile" : "target-DmfServer-Debug-7369d44476cc726342aa.json",
+					"name" : "DmfServer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
 					"id" : "server::@fffd7673bb2fd0d58c2a",
-					"jsonFile" : "target-server-Debug-ec5d14483cc4845b9127.json",
+					"jsonFile" : "target-server-Debug-17cd618dc63070fd9027.json",
 					"name" : "server",
 					"projectIndex" : 0
 				}

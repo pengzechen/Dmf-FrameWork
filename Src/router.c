@@ -5,15 +5,13 @@ void Rou_init(
 	// 服务启动时传来的
 	ContFun cf[], 
 	char* keys[], 
-	int num, 
-	
 	int acceptFd, 
 	Request *req) 
 {
 	int flag = 0;
 	
 	// 先在control回调函数列表中寻找
-	for(int i=0; i<= num-1; i++){
+	for(int i=0; cf[i] != NULL; i++){
 		if( strcmp(req->path, keys[i]) == 0){
 			ContFun p;
 			p = cf[i];

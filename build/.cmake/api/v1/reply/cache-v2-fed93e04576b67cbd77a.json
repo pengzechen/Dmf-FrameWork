@@ -1278,6 +1278,18 @@
 			"value" : "ON"
 		},
 		{
+			"name" : "DmfServer_LIB_DEPENDS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Dependencies for the target"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "general;libssl;general;libmysql;general;pthreadVC2;general;ws2_32;general;libcrypto;general;libxml2;general;iconv;"
+		},
+		{
 			"name" : "DmfServer_SOURCE_DIR",
 			"properties" : 
 			[
