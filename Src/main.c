@@ -133,6 +133,8 @@ void elrtest(int a, const Request* req)
 typedef void(*View)(int, const Request*);
 typedef int(*Get)();
 typedef void(*Set)(int);
+typedef void(*Dll_read_shm)();
+#include <views.h>
 
 int main() {
 
@@ -144,11 +146,15 @@ int main() {
 	HMODULE handle = LoadLibrary("./views/libviews.dll");
 
 	View lib = (View)GetProcAddress(handle, "viewtest");
+	
 	Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
+	testlink = 12;
+	printf("link test %d \n", testlink);
 
-	link_set(3);
-	printf("link test %d \n", link_get());
+
+	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
+	dll_read_shm();
 
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};

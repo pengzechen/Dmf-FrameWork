@@ -1,17 +1,5 @@
-#include <server.h>
+#include "views.h"
 
-#define DLL_EXPORT __declspec(dllexport)
-#define DLL_IMPORT __declspec(dllimport)
-
-// 多进程实现数据共享的方法
-#pragma data_seg("flag_data")
-int testlink = 0;
-char string[1024*1024] = {0};
-#pragma data_seg()
-#pragma comment(linker,"/SECTION:flag_data,RWS")
-
-
-/*
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
 	switch(ul_reason_for_call){
 		case DLL_PROCESS_ATTACH:
@@ -32,34 +20,31 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserve
 
 	return TRUE;
 }
-*/
 
-#ifdef __cplusplus    // If used by C++ code, 
-extern "C" {          // we need to export the C interface
-#endif
-
-DLL_EXPORT void set(int a){
+void set(int a){
 	testlink = a;
 }
-DLL_EXPORT int get(){
+
+int get(){
 	return testlink;
 }
-DLL_EXPORT void viewtest(int a, const Request* req)
+
+void viewtest(int a, const Request* req)
 {
 	// printf("--in--%s\n", g_server_conf_all._conf_model.database);
 	Res_row(a, "lib test ok\n ");
 }
 
-DLL_EXPORT void read_shm(){
+void dll_read_shm(){
 	HANDLE hMapFile;
 	LPCTSTR pBuf;
-	TCHAR szName[]=TEXT("Global/MyFileMappingObject");
+	TCHAR szName[]=TEXT("Global\\MyFileMappingObject");
 
 	hMapFile = OpenFileMapping(
 		FILE_MAP_READ,
 		FALSE,
 		szName);
-		
+
 	if (hMapFile == NULL){
 		MessageBox(NULL, "Failed to open file mapping.\n", "Error", MB_ICONERROR);
 		DWORD error = GetLastError();
@@ -68,7 +53,7 @@ DLL_EXPORT void read_shm(){
 	}
 	pBuf = (LPCTSTR)MapViewOfFile(
 		hMapFile, // 映射文件句柄
-		FILE_MAP_ALL_ACCESS, // 可读可写
+		FILE_MAP_READ, // 可读可写
 		0,
 		0,
 		1024*1024);
@@ -89,7 +74,7 @@ DLL_EXPORT void read_shm(){
 	CloseHandle(hMapFile);
 }
 
-DLL_EXPORT void dll_write_to_shm(char* str){
+void dll_write_shm(char* str){
 	TCHAR szName[]=TEXT("Global\\MyFileMappingObject");
 	HANDLE hMapFile;
 	LPCTSTR pBuf;
@@ -122,10 +107,6 @@ DLL_EXPORT void dll_write_to_shm(char* str){
 
 	printf("give string: %s\n", str);
 	UnmapViewOfFile(pBuf);
-	CloseHandle(hMapFile);
+	// CloseHandle(hMapFile);
 }
 
-
-#ifdef __cplusplus
-}
-#endif
