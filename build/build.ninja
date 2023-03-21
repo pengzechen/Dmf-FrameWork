@@ -255,6 +255,14 @@ build Src/rebuild_cache: phony Src/CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_views: phony || Src/views/CMakeFiles/views.dir
 
+build Src/views/CMakeFiles/views.dir/linktest.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/linktest.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\linktest.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir
+
 build Src/views/CMakeFiles/views.dir/view.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/view.c || cmake_object_order_depends_target_views
   DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
   DEP_FILE = Src\views\CMakeFiles\views.dir\view.c.obj.d
@@ -311,7 +319,7 @@ build Src/views/CMakeFiles/views.dir/__/utility.c.obj: C_COMPILER__views_Debug C
 #############################################
 # Link the shared library C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll
 
-build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a: C_SHARED_LIBRARY_LINKER__views_Debug Src/views/CMakeFiles/views.dir/view.c.obj Src/views/CMakeFiles/views.dir/__/cpool.c.obj Src/views/CMakeFiles/views.dir/__/response.c.obj Src/views/CMakeFiles/views.dir/__/session.c.obj Src/views/CMakeFiles/views.dir/__/template.c.obj Src/views/CMakeFiles/views.dir/__/utility.c.obj
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a: C_SHARED_LIBRARY_LINKER__views_Debug Src/views/CMakeFiles/views.dir/linktest.c.obj Src/views/CMakeFiles/views.dir/view.c.obj Src/views/CMakeFiles/views.dir/__/cpool.c.obj Src/views/CMakeFiles/views.dir/__/response.c.obj Src/views/CMakeFiles/views.dir/__/session.c.obj Src/views/CMakeFiles/views.dir/__/template.c.obj Src/views/CMakeFiles/views.dir/__/utility.c.obj
   LANGUAGE_COMPILE_FLAGS = -g
   LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
@@ -322,6 +330,42 @@ build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.d
   TARGET_FILE = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll
   TARGET_IMPLIB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll.a
   TARGET_PDB = views.dll.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target linktest
+
+
+#############################################
+# Order-only phony target for linktest
+
+build cmake_object_order_depends_target_linktest: phony || Src/views/CMakeFiles/linktest.dir
+
+build Src/views/CMakeFiles/linktest.dir/linktest.c.obj: C_COMPILER__linktest_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/views/linktest.c || cmake_object_order_depends_target_linktest
+  DEFINES = -DHAVE_STRUCT_TIMESPEC
+  DEP_FILE = Src\views\CMakeFiles\linktest.dir\linktest.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\linktest.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\linktest.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target linktest
+
+
+#############################################
+# Link the executable C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\linktest.exe
+
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.exe: C_EXECUTABLE_LINKER__linktest_Debug Src/views/CMakeFiles/linktest.dir/linktest.c.obj
+  FLAGS = -g
+  LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+  LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib
+  OBJECT_DIR = Src\views\CMakeFiles\linktest.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_FILE = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\linktest.exe
+  TARGET_IMPLIB = C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\liblinktest.dll.a
+  TARGET_PDB = linktest.exe.dbg
 
 
 #############################################
@@ -352,6 +396,10 @@ build Src/views/rebuild_cache: phony Src/views/CMakeFiles/rebuild_cache.util
 
 build libviews.dll: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll
 
+build linktest: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.exe
+
+build linktest.exe: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.exe
+
 build server: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
 
 build server.exe: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/server.exe
@@ -380,7 +428,7 @@ build Src/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/s
 #############################################
 # Folder: C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build/Src/views
 
-build Src/views/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll
+build Src/views/all: phony C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.exe
 
 # =============================================================================
 # Built-in targets

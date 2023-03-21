@@ -2,13 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.exe"
 		},
 		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a"
-		},
-		{
-			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.pdb"
+			"path" : "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/linktest.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -16,7 +13,7 @@
 	{
 		"commands" : 
 		[
-			"ADD_LIBRARY",
+			"add_executable",
 			"link_directories",
 			"add_definitions",
 			"include_directories"
@@ -34,7 +31,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 3,
+				"line" : 12,
 				"parent" : 0
 			},
 			{
@@ -74,9 +71,6 @@
 				{
 					"backtrace" : 4,
 					"define" : "HAVE_STRUCT_TIMESPEC"
-				},
-				{
-					"define" : "views_EXPORTS"
 				}
 			],
 			"includes" : 
@@ -89,20 +83,19 @@
 			"language" : "C",
 			"sourceIndexes" : 
 			[
-				0,
-				1,
-				2,
-				3,
-				4,
-				5
+				0
 			]
 		}
 	],
-	"id" : "views::@92b6779f55cb2208c651",
+	"id" : "linktest::@92b6779f55cb2208c651",
 	"link" : 
 	{
 		"commandFragments" : 
 		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
 			{
 				"fragment" : "",
 				"role" : "flags"
@@ -154,8 +147,8 @@
 		],
 		"language" : "C"
 	},
-	"name" : "views",
-	"nameOnDisk" : "libviews.dll",
+	"name" : "linktest",
+	"nameOnDisk" : "linktest.exe",
 	"paths" : 
 	{
 		"build" : "Src/views",
@@ -167,12 +160,7 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0,
-				1,
-				2,
-				3,
-				4,
-				5
+				0
 			]
 		}
 	],
@@ -181,39 +169,9 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Src/views/view.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/cpool.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/response.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/session.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/template.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Src/utility.c",
+			"path" : "Src/views/linktest.c",
 			"sourceGroupIndex" : 0
 		}
 	],
-	"type" : "SHARED_LIBRARY"
+	"type" : "EXECUTABLE"
 }

@@ -131,6 +131,9 @@ void elrtest(int a, const Request* req)
 
 
 typedef void(*View)(int, const Request*);
+typedef int(*Get)();
+typedef void(*Set)(int);
+
 int main() {
 
 	ConfInit();	
@@ -139,7 +142,14 @@ int main() {
 	elr_mpl_init();
 
 	HMODULE handle = LoadLibrary("./views/libviews.dll");
+
 	View lib = (View)GetProcAddress(handle, "viewtest");
+	Get link_get = (Get)GetProcAddress(handle, "get");
+	Set link_set = (Set)GetProcAddress(handle, "set");
+
+	link_set(3);
+	printf("link test %d \n", link_get());
+
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", "/lib", NULL};
