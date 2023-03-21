@@ -157,10 +157,11 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
     new_node->key = malloc(sizeof(char)*strlen(random_str));
     strcpy(new_node->key, random_str);
 
-    new_node->value = malloc(sizeof(SessionData));
+    new_node->value = (SessionData*)malloc(sizeof(SessionData));
     new_node->value->next = NULL;
     new_node->value->key = malloc(sizeof(char)*strlen(key));
     new_node->value->data = malloc(sizeof(char)*strlen(value));
+
     strcpy(new_node->value->key, key);
     strcpy(new_node->value->data, value);
 
@@ -190,6 +191,24 @@ extern void SessionAll(){
     }
 }
 
+char* getSessionA(const Request* req, char* key){
+    char *str1;
+    char* session_res = NULL;
+
+	for(int i=0; i<=req->p_int; i++) {
+		if(strcmp(req->params[i].key, "Cookie")==0) {
+			str1=strstr(req->params[i].data, "dmfsession=");
+			if(str1 != NULL){
+				session_res = getSession(str1+11, key);
+				if( session_res == NULL){
+					return NULL;
+				}else{
+					return session_res;
+				}
+			}
+		}
+	}
+}
 
 char* getSession(char* session_str, char* key) {
     // 计算当前 session 序号是多少
@@ -203,14 +222,14 @@ char* getSession(char* session_str, char* key) {
         if(strcmp(temp->key, session_str) == 0){
             session_data_temp = temp->value;
             do{
+
                 if(strcmp(session_data_temp->key, key) == 0){
                     return session_data_temp->data;
                 }
                 session_data_temp = session_data_temp->next;
                 
-            }while((session_data_temp->next != NULL ));
+            }while((session_data_temp != NULL ));
         }
-        printf("999\n");
     }
     
     return NULL;

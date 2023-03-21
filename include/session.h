@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+#include <request.h>
+
 
 #define HASH_DEC_LEN 199
 
@@ -38,6 +40,6 @@ extern void SessionAll();
 
 extern char* getSession(char*, char*);
 
-
+extern char* getSessionA(const Request* req, char* key);
 
 #endif /* SESSION */

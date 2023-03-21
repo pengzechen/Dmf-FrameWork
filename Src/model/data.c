@@ -49,6 +49,7 @@ ObjectNode* CreateRootNode(char* nodeName, NodeDataType ndt, void* anyData)
 	return mn;
 }
 
+// append a Bro to a ObjectNode
 void AppendBro(ObjectNode* mn, ObjectNode* on)
 {
 	if(mn->mnBro == NULL){
@@ -61,6 +62,7 @@ void AppendBro(ObjectNode* mn, ObjectNode* on)
 	//return mn;
 }
 
+// append a child to a ObjectNode
 void AppendChild(ObjectNode* mn, ObjectNode* child)
 {
 	if(mn->mnChild != NULL)
@@ -73,13 +75,13 @@ void ShowNodeData(ObjectNode* mn)
 	if(mn == NULL) return;
 	switch(mn->ndt){
 		case D_CHAR:
-			//printf("%s: %s \n", mn->NodeName, mn->nd.d_str);
+			printf("%s: %s \n", mn->NodeName, mn->nd.d_str);
 			break;
 		case D_INT:
-			//printf("%s: %d \n", mn->NodeName, mn->nd.d_int);
+			printf("%s: %d \n", mn->NodeName, mn->nd.d_int);
 			break;
 		case D_NODE:
-			//printf("%s: Object \n", mn->NodeName);
+			printf("%s: Object \n", mn->NodeName);
 			break;
 		default:
 			// No such type

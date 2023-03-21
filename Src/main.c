@@ -19,23 +19,14 @@ void setsession(int a, const Request *req)
 }
 
 void getsession(int a, const Request *req) {
-	char *str1;
-	for(int i=0; i<=req->p_int; i++) {
-		if(strcmp(req->params[i].key, "Cookie")==0) {
-			str1=strstr(req->params[i].data, "dmfsession=");
-			if(str1 != NULL){
-				printf("%s ", str1+11);
-				char* session_res = NULL;
-				session_res = getSession(str1+11, "login");
-				if( session_res == NULL){
-					printf("no such key\n");
-				}else{
-					printf("%s \n", session_res);
-				}
-			}
-		}
+	char* s = getSessionA(req, "login");
+	if(s == NULL){
+		Res_row(a, "no such key");
+	}else{
+		char res[256] = {0};
+		strcat(res, s);
+		Res_row(a, res);
 	}
-	Res_row(a, "This is a test str");
 }
 
 void sessiondebug(int a, const Request* req) 
@@ -137,31 +128,24 @@ typedef void(*Dll_read_shm)();
 #include <views.h>
 
 int main() {
-
 	ConfInit();	
 	SessionInit();
 	mysql_pool_init();
 	elr_mpl_init();
 
 	HMODULE handle = LoadLibrary("./views/libviews.dll");
-
 	View lib = (View)GetProcAddress(handle, "viewtest");
-	
 	Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
 	testlink = 12;
 	printf("link test %d \n", testlink);
-
-
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
 	dll_read_shm();
-
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", "/lib", NULL};
 	
-	
-	SimpleServerMake(cf, keys);
+	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	
 	ContFunMap cmp;
@@ -181,6 +165,6 @@ int main() {
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = "/elrtest";
 	cmp.keys[7] = NULL;
-	//iocpServerMake(cmp);
+	iocpServerMake(cmp);
 	return 0;
 }
