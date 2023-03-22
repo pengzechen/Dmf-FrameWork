@@ -31,7 +31,8 @@ int get(){
 
 void viewtest(int a, const Request* req)
 {
-	// printf("--in--%s\n", g_server_conf_all._conf_model.database);
+	printf("--in--%s\n", g_server_conf_all._conf_model.database);
+	exeSql("select * from test;");
 	Res_row(a, "lib test ok\n ");
 }
 

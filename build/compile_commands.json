@@ -86,8 +86,23 @@
 },
 {
   "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\conf\\conf.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\conf.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\conf.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\conf\\test.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\test.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\conf\\test.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
   "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\cpool.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c",
   "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\cpool.c"
+},
+{
+  "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",
+  "command": "D:\\program_\\MinGW\\bin\\gcc.exe -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include -g   -fexec-charset=gbk -o Src\\views\\CMakeFiles\\views.dir\\__\\model.c.obj -c C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\model.c",
+  "file": "C:\\Users\\92706\\Desktop\\TEMP\\C_learn\\Myserver\\request\\Src\\model.c"
 },
 {
   "directory": "C:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/build",

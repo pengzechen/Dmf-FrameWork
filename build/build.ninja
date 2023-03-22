@@ -271,9 +271,33 @@ build Src/views/CMakeFiles/views.dir/view.c.obj: C_COMPILER__views_Debug C$:/Use
   OBJECT_DIR = Src\views\CMakeFiles\views.dir
   OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir
 
+build Src/views/CMakeFiles/views.dir/__/conf/conf.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/conf/conf.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\conf\conf.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__\conf
+
+build Src/views/CMakeFiles/views.dir/__/conf/test.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/conf/test.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\conf\test.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__\conf
+
 build Src/views/CMakeFiles/views.dir/__/cpool.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/cpool.c || cmake_object_order_depends_target_views
   DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
   DEP_FILE = Src\views\CMakeFiles\views.dir\__\cpool.c.obj.d
+  FLAGS = -g   -fexec-charset=gbk
+  INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
+  OBJECT_DIR = Src\views\CMakeFiles\views.dir
+  OBJECT_FILE_DIR = Src\views\CMakeFiles\views.dir\__
+
+build Src/views/CMakeFiles/views.dir/__/model.c.obj: C_COMPILER__views_Debug C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/Src/model.c || cmake_object_order_depends_target_views
+  DEFINES = -DHAVE_STRUCT_TIMESPEC -Dviews_EXPORTS
+  DEP_FILE = Src\views\CMakeFiles\views.dir\__\model.c.obj.d
   FLAGS = -g   -fexec-charset=gbk
   INCLUDES = -IC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/include
   OBJECT_DIR = Src\views\CMakeFiles\views.dir
@@ -319,7 +343,7 @@ build Src/views/CMakeFiles/views.dir/__/utility.c.obj: C_COMPILER__views_Debug C
 #############################################
 # Link the shared library C:\Users\92706\Desktop\TEMP\C_learn\Myserver\request\bin\views\libviews.dll
 
-build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a: C_SHARED_LIBRARY_LINKER__views_Debug Src/views/CMakeFiles/views.dir/linktest.c.obj Src/views/CMakeFiles/views.dir/view.c.obj Src/views/CMakeFiles/views.dir/__/cpool.c.obj Src/views/CMakeFiles/views.dir/__/response.c.obj Src/views/CMakeFiles/views.dir/__/session.c.obj Src/views/CMakeFiles/views.dir/__/template.c.obj Src/views/CMakeFiles/views.dir/__/utility.c.obj
+build C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll C$:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/bin/views/libviews.dll.a: C_SHARED_LIBRARY_LINKER__views_Debug Src/views/CMakeFiles/views.dir/linktest.c.obj Src/views/CMakeFiles/views.dir/view.c.obj Src/views/CMakeFiles/views.dir/__/conf/conf.c.obj Src/views/CMakeFiles/views.dir/__/conf/test.c.obj Src/views/CMakeFiles/views.dir/__/cpool.c.obj Src/views/CMakeFiles/views.dir/__/model.c.obj Src/views/CMakeFiles/views.dir/__/response.c.obj Src/views/CMakeFiles/views.dir/__/session.c.obj Src/views/CMakeFiles/views.dir/__/template.c.obj Src/views/CMakeFiles/views.dir/__/utility.c.obj
   LANGUAGE_COMPILE_FLAGS = -g
   LINK_LIBRARIES = -llibssl  -llibmysql  -lpthreadVC2  -lws2_32  -llibcrypto  -llibxml2  -liconv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   LINK_PATH = -LC:/Users/92706/Desktop/TEMP/C_learn/Myserver/request/lib

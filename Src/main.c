@@ -15,7 +15,7 @@ void setsession(int a, const Request *req)
 
 	SetBody(&res, "test");
 	ResParse(&res);
-	// exeSql("select * from test;");
+
 }
 
 void getsession(int a, const Request *req) {
@@ -116,6 +116,7 @@ void elrtest(int a, const Request* req)
 	//char* str = (char*) malloc (sizeof(char)* 50);
 
 	//free(str);
+	printf("g_server_conf_all： database %s\n", g_server_conf_all._conf_model.database);
 
 	Res_row(a, "test ok");
 }
@@ -128,7 +129,7 @@ typedef void(*Dll_read_shm)();
 #include <views.h>
 
 int main() {
-	ConfInit();	
+	ConfInit();
 	SessionInit();
 	mysql_pool_init();
 	elr_mpl_init();
@@ -156,7 +157,8 @@ int main() {
 	cmp.cf[4] = &mysqltest;
 	cmp.cf[5] = &datamodeltest;
 	cmp.cf[6] = &elrtest;
-	cmp.cf[7] = NULL;
+	cmp.cf[7] = lib;
+	cmp.cf[8] = NULL;
 	cmp.keys[0] = "/getsession";
 	cmp.keys[1] = "/template";
 	cmp.keys[2] = "/setsession";
@@ -164,7 +166,8 @@ int main() {
 	cmp.keys[4] = "/mysqltest";
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = "/elrtest";
-	cmp.keys[7] = NULL;
+	cmp.keys[7] = "/lib";
+	cmp.keys[8] = NULL;
 	iocpServerMake(cmp);
 	return 0;
 }
