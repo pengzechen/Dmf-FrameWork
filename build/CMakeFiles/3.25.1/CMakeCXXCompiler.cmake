@@ -1,4 +1,4 @@
-set(CMAKE_CXX_COMPILER "D:/program_/MinGW/bin/g++.exe")
+set(CMAKE_CXX_COMPILER "D:/program_/MinGW/bin/c++.exe")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_COMPILER_VERSION "6.3.0")

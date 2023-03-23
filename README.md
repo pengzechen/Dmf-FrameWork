@@ -5,6 +5,6 @@ To run this server:
 ```
 git clone https://github.com/pengzechen/dmfserver
 cd build
-cmake ..
+cmake ../CMakeLists.txt -G "MinGW Makefiles"
 make
 ```
