@@ -8,5 +8,5 @@ file( GLOB views_SRC "*.c" "*.h")
 add_library(views SHARED ${views_SRC} ${views_need_SRC})
 
 
-#指定生成目标
-add_executable(linktest "linktest.c" )
+# 指定生成目标
+add_executable(linktest "linktest.c")
