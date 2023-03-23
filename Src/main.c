@@ -156,12 +156,12 @@ int main() {
 	testlink = 12;
 	printf("link test %d \n", testlink);
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
-	dll_read_shm();
+	// dll_read_shm();
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", "/lib", NULL};
 	
-	// SimpleServerMake(cf, keys);
+	SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	
 	ContFunMap cmp;
@@ -183,6 +183,6 @@ int main() {
 	cmp.keys[6] = "/elrtest";
 	cmp.keys[7] = "/lib";
 	cmp.keys[8] = NULL;
-	iocpServerMake(cmp);
+	// iocpServerMake(cmp);
 	return 0;
 }

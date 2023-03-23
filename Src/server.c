@@ -22,32 +22,22 @@ void SSLservermake(ContFun cf[], char* keys[]){
 	unsigned int myport, lisnum;
 
 	SSL_CTX *ctx;
-
-    /* SSL 库初始化 */
     SSL_library_init();
-    /* 载入所有 SSL 算法 */
     OpenSSL_add_all_algorithms();
-    /* 载入所有 SSL 错误消息 */
     SSL_load_error_strings();
-    /* 以 SSL V2 和 V3 标准兼容方式产生一个 SSL_CTX ，即 SSL Content Text */
     ctx = SSL_CTX_new(SSLv23_server_method());
-    /* 也可以用 SSLv2_server_method() 或 SSLv3_server_method() 单独表示 V2 或 V3标准 */
     if (ctx == NULL) {
         ERR_print_errors_fp(stdout);
         exit(1);
     }
-
-    /* 载入用户的数字证书， 此证书用来发送给客户端。 证书里包含有公钥 */
     if (SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
         exit(1);
     }
-    /* 载入用户私钥 */
     if (SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
         exit(1);
     }
-    /* 检查用户私钥是否正确 */
     if (!SSL_CTX_check_private_key(ctx)) {
         ERR_print_errors_fp(stdout);
         exit(1);
@@ -328,7 +318,7 @@ int iocpServerMake(ContFunMap cmp) {
 		// 投递一个WSARecv操作
 		DWORD Flags = 0;
 		DWORD dwRecv = 0;
-		WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
+		WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
 	}
 
 	DWORD dwByteTrans;
