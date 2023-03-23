@@ -1,9 +1,0 @@
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/CMakeFiles/edit_cache.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/CMakeFiles/rebuild_cache.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/CMakeFiles/server.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/CMakeFiles/edit_cache.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/CMakeFiles/rebuild_cache.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/views/CMakeFiles/views.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/views/CMakeFiles/linktest.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/views/CMakeFiles/edit_cache.dir
-C:/Users/92706/Desktop/Dmfserver/dmfserver/build/Src/views/CMakeFiles/rebuild_cache.dir
