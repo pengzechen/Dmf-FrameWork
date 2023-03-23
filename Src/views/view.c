@@ -55,7 +55,9 @@ void viewtest(int a, const Request* req)
 void dll_read_shm(){
 	HANDLE hMapFile;
 	LPCTSTR pBuf;
-	TCHAR szName[]=TEXT("Global\\MyFileMappingObject");
+	// "Global\\MyFileMappingObject"
+
+	TCHAR szName[]=TEXT("MyFileMappingObject");
 
 	hMapFile = OpenFileMapping(
 		FILE_MAP_READ,
@@ -92,7 +94,7 @@ void dll_read_shm(){
 }
 
 void dll_write_shm(char* str){
-	TCHAR szName[]=TEXT("Global\\MyFileMappingObject");
+	TCHAR szName[]=TEXT("MyFileMappingObject");
 	HANDLE hMapFile;
 	LPCTSTR pBuf;
 	hMapFile = CreateFileMapping(
