@@ -35,6 +35,10 @@ typedef struct conf_model {
 
 typedef struct conf_server {
     int port;
+
+    char cert_private[128];
+    char cert_public[128];
+    
 } conf_server;
 
 typedef struct Server_Conf {

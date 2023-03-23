@@ -38,12 +38,12 @@ void SSLservermake(ContFun cf[], char* keys[]){
     }
 
     /* 载入用户的数字证书， 此证书用来发送给客户端。 证书里包含有公钥 */
-    if (SSL_CTX_use_certificate_file(ctx, "localhost.pem", SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
         exit(1);
     }
     /* 载入用户私钥 */
-    if (SSL_CTX_use_PrivateKey_file(ctx, "localhost-key.pem", SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
         exit(1);
     }
@@ -91,6 +91,7 @@ void SSLservermake(ContFun cf[], char* keys[]){
                         "Content-Type:text/html\r\n"
                         "Server:Dmfserver\r\n"
                         "\r\n OK OK";
+						
         len = SSL_write(ssl, res, strlen(res));
         
 
@@ -135,7 +136,12 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 
 void SimpleServerMake(ContFun cf[], char* keys[]) {
 	
-	int serverPort = SERVER_PORT;
+	int serverPort;
+	// if configure not define port then use SERVER_PORT
+	if(g_server_conf_all._conf_server.port == 0)
+	serverPort = SERVER_PORT;
+	else serverPort = g_server_conf_all._conf_server.port;
+
     WSADATA wsaData;
     SOCKET sListen, sAccept;
 
@@ -264,7 +270,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 
 int iocpServerMake(ContFunMap cmp) {
 
-	
+	int serverPort;
 	WSADATA wsd;
 	if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)
 	{
@@ -286,8 +292,13 @@ int iocpServerMake(ContFunMap cmp) {
 		   }
 	}
 
-	//创建侦听SOCKET
-	SOCKET sListen = BindServerOverlapped(SERVER_PORT);
+	
+	// if configure not define port then use SERVER_PORT
+	if(g_server_conf_all._conf_server.port == 0)
+	serverPort = SERVER_PORT;
+	else serverPort = g_server_conf_all._conf_server.port;
+	// Listening socket
+	SOCKET sListen = BindServerOverlapped(serverPort);
 
 	SOCKET sClient;
 	LPPER_HANDLE_DATA PerHandleData;
@@ -297,7 +308,7 @@ int iocpServerMake(ContFunMap cmp) {
 	
 	while(1){
 		
-		// 等待客户端接入
+		// wait for client
 		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
 		//sClient = accept(sListen, 0, 0);
 

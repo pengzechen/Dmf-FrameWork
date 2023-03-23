@@ -3,6 +3,10 @@
 
   <server>
 	  <listen>80</listen>
+    <cert>
+      <private>./cert/localhost-key.pem</private>
+      <public>./cert/localhost.pem</public>
+    </cert>
   </server>
 
   <model>
@@ -17,8 +21,10 @@
 	  <dir>./template</dir>
   </template>
 
-  <static>
-	  <dir>./static</dir>
-  </static>
-  
+  <response>
+    <static>
+	    <dir>./static</dir>
+    </static>
+  </response>
+
 </dmfserver>

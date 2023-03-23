@@ -43,7 +43,8 @@ void ConfInit()
 
     xmlChar *szKey;
     xmlNodePtr child;
-    child = curNode->children; // curNode 是根节点
+    child = curNode->children;      // curNode 是根节点
+                                    // child 是模块层
     while (child != NULL){
         if (!xmlStrcmp(child->name, (const xmlChar *)"model")) {
             // szKey = xmlNodeGetContent(child);
@@ -73,5 +74,12 @@ void ConfInit()
     xmlFree(szKey);
 
     xmlFreeDoc(doc);
+
+
+    g_server_conf_all._conf_server.port = 80;
+
+    strcpy(g_server_conf_all._conf_server.cert_public, "./cert/localhost.pem");
+    strcpy(g_server_conf_all._conf_server.cert_private, "./cert/localhost-key.pem");
+
     printf("[Server: Info] conf init successfully...\n");
 }
