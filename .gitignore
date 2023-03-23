@@ -2,7 +2,7 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
 
-bin/server.exe
+bin/*.exe
 bin/static/1.js
 bin/templates/test.html
 
