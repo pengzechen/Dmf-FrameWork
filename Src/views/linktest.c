@@ -37,7 +37,7 @@ int main() {
     dll_write_shm(data);
 
 
-    while(1){Sleep(2000);printf("[linktest: ]%d\n", link_get());}
+    while(1){Sleep(2000);}
     FreeLibrary(handle);
     return 0;
 }

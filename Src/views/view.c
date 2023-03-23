@@ -19,16 +19,16 @@ limitations under the License.
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
 	switch(ul_reason_for_call){
 		case DLL_PROCESS_ATTACH:
-			printf("dll_process_attach\n");
+			// printf("dll_process_attach\n");
 			break;
 		case DLL_PROCESS_DETACH:
-			printf("dll_process_detach\n");
+			// printf("dll_process_detach\n");
 			break;
 		case DLL_THREAD_ATTACH:
-			printf("dll_thread_attach\n");
+			// printf("dll_thread_attach\n");
 			break;
 		case DLL_THREAD_DETACH:
-			printf("dll_thread_detach\n");
+			// printf("dll_thread_detach\n");
 			break;
 		default:
 			break;
