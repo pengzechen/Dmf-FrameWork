@@ -9,7 +9,7 @@
 #include <request.h>
 
 
-#define HASH_DEC_LEN 199
+#define HASH_DEC_LEN 65536
 
 typedef struct _SessionData {
     char* key;

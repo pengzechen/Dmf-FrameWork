@@ -180,15 +180,20 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
 extern void SessionAll(){
     HashNode* temp;
 
+    char str_res[1024*1024] = {0};
+    
+
     for(int i=0; i< HASH_DEC_LEN; i++){
         temp = &g_session_all_dec[i];
-        printf("%d: ", i);
         while(temp->next != NULL){
             temp = temp->next; 
-            printf("[%s: %d]->", temp->key, &temp->value);
+            strcat(str_res, temp->key);
+            strcat(str_res, temp->value->data);
+            strcat(str_res, "\n");
         }
-        printf("\n");
     }
+
+    printf("%s\n", str_res);
 }
 
 char* getSessionA(const Request* req, char* key){
@@ -200,14 +205,12 @@ char* getSessionA(const Request* req, char* key){
 			str1=strstr(req->params[i].data, "dmfsession=");
 			if(str1 != NULL){
 				session_res = getSession(str1+11, key);
-				if( session_res == NULL){
-					return NULL;
-				}else{
-					return session_res;
-				}
+                return session_res == NULL ? NULL : session_res;
 			}
 		}
 	}
+
+    return NULL;
 }
 
 char* getSession(char* session_str, char* key) {
