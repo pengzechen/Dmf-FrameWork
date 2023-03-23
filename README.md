@@ -17,8 +17,8 @@ Pay attention: I used MySql(5.7), if you use aother version of MySql, please rep
 #### 2.Clone and Compile the project
 
 ```
-git clone https://github.com/pengzechen/dmfserver
-cd dmfserver
+git clone https://github.com/pengzechen/request
+cd request
 cd build
 cmake ../CMakeLists.txt -G "MinGW Makefiles"
 make
