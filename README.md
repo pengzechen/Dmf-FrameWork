@@ -19,6 +19,7 @@ Pay attention: I used MySql(5.7), if you use aother version of MySql, please rep
 ```
 git clone https://github.com/pengzechen/request
 cd request
+mkdir build
 cd build
 cmake ../CMakeLists.txt -G "MinGW Makefiles"
 make
