@@ -77,9 +77,11 @@ void ConfInit()
 
 
     g_server_conf_all._conf_server.port = 80;
-
+    strcpy(g_server_conf_all._conf_server.host, "localhost");
     strcpy(g_server_conf_all._conf_server.cert_public, "./cert/localhost.pem");
     strcpy(g_server_conf_all._conf_server.cert_private, "./cert/localhost-key.pem");
+    g_server_conf_all._conf_server.mode = SimpleServer;
+
 
     printf("[Server: Info] conf init successfully...\n");
 }
