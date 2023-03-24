@@ -90,9 +90,7 @@ void SSLservermake(ContFun cf[], char* keys[]){
         close(sAccept);
     }
 
-
     close(sListen);
-
     SSL_CTX_free(ctx);
 }
 
