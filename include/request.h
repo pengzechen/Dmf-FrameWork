@@ -76,10 +76,19 @@ struct req {
 
 typedef struct req Request;
 
-static void MultiParse (Request *request, char *boundary );
-
-void ParseHttp(Request *request, char *data);
-
-void freeReq(Request *req);
-
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+	static void MultiParse (Request *request, char *boundary );
+
+	void ParseHttp(Request *request, char *data);
+
+	void freeReq(Request *req);
+
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
+
+#endif // REQUEST

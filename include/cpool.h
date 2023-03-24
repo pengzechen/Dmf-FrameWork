@@ -30,6 +30,8 @@ typedef struct mysql_conn
 	MYSQL conn;
 } mysql_conn;    //相当于typedef struct mysql_conn mysql_conn;  第一个mysql_conn为类型，第二个为变量名
 
+
+
 //定义mysql连接池结构
 typedef struct mysql_pool    
 {
@@ -47,6 +49,10 @@ typedef struct mysql_pool
 	mysql_conn * mysql_list; //mysql连接池链表
 } mysql_pool;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void mysql_pool_init();   //执行初始化方法
 void destroy_mysql_connection(mysql_conn *conn);
 void destroy_mysql_pool();
@@ -54,6 +60,11 @@ void release_mysql_connection(mysql_conn *conn);
 mysql_conn * get_mysql_connection();
 mysql_conn * get_mysql_connection_block();
 MYSQL_RES * mysql_execute_query(const char *sql,unsigned long length,int * flag);
+
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif  //MYSQL_POOL_H
 

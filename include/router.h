@@ -38,6 +38,10 @@ typedef struct _ContFunMap {
 	
 } ContFunMap;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
 void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
@@ -45,5 +49,9 @@ void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
 static int searchLocalFile(char* local_paths[]);
 
 static char* loadFile(char *path);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif

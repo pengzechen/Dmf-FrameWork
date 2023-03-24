@@ -41,6 +41,10 @@ typedef struct _Model {
 typedef Model* ModelPtr;
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //  mysql_affected_rows(&my_connection)  返回int
 
 extern void exeSql(char* sql);
@@ -56,5 +60,9 @@ static void GetModelResultInfo(ModelPtr mPtr);
 int GetModelResult(ModelPtr mPtr);
 
 void ModelClose(ModelPtr mPtr);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif

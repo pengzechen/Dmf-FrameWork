@@ -70,7 +70,9 @@ typedef struct {
 	
 }PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 static void Handler(int acceptFd, ContFun cf[], char* keys[]);
 
@@ -79,5 +81,9 @@ extern void SimpleServerMake(ContFun cf[], char* keys[]);
 extern int iocpServerMake(ContFunMap cmp);
 
 extern void SSLservermake(ContFun cf[], char* keys[]);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif

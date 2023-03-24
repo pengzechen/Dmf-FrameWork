@@ -22,8 +22,14 @@ limitations under the License.
 #include <stdio.h>
 #include <string.h>
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern void serverTime(char* str);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif

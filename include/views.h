@@ -44,7 +44,7 @@ extern "C" {          // we need to export the C interface
 	DLL_EXPORT void dll_write_shm(char* str);
 
 #ifdef __cplusplus
-}
+}    /* end of the 'extern "C"' block */
 #endif
 
-#endif
+#endif // __views__

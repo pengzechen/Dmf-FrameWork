@@ -46,7 +46,9 @@ typedef struct _HashNode
 // session 全局变量
 HashNode g_session_all_dec[ HASH_DEC_LEN ];
 
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern void SessionInit();
 
@@ -57,5 +59,9 @@ extern void SessionAll();
 extern char* getSession(char*, char*);
 
 extern char* getSessionA(const Request* req, char* key);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif /* SESSION */

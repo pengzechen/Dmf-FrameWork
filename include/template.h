@@ -35,6 +35,9 @@ struct Kvmap {
 	void (*Func)(char*, char *);			// 
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 char * loadTemplate(char * template_path);
 
@@ -42,5 +45,8 @@ static void ParseDec(char* tt, char* dec[], char* inner);
 
 char * parseContext(char *context, struct Kvmap *kv, int kv_num);
 
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif

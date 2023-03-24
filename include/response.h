@@ -39,6 +39,10 @@ typedef struct _Response {
 	int fd;
 }Response;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void Res_init(int fd, Response* res);
 
 static void ResHandel( int acceptFd, char* res_str );
@@ -60,5 +64,9 @@ extern void Res_row( int acceptFd, char* res_str);
 extern void Res_NotFound(int acceptFd);
 
 extern void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif
