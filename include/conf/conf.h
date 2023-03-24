@@ -25,6 +25,27 @@ limitations under the License.
 #include <libxml/xpath.h>
 #include <string.h>
 
+// server 模块
+
+typedef enum _ServerMode {
+    SimpleServer, 
+    IOCPServer, 
+    SSLServer,
+#ifdef __linux__
+    EpollServer,
+#endif
+} ServerMode;
+
+typedef struct conf_server {
+    int port;
+    char host[64];
+    ServerMode mode;
+    char cert_private[128];
+    char cert_public[128];
+    
+} conf_server;
+
+// model 模块
 typedef struct conf_model {
     char host[64];
     int port;
@@ -33,13 +54,7 @@ typedef struct conf_model {
     char database[32];
 } conf_model;
 
-typedef struct conf_server {
-    int port;
 
-    char cert_private[128];
-    char cert_public[128];
-    
-} conf_server;
 
 typedef struct Server_Conf {
     conf_model _conf_model;
