@@ -38,8 +38,7 @@ limitations under the License.
 #include <elr_mpl/elr_mpl.h>
 #include <conf/conf.h>
 
-// #pragma comment(lib, "ws2_32.lib")      //windows下调用动态库
-#include<WinSock2.h>
+
 #include<stdio.h>
 #include<string.h>
 #include<time.h>
@@ -50,9 +49,7 @@ limitations under the License.
 
 #ifdef __WIN32__
 
-#elif __linux__
-
-#endif
+#include<WinSock2.h>
 
 typedef struct {
 	
@@ -74,16 +71,21 @@ typedef struct {
 extern "C" {
 #endif
 
-static void Handler(int acceptFd, ContFun cf[], char* keys[]);
+	static void Handler(int acceptFd, ContFun cf[], char* keys[]);
 
-extern void SimpleServerMake(ContFun cf[], char* keys[]);
+	extern void SimpleServerMake(ContFun cf[], char* keys[]);
 
-extern int iocpServerMake(ContFunMap cmp);
+	extern int iocpServerMake(ContFunMap cmp);
 
-extern void SSLservermake(ContFun cf[], char* keys[]);
+	extern void SSLservermake(ContFun cf[], char* keys[]);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
 #endif
 
-#endif
+
+#elif __linux__
+
+#endif  // Windows or Linux
+
+#endif  // SERVER

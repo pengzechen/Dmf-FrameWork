@@ -3,6 +3,8 @@
 
   <server>
 	  <listen>80</listen>
+    <host>localhsot</host>
+    <mode>SSLSimpleServer</mode>
     <cert>
       <private>./cert/localhost-key.pem</private>
       <public>./cert/localhost.pem</public>

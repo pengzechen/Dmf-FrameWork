@@ -41,6 +41,9 @@ extern void Res_init(int fd, Response* res){
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
 static void ResHandel( int acceptFd, char* res_str ){
+	if(g_server_conf_all._conf_server.mode = SSLServer){
+		
+	}
 	send(acceptFd, res_str, strlen(res_str),0);
 	closesocket(acceptFd);
 }

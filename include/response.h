@@ -27,6 +27,9 @@ limitations under the License.
 #include <stdio.h>
 #include <WinSock2.h>		// 为了使用 send
 
+#include <openssl/ssl.h>    // 为了使用 ssl_write
+#include "conf.h"
+
 typedef struct _Response {
 	char Server[32];
 	char Date[32];
