@@ -20,29 +20,48 @@ limitations under the License.
 
 void setsession(int a, const Request *req)
 {
+	char res_str[80] = {0};
+	strcat(res_str, "SET session ");
+	strcat(res_str, req->query[0].key);
+	strcat(res_str, " data: ");
+	strcat(res_str, req->query[0].data);
+
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
 	SetType(&res, "text/html;utf-8;");
-
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, "login", "true");
-
-	SetBody(&res, "test");
+	SetSession(&res, req->query[0].key, req->query[0].data);
+	SetBody(&res, res_str);
 	ResParse(&res);
-
 }
 
+
 void getsession(int a, const Request *req) {
-	char* s = getSessionA(req, "login");
+	
+	char* s = getSessionR(req, req->query[0].data);
 	if(s == NULL){
 		Res_row(a, "no such key");
 	}else{
 		char res[256] = {0};
+		strcat(res, "session data: ");
 		strcat(res, s);
 		Res_row(a, res);
 	}
 }
+
+
+void sessionAdd(int a, const Request *req){
+	char res_str[80] = {0};
+	strcat(res_str, "SET session ");
+	strcat(res_str, req->query[0].key);
+	strcat(res_str, " data: ");
+	strcat(res_str, req->query[0].data);
+
+	int res = SessionAddR(req, req->query[0].key, req->query[0].data);
+	Res_row(a, res_str);
+}
+
 
 void sessiondebug(int a, const Request* req) 
 {
@@ -158,10 +177,12 @@ int main() {
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
 	// dll_read_shm();
 
-	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, &mysqltest, &datamodeltest, &elrtest, lib, NULL};
-	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", "/mysqltest", "/datamodeltest", "/elrtest", "/lib", NULL};
+	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
+					&mysqltest, &datamodeltest, &elrtest, lib, &sessionAdd, NULL};
+	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
+					"/mysqltest", "/datamodeltest", "/elrtest", "/lib", "/sessionadd", NULL};
 	
-	SimpleServerMake(cf, keys);
+	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	
 	ContFunMap cmp;
@@ -173,7 +194,8 @@ int main() {
 	cmp.cf[5] = &datamodeltest;
 	cmp.cf[6] = &elrtest;
 	cmp.cf[7] = lib;
-	cmp.cf[8] = NULL;
+	cmp.cf[8] = &sessionAdd;
+	cmp.cf[9] = NULL;
 	cmp.keys[0] = "/getsession";
 	cmp.keys[1] = "/template";
 	cmp.keys[2] = "/setsession";
@@ -182,7 +204,8 @@ int main() {
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = "/elrtest";
 	cmp.keys[7] = "/lib";
-	cmp.keys[8] = NULL;
-	// iocpServerMake(cmp);
+	cmp.keys[8] = "/sessionadd";
+	cmp.keys[9] = NULL;
+	iocpServerMake(cmp);
 	return 0;
 }

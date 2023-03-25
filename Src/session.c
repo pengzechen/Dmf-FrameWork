@@ -98,6 +98,8 @@ int sessionAdd(char session_name, char key, char* value, SessionType type, int l
 
 */
 
+// session 全局变量
+static HashNode g_session_all_dec[ HASH_DEC_LEN ];
 
 static int get_random_str(char* random_str, const int random_len)
 {
@@ -157,7 +159,53 @@ static HashNode* CreateNewHashNode()
     return p;
 }
 
-extern void SessionCreate(char* random_str,char* key, char* value) {
+// debug 使用
+extern void SessionAll() {
+    HashNode* temp;
+    SessionData* dtemp;
+    char buff[10] = {0};
+    time_t t = time(NULL);
+    char str_res[1024*1024] = {0};
+    
+
+    for(int i=0; i< HASH_DEC_LEN; i++){
+        temp = &g_session_all_dec[i];
+
+        itoa(i,buff,10);
+        strcat(str_res, buff);
+        memset(buff, 0, 10);
+        strcat(str_res, "------------\n");
+
+        while(temp->next != NULL) {
+            temp = temp->next; 
+            strcat(str_res, temp->key);
+            strcat(str_res, "\n");
+
+            dtemp = temp->value;
+            while((dtemp) != NULL){
+                
+                strcat(str_res, "           Key: ");
+                strcat(str_res, dtemp->key);
+                strcat(str_res, " Data: ");
+                strcat(str_res, dtemp->data);
+
+                if(dtemp->time_store + dtemp->expire < time(&t))
+                strcat(str_res, "(expired)");
+
+                strcat(str_res, "\n");
+
+                dtemp = dtemp->next;
+            }
+
+            strcat(str_res, "\n");
+        }
+    }
+
+    printf("%s\n", str_res);
+}
+
+// 创建一个新的session并往session里面加一个sessiondata 
+extern void SessionCreate(char* random_str, char* key, char* value) {
     
     get_random_str(random_str, 10);
     unsigned int a = BKDRHash(random_str);
@@ -166,23 +214,25 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
     //time_t session_create_time;
 	//session_create_time = time(NULL);
 	//int ii = time(&session_create_time);
-    
-    HashNode* new_node = CreateNewHashNode();
 
-    new_node->key = malloc(sizeof(char)*strlen(random_str));
+    // 创建一个 HashNode 并存放一个 SessionData 
+    // HashNode->next = NULL   SessionData->next = NULL
+    HashNode* new_node = CreateNewHashNode();  // HashNode->next = NULL
+    new_node->key = malloc(sizeof(char)*strlen(random_str));      // session code
     strcpy(new_node->key, random_str);
-
-    new_node->value = (SessionData*)malloc(sizeof(SessionData));
+    new_node->value = (SessionData*)malloc(sizeof(SessionData));    // session data
+    new_node->value->key = (char*)malloc(sizeof(char)*strlen(key));       // malloc data name
+    new_node->value->data = (char*)malloc(sizeof(char)*strlen(value));    // malloc data 
+    strcpy(new_node->value->key, key);      // set data name
+    strcpy(new_node->value->data, value);   // set data
+    time_t t = time(NULL);
+    new_node->value->time_store = time(&t);
+    new_node->value->expire = SESSION_EXPIRE_DEFAULT;
     new_node->value->next = NULL;
-    new_node->value->key = malloc(sizeof(char)*strlen(key));
-    new_node->value->data = malloc(sizeof(char)*strlen(value));
-
-    strcpy(new_node->value->key, key);
-    strcpy(new_node->value->data, value);
 
     if(g_session_all_dec[a % HASH_DEC_LEN].next == NULL){
         // 某个节点第一次添加数据
-        g_session_all_dec[a % HASH_DEC_LEN].next = new_node;
+        g_session_all_dec[a % HASH_DEC_LEN].next = new_node;        // g_session_all_dec[通过 session code 得出的下标]
     }else{
         // 从头部插入新节点
         new_node->next = g_session_all_dec[a % HASH_DEC_LEN].next;
@@ -191,33 +241,15 @@ extern void SessionCreate(char* random_str,char* key, char* value) {
         
 }
 
-// debug 使用
-extern void SessionAll(){
-    HashNode* temp;
-
-    char str_res[1024*1024] = {0};
-    
-
-    for(int i=0; i< HASH_DEC_LEN; i++){
-        temp = &g_session_all_dec[i];
-        while(temp->next != NULL){
-            temp = temp->next; 
-            strcat(str_res, temp->key);
-            strcat(str_res, temp->value->data);
-            strcat(str_res, "\n");
-        }
-    }
-
-    printf("%s\n", str_res);
-}
-
-char* getSessionA(const Request* req, char* key){
+/*  \brief 通过 session_str 和数据名得到对应数据 
+    \param 传入 req   */
+extern char* getSessionR(const Request* req, char* key) {
     char *str1;
     char* session_res = NULL;
 
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
-			str1=strstr(req->params[i].data, "dmfsession=");
+			str1 = strstr(req->params[i].data, "dmfsession=");
 			if(str1 != NULL){
 				session_res = getSession(str1+11, key);
                 return session_res == NULL ? NULL : session_res;
@@ -228,27 +260,180 @@ char* getSessionA(const Request* req, char* key){
     return NULL;
 }
 
-char* getSession(char* session_str, char* key) {
+
+/* \brief 通过 session_str 和数据名得到对应数据 */
+extern char* getSession(char* session_str, char* key) {
     // 计算当前 session 序号是多少
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
     temp = &g_session_all_dec[index];
 
-    SessionData *session_data_temp;
+    SessionData *session_data_temp;    // SESSION 链的数据节点
+    time_t t = time(NULL);
+    int curr_time = time(&t);
+
     while(temp->next != NULL){
         temp = temp->next; 
         if(strcmp(temp->key, session_str) == 0){
-            session_data_temp = temp->value;
+            
+            session_data_temp = temp->value;            // 找到数据节点的 链头
             do{
 
-                if(strcmp(session_data_temp->key, key) == 0){
-                    return session_data_temp->data;
+                if(strcmp(session_data_temp->key, key) == 0){        // 数据名字相同
+                    if(curr_time <= session_data_temp->time_store + session_data_temp->expire)  // 数据未过期
+                        return session_data_temp->data;
+                    else
+                        return NULL;
                 }
+
+                printf("Key: %s Data: %s \n", session_data_temp->key, session_data_temp->data);
+                // 搜索数据链中下一个数据的名字
                 session_data_temp = session_data_temp->next;
-                
             }while((session_data_temp != NULL ));
+
         }
     }
     
     return NULL;
+}
+
+
+/*  \bref  往已经存在的一个session里面添加sessiondata
+    \param 传入 req   
+    \return  成功返回 1, 失败返回 0  */
+extern int SessionAddR(const Request* req, char* key, char* data) {
+    char *str1;
+	for(int i=0; i<=req->p_int; i++) {
+		if(strcmp(req->params[i].key, "Cookie")==0) {
+			str1 = strstr(req->params[i].data, "dmfsession=");
+			if(str1 != NULL){
+                printf("func session add %s\n", str1+11);
+                return SessionAdd( str1+11, key, data);
+			}else{
+                return 0;   // Cookie 没有 session
+            }
+		}
+	}
+    return 0;       // req 对象没有 session
+}
+
+
+/*  \brief 往已经存在的一个session里面添加sessiondata
+    \return 成功返回 1, 失败返回 0    */
+extern int SessionAdd(char* session_str, char* key, char* value) {
+    
+    SessionData* dataNode = (SessionData*)malloc(sizeof(SessionData));    // data node
+    dataNode->key = (char*)malloc(sizeof(char)*strlen(key));       // malloc data name
+    dataNode->data = (char*)malloc(sizeof(char)*strlen(value));    // malloc data 
+    strcpy(dataNode->key, key);      // set data name
+    strcpy(dataNode->data, value);   // set data
+    time_t t = time(NULL);
+    dataNode->time_store = time(&t);
+    dataNode->expire = SESSION_EXPIRE_DEFAULT;
+    dataNode->next = NULL;
+
+
+
+    // 计算当前 session 序号是多少
+    unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
+    HashNode* temp = &g_session_all_dec[index];
+
+    while(temp->next != NULL){
+        temp = temp->next; 
+        if(strcmp(temp->key, session_str) == 0){
+            
+            if(temp->value == NULL){
+                temp->value = dataNode;
+                return 1;
+            }else{
+                dataNode->next = temp->value;
+                temp->value = dataNode;
+                return 1;
+            }
+        }
+    }
+
+    return 0;       // 没有找到目标 session_str
+}
+
+
+
+/*  \brief 修改session data 
+    \return 修改成功返回1  */
+extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) {
+    char *str1;
+	for(int i=0; i<=req->p_int; i++) {
+		if(strcmp(req->params[i].key, "Cookie")==0) {
+			str1 = strstr(req->params[i].data, "dmfsession=");
+			if(str1 != NULL){
+                return UpdateSessionData( str1+11, key, newdata);
+			}else{
+                return 0;   // Cookie 没有 session
+            }
+		}
+	}
+    return 0;       // req 对象没有 session
+}
+
+
+/*  \brief 修改session data 
+    \return 修改成功返回1  */
+extern int UpdateSessionData(char* session_str, char* key, char* newdata) {
+    // 计算当前 session 序号是多少
+    unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
+    HashNode* temp;
+    temp = &g_session_all_dec[index];
+
+    SessionData *session_data_temp;    // SESSION 链的数据节点
+    time_t t = time(NULL);
+    int curr_time = time(&t);
+
+    while(temp->next != NULL){
+        temp = temp->next; 
+        if(strcmp(temp->key, session_str) == 0){
+            
+            session_data_temp = temp->value;            // 找到数据节点的 链头
+            do{
+
+                if(strcmp(session_data_temp->key, key) == 0){        // 数据名字相同
+
+                    free(session_data_temp->data);
+                    session_data_temp->data = (char*)malloc(sizeof(char)*strlen(newdata));
+                    strcpy(session_data_temp->data, newdata);
+                    session_data_temp->time_store = curr_time;
+                    session_data_temp->expire = SESSION_EXPIRE_DEFAULT;
+
+                    return 1;
+                }
+
+                printf("Key: %s Data: %s \n", session_data_temp->key, session_data_temp->data);
+                // 搜索数据链中下一个数据的名字
+                session_data_temp = session_data_temp->next;
+            }while((session_data_temp != NULL ));
+
+        }
+    }
+    return 0;
+}
+
+
+/* \brief 删除 Session data 
+    \return  返回1 删除成功*/
+extern int DeleteSessionData(char* session_str, char* key) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return 1;
 }

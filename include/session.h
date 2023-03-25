@@ -25,11 +25,13 @@ limitations under the License.
 #include <request.h>
 
 
-#define HASH_DEC_LEN 65536
+#define HASH_DEC_LEN 5
 
 typedef struct _SessionData {
     char* key;
     char* data;
+    int time_store;
+    int expire;
     struct _SessionData* next;
 } SessionData;
 
@@ -42,23 +44,25 @@ typedef struct _HashNode
 
 } HashNode ;
 
-
-// session 全局变量
-HashNode g_session_all_dec[ HASH_DEC_LEN ];
+#define SESSION_EXPIRE_DEFAULT 60 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern void SessionInit();
+    extern void SessionInit();
 
-extern void SessionCreate(char* ,char*, char*);
+    extern void SessionCreate(char* ,char*, char*);
 
-extern void SessionAll();
+    extern void SessionAll();
 
-extern char* getSession(char*, char*);
+    extern char* getSession(char*, char*);
 
-extern char* getSessionA(const Request* req, char* key);
+    extern char* getSessionR(const Request* req, char* key);
+
+    extern int SessionAddR(const Request* req, char* key, char* data);
+
+    extern int SessionAdd(char* session_str, char* key, char* value);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
