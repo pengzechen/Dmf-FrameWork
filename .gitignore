@@ -9,4 +9,4 @@ bin/templates/test.html
 build/
 
 bin/link/*.dll
-
+bin/linl/*.a
