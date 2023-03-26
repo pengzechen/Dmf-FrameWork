@@ -29,6 +29,11 @@ char string[1024*1024] = {0};
 #pragma data_seg()
 #pragma comment(linker,"/SECTION:flag_data,RWS")
 
+typedef int(*Get)();
+typedef void(*Set)(int);
+typedef void(*Dll_read_shm)();
+
+
 #ifdef __cplusplus    // If used by C++ code, 
 extern "C" {          // we need to export the C interface
 #endif
