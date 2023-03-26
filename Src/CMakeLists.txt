@@ -24,11 +24,9 @@ aux_source_directory(./model model_SRC)
 aux_source_directory(./elr_mpl elr_mpl_SRC)
 aux_source_directory(./conf conf_SRC)
 
-file( GLOB views_need_SRC response.c utility.c template.c session.c cpool.c model.c ${conf_SRC})
-
 
 #添加子目录
-add_subdirectory(${PROJECT_SOURCE_DIR}/Src/views) 
+add_subdirectory(${PROJECT_SOURCE_DIR}/Src/link) 
 
 #指定生成目标
 add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} )

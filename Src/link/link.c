@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include "views.h"
+#include "link.h"
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
 	switch(ul_reason_for_call){
@@ -43,13 +43,6 @@ void set(int a){
 
 int get(){
 	return testlink;
-}
-
-void viewtest(int a, const Request* req)
-{
-	printf("--in--%s\n", g_server_conf_all._conf_model.database);
-	exeSql("select * from test;");
-	Res_row(a, "lib test ok\n ");
 }
 
 void dll_read_shm(){

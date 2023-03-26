@@ -14,14 +14,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#ifndef __views__
-#define __views__
-
-#include <server.h>
+#ifndef __link__
+#define __link__
 
 #define DLL_EXPORT __declspec(dllexport)
 #define DLL_IMPORT __declspec(dllimport)
 
+#include <windows.h>
+#include <stdio.h>
 // 多进程实现数据共享的方法
 #pragma data_seg("flag_data")
 int testlink = 0;
@@ -37,8 +37,6 @@ extern "C" {          // we need to export the C interface
 
 	DLL_EXPORT int get();
 
-	DLL_EXPORT void viewtest(int a, const Request* req);
-
 	DLL_EXPORT void dll_read_shm();
 
 	DLL_EXPORT void dll_write_shm(char* str);
@@ -47,4 +45,4 @@ extern "C" {          // we need to export the C interface
 }    /* end of the 'extern "C"' block */
 #endif
 
-#endif // __views__
+#endif // __link__
