@@ -203,19 +203,19 @@ void MultiParse (Request *request, char *boundary ) {
 	
 	
 	
-	if(MULTI_DEBUG){
-		printf("---------------------MULTI-DEBUG--------------------\n");
-		for(; mul_num >= 0; mul_num --){
-			
-		printf("%s  : %s\n", request->multi[mul_num]->dis.key,request->multi[mul_num]->dis.data);
-		printf("%s  : %s\n", request->multi[mul_num]->name.key,request->multi[mul_num]->name.data);
-		printf("%s  : %s\n", request->multi[mul_num]->filename.key,request->multi[mul_num]->filename.data);
-		printf("Length: %d\n", request->multi[mul_num]->length );
-		printf("DATA: %#x\n", &(request->multi[mul_num]->data) );
+#ifdef MULTI_DEBUG 
+	printf("---------------------MULTI-DEBUG--------------------\n");
+	for(; mul_num >= 0; mul_num --){
 		
-		}
-		printf("---------------------MULTI-DEBUG--------------------\n");
+	printf("%s  : %s\n", request->multi[mul_num]->dis.key,request->multi[mul_num]->dis.data);
+	printf("%s  : %s\n", request->multi[mul_num]->name.key,request->multi[mul_num]->name.data);
+	printf("%s  : %s\n", request->multi[mul_num]->filename.key,request->multi[mul_num]->filename.data);
+	printf("Length: %d\n", request->multi[mul_num]->length );
+	printf("DATA: %#x\n", &(request->multi[mul_num]->data) );
+	
 	}
+	printf("---------------------MULTI-DEBUG--------------------\n");
+#endif
 }
 
 
@@ -465,28 +465,23 @@ void ParseHttp(Request *request, char *data) {
 	request->q_int = q_int;
 	request->p_int = p_int;
 	
-	if(REQUEST_DEBUG){
-		
-		
-		printf("--------------------REQUEST-DEBUG--------------------\n");
-		
-		printf("----STATE: %d  p_int: %d  q_int: %d----\n", state, p_int, q_int);
-		printf("%s\n", request->method);
-		printf("%s\n", request->path);
-		printf("%s\n", request->protocol);
-		printf("%s\n", request->version);
-		
-		for(;q_int >=0; q_int--){
-			printf("%s: %s\n", request->query[q_int].key, request->query[q_int].data);
-		}
-
-		for(;p_int >=0; p_int--){
-			printf("%s: %s\n", request->params[p_int].key, request->params[p_int].data);
-		}
-		
-		printf("length: %d\nBody: %#x\n", request->body.length, &(request->body.body) );
-		printf("--------------------REQUEST-DEBUG--------------------\n");
+#ifdef REQUEST_DEBUG 
+	printf("--------------------REQUEST-DEBUG--------------------\n");
+	printf("----STATE: %d  p_int: %d  q_int: %d----\n", state, p_int, q_int);
+	printf("%s\n", request->method);
+	printf("%s\n", request->path);
+	printf("%s\n", request->protocol);
+	printf("%s\n", request->version);
+	for(;q_int >=0; q_int--){
+		printf("%s: %s\n", request->query[q_int].key, request->query[q_int].data);
 	}
+	for(;p_int >=0; p_int--){
+		printf("%s: %s\n", request->params[p_int].key, request->params[p_int].data);
+	}
+	
+	printf("length: %d\nBody: %#x\n", request->body.length, &(request->body.body) );
+	printf("--------------------REQUEST-DEBUG--------------------\n");
+#endif
 	
 }
 

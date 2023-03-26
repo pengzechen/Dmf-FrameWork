@@ -17,8 +17,9 @@ limitations under the License.
 #ifndef REQUEST
 #define REQUEST
 
-#define MULTI_DEBUG 0
-#define REQUEST_DEBUG 0
+
+// #define MULTI_DEBUG
+// #define REQUEST_DEBUG
 
 #define BODY_MAX 1024*1024				// body 数据大小
 #define MULTI_PART_MAX 1024*1024		// multipart 数据大小

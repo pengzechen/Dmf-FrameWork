@@ -21,9 +21,10 @@ limitations under the License.
 #include <string.h>
 #include <stdlib.h>
 #include <sys/time.h>
-
+#include <unistd.h>
+#include <pthread.h>
 #include <request.h>
-
+#include <windows.h>
 
 #define HASH_DEC_LEN 5
 
@@ -56,13 +57,17 @@ extern "C" {
 
     extern void SessionAll();
 
-    extern char* getSession(char*, char*);
-
     extern char* getSessionR(const Request* req, char* key);
 
     extern int SessionAddR(const Request* req, char* key, char* data);
 
+    extern int UpdateSessionDataR(const Request* req, char* key, char* newdata);
+
+    extern char* getSession(char*, char*);
+
     extern int SessionAdd(char* session_str, char* key, char* value);
+
+    extern int UpdateSessionData(char* session_str, char* key, char* newdata);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

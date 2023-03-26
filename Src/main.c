@@ -26,20 +26,28 @@ void setsession(int a, const Request *req)
 	strcat(res_str, " data: ");
 	strcat(res_str, req->query[0].data);
 
+	char key[32] = {0}; char data[32] = {0};
+	strcat(key, req->query[0].key);
+	strcat(data, req->query[0].data);
+
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
 	SetType(&res, "text/html;utf-8;");
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, req->query[0].key, req->query[0].data);
+	SetSession(&res, key, data);
 	SetBody(&res, res_str);
 	ResParse(&res);
 }
 
 
 void getsession(int a, const Request *req) {
+	char key[32] = {0}; char data[32] = {0};
+	strcat(key, req->query[0].key);
+	strcat(data, req->query[0].data);
+
 	
-	char* s = getSessionR(req, req->query[0].data);
+	char* s = getSessionR(req, data );
 	if(s == NULL){
 		Res_row(a, "no such key");
 	}else{
@@ -52,13 +60,26 @@ void getsession(int a, const Request *req) {
 
 
 void sessionAdd(int a, const Request *req){
+
+	char key[32] = {0}; char data[32] = {0};
+	strcat(key, req->query[0].key);
+	strcat(data, req->query[0].data);
+
 	char res_str[80] = {0};
 	strcat(res_str, "SET session ");
-	strcat(res_str, req->query[0].key);
+	strcat(res_str, key);
 	strcat(res_str, " data: ");
-	strcat(res_str, req->query[0].data);
+	strcat(res_str, data);
 
-	int res = SessionAddR(req, req->query[0].key, req->query[0].data);
+	int res = SessionAddR(req, key, data);
+	switch(res){
+		case -1:
+		printf("[view: sessionAdd] req hasn't a session\n");break;
+		case -2:
+		printf("[view: sessionAdd] session chain hasn't such session\n");break;break;
+		default: break;
+	}
+	
 	Res_row(a, res_str);
 }
 
@@ -160,9 +181,9 @@ typedef void(*View)(int, const Request*);
 typedef int(*Get)();
 typedef void(*Set)(int);
 typedef void(*Dll_read_shm)();
-#include <views.h>
 
-int main() {
+
+int main(int arg, char* args[]) {
 	ConfInit();
 	SessionInit();
 	mysql_pool_init();
@@ -172,8 +193,6 @@ int main() {
 	View lib = (View)GetProcAddress(handle, "viewtest");
 	Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
-	testlink = 12;
-	printf("link test %d \n", testlink);
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
 	// dll_read_shm();
 
@@ -206,6 +225,7 @@ int main() {
 	cmp.keys[7] = "/lib";
 	cmp.keys[8] = "/sessionadd";
 	cmp.keys[9] = NULL;
+
 	iocpServerMake(cmp);
 	return 0;
 }

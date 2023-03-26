@@ -98,9 +98,10 @@ int sessionAdd(char session_name, char key, char* value, SessionType type, int l
 
 */
 
-// session 全局变量
+// 在session模块中使用的全局变量
 static HashNode g_session_all_dec[ HASH_DEC_LEN ];
 
+// 产生随机的字符串
 static int get_random_str(char* random_str, const int random_len)
 {
     int i, random_num, seed_str_len;
@@ -124,6 +125,7 @@ static int get_random_str(char* random_str, const int random_len)
     return 0;
 }
 
+
 // BKDR Hash Function
 static unsigned int BKDRHash(char *str)
 {
@@ -136,6 +138,15 @@ static unsigned int BKDRHash(char *str)
     return (hash & 0x7FFFFFFF);
 }
 
+
+void* FroundCheck() {
+    while(1){
+        SessionAll();
+        Sleep(5000);
+    }
+}
+
+
 extern void SessionInit()
 {
     for(int i=0; i<HASH_DEC_LEN; i++) {
@@ -144,7 +155,12 @@ extern void SessionInit()
         g_session_all_dec[i].next = NULL;
     }
     printf("[Server: Info] session init successfully...\n");
+
+    pthread_t roundCheck;
+	pthread_create(&roundCheck, NULL, FroundCheck, NULL);
+    // pthread_join(roundCheck, NULL);
 }
+
 
 static HashNode* CreateNewHashNode()
 {
@@ -159,13 +175,14 @@ static HashNode* CreateNewHashNode()
     return p;
 }
 
+
 // debug 使用
 extern void SessionAll() {
     HashNode* temp;
     SessionData* dtemp;
     char buff[10] = {0};
     time_t t = time(NULL);
-    char str_res[1024*1024] = {0};
+    char str_res[1024] = {0};
     
 
     for(int i=0; i< HASH_DEC_LEN; i++){
@@ -204,6 +221,7 @@ extern void SessionAll() {
     printf("%s\n", str_res);
 }
 
+
 // 创建一个新的session并往session里面加一个sessiondata 
 extern void SessionCreate(char* random_str, char* key, char* value) {
     
@@ -240,6 +258,7 @@ extern void SessionCreate(char* random_str, char* key, char* value) {
     }
         
 }
+
 
 /*  \brief 通过 session_str 和数据名得到对应数据 
     \param 传入 req   */
@@ -300,21 +319,22 @@ extern char* getSession(char* session_str, char* key) {
 
 /*  \bref  往已经存在的一个session里面添加sessiondata
     \param 传入 req   
-    \return  成功返回 1, 失败返回 0  */
+    \return  成功返回 1, 失败返回非0\n  
+     -2: session链中 没有找到目标 session_str 
+     -1: req 对象没有 session  */
 extern int SessionAddR(const Request* req, char* key, char* data) {
     char *str1;
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
 			str1 = strstr(req->params[i].data, "dmfsession=");
 			if(str1 != NULL){
-                printf("func session add %s\n", str1+11);
                 return SessionAdd( str1+11, key, data);
 			}else{
-                return 0;   // Cookie 没有 session
+                return -1;   // req 对象没有 session
             }
 		}
 	}
-    return 0;       // req 对象没有 session
+    return -1;       // req 对象没有 session
 }
 
 
@@ -353,9 +373,8 @@ extern int SessionAdd(char* session_str, char* key, char* value) {
         }
     }
 
-    return 0;       // 没有找到目标 session_str
+    return -2;       // session链中 没有找到目标 session_str
 }
-
 
 
 /*  \brief 修改session data 
