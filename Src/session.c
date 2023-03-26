@@ -319,9 +319,9 @@ extern char* getSession(char* session_str, char* key) {
 
 /*  \bref  往已经存在的一个session里面添加sessiondata
     \param 传入 req   
-    \return  成功返回 1, 失败返回非0\n  
-     -2: session链中 没有找到目标 session_str 
-     -1: req 对象没有 session  */
+    \return  成功返回 1, 失败返回非0 
+    \return -2: session 链中没有找到目标 session_str 
+    \return -1: req 对象没有 session  */
 extern int SessionAddR(const Request* req, char* key, char* data) {
     char *str1;
 	for(int i=0; i<=req->p_int; i++) {
@@ -421,7 +421,6 @@ extern int UpdateSessionData(char* session_str, char* key, char* newdata) {
                     strcpy(session_data_temp->data, newdata);
                     session_data_temp->time_store = curr_time;
                     session_data_temp->expire = SESSION_EXPIRE_DEFAULT;
-
                     return 1;
                 }
 

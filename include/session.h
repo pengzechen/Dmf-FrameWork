@@ -45,7 +45,7 @@ typedef struct _HashNode
 
 } HashNode ;
 
-#define SESSION_EXPIRE_DEFAULT 60 
+#define SESSION_EXPIRE_DEFAULT 60 * 2
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,7 +63,7 @@ extern "C" {
 
     extern int UpdateSessionDataR(const Request* req, char* key, char* newdata);
 
-    extern char* getSession(char*, char*);
+    extern char* getSession(char* session_str, char* key);
 
     extern int SessionAdd(char* session_str, char* key, char* value);
 

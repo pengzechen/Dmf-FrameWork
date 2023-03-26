@@ -40,7 +40,6 @@ void setsession(int a, const Request *req)
 	ResParse(&res);
 }
 
-
 void getsession(int a, const Request *req) {
 	char key[32] = {0}; char data[32] = {0};
 	strcat(key, req->query[0].key);
@@ -58,8 +57,7 @@ void getsession(int a, const Request *req) {
 	}
 }
 
-
-void sessionAdd(int a, const Request *req){
+void sessionadd(int a, const Request *req) {
 
 	char key[32] = {0}; char data[32] = {0};
 	strcat(key, req->query[0].key);
@@ -83,6 +81,18 @@ void sessionAdd(int a, const Request *req){
 	Res_row(a, res_str);
 }
 
+void updatesession(int a, const Request *req) {
+	char key[32] = {0}; char data[32] = {0};
+	strcat(key, req->query[0].key);
+	strcat(data, req->query[0].data);
+
+	int res = UpdateSessionDataR(req, key, data);
+
+	if(res)
+		Res_row(a, "Update successfully!");
+	else
+		Res_row(a, "Update faild");
+}
 
 void sessiondebug(int a, const Request* req) 
 {
@@ -197,9 +207,9 @@ int main(int arg, char* args[]) {
 	// dll_read_shm();
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
-					&mysqltest, &datamodeltest, &elrtest, lib, &sessionAdd, NULL};
+					&mysqltest, &datamodeltest, &elrtest, lib, &sessionadd, &updatesession, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
-					"/mysqltest", "/datamodeltest", "/elrtest", "/lib", "/sessionadd", NULL};
+					"/mysqltest", "/datamodeltest", "/elrtest", "/lib", "/sessionadd", "/updatesession", NULL};
 	
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
@@ -213,8 +223,9 @@ int main(int arg, char* args[]) {
 	cmp.cf[5] = &datamodeltest;
 	cmp.cf[6] = &elrtest;
 	cmp.cf[7] = lib;
-	cmp.cf[8] = &sessionAdd;
-	cmp.cf[9] = NULL;
+	cmp.cf[8] = &sessionadd;
+	cmp.cf[9] = &updatesession;
+	cmp.cf[10] = NULL;
 	cmp.keys[0] = "/getsession";
 	cmp.keys[1] = "/template";
 	cmp.keys[2] = "/setsession";
@@ -224,8 +235,10 @@ int main(int arg, char* args[]) {
 	cmp.keys[6] = "/elrtest";
 	cmp.keys[7] = "/lib";
 	cmp.keys[8] = "/sessionadd";
-	cmp.keys[9] = NULL;
-
+	cmp.keys[9] = "/updatesession";
+	cmp.keys[10] = NULL;
 	iocpServerMake(cmp);
+
+	
 	return 0;
 }
