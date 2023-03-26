@@ -200,16 +200,15 @@ int main(int arg, char* args[]) {
 	elr_mpl_init();
 
 	HMODULE handle = LoadLibrary("./views/libviews.dll");
-	View lib = (View)GetProcAddress(handle, "viewtest");
 	Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
 	// dll_read_shm();
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
-					&mysqltest, &datamodeltest, &elrtest, lib, &sessionadd, &updatesession, NULL};
+					&mysqltest, &datamodeltest, &elrtest, &sessionadd, &updatesession, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
-					"/mysqltest", "/datamodeltest", "/elrtest", "/lib", "/sessionadd", "/updatesession", NULL};
+					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd", "/updatesession", NULL};
 	
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
@@ -222,10 +221,10 @@ int main(int arg, char* args[]) {
 	cmp.cf[4] = &mysqltest;
 	cmp.cf[5] = &datamodeltest;
 	cmp.cf[6] = &elrtest;
-	cmp.cf[7] = lib;
-	cmp.cf[8] = &sessionadd;
-	cmp.cf[9] = &updatesession;
-	cmp.cf[10] = NULL;
+
+	cmp.cf[7] = &sessionadd;
+	cmp.cf[8] = &updatesession;
+	cmp.cf[9] = NULL;
 	cmp.keys[0] = "/getsession";
 	cmp.keys[1] = "/template";
 	cmp.keys[2] = "/setsession";
@@ -233,10 +232,10 @@ int main(int arg, char* args[]) {
 	cmp.keys[4] = "/mysqltest";
 	cmp.keys[5] = "/datamodeltest";
 	cmp.keys[6] = "/elrtest";
-	cmp.keys[7] = "/lib";
-	cmp.keys[8] = "/sessionadd";
-	cmp.keys[9] = "/updatesession";
-	cmp.keys[10] = NULL;
+
+	cmp.keys[7] = "/sessionadd";
+	cmp.keys[8] = "/updatesession";
+	cmp.keys[9] = NULL;
 	iocpServerMake(cmp);
 
 	
