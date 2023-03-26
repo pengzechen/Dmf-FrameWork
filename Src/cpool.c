@@ -27,7 +27,7 @@ unsigned int query_times = 0; //mysql所有的查询次数，用于测试
 //创建一个新的mysql连接
 mysql_conn * mysql_new_connection()
 {
-	mysql_conn * conn=malloc(sizeof(mysql_conn));    //定义一个类型为mysql_conn的名为conn的指针变量,分配内存
+	mysql_conn * conn = malloc(sizeof(mysql_conn));    //定义一个类型为mysql_conn的名为conn的指针变量,分配内存
 	if (mysql_init(&conn->conn) == NULL)
 	{
 		printf("can not init mysql: [%s]\n",strerror(errno));
