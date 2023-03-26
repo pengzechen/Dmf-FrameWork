@@ -1,4 +1,5 @@
-
+#include <request.h>
+#include <response.h>
 
 
 void mfunction(char *out, char *in) {
