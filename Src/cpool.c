@@ -126,7 +126,7 @@ void mysql_pool_init()
 
 	pthread_mutex_unlock(&pool_mysql.lock);
 
-	printf("[Server: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.min_connections);
+	printf("[mysqlpool: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.min_connections);
 }
 
 

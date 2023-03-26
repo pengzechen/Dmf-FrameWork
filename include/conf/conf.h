@@ -63,7 +63,7 @@ typedef struct Server_Conf {
 
 
 // conf 全局的配置变量
-Server_Conf g_server_conf_all;
+extern Server_Conf g_server_conf_all;
 
 #ifdef __cplusplus
 extern "C" {

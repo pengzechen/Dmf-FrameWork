@@ -71,7 +71,7 @@ void Rou_iocp_init(
 	int flag = 0;
 	
 	// 先在control回调函数列表中寻找
-	for(int i=0; cmp.keys[i] != NULL; i++){
+	for(int i=0; cmp.keys[i] != NULL; i++) {
 		if( strcmp(req->path, cmp.keys[i]) == 0){
 			ContFun p;
 			p = cmp.cf[i];

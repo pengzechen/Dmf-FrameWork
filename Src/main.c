@@ -181,7 +181,7 @@ void elrtest(int a, const Request* req)
 	//char* str = (char*) malloc (sizeof(char)* 50);
 
 	//free(str);
-	printf("g_server_conf_all： database %s\n", g_server_conf_all._conf_model.database);
+	printf("g_server_conf_all: database %s\n", g_server_conf_all._conf_model.database);
 
 	Res_row(a, "test ok");
 }

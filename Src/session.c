@@ -141,7 +141,7 @@ static unsigned int BKDRHash(char *str)
 
 void* FroundCheck() {
     while(1){
-        SessionAll();
+        // SessionAll();
         Sleep(5000);
     }
 }
@@ -154,7 +154,7 @@ extern void SessionInit()
         g_session_all_dec[i].value = NULL;
         g_session_all_dec[i].next = NULL;
     }
-    printf("[Server: Info] session init successfully...\n");
+    printf("[Session: Info] session init successfully...\n");
 
     pthread_t roundCheck;
 	pthread_create(&roundCheck, NULL, FroundCheck, NULL);
@@ -164,7 +164,7 @@ extern void SessionInit()
 
 static HashNode* CreateNewHashNode()
 {
-    HashNode *p = malloc(sizeof(HashNode)*1);
+    HashNode *p = (HashNode*)malloc(sizeof(HashNode)*1);
     if(p == NULL){
         return NULL;
     }else{
@@ -438,19 +438,6 @@ extern int UpdateSessionData(char* session_str, char* key, char* newdata) {
 /* \brief 删除 Session data 
     \return  返回1 删除成功*/
 extern int DeleteSessionData(char* session_str, char* key) {
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     return 1;

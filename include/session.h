@@ -47,6 +47,9 @@ typedef struct _HashNode
 
 #define SESSION_EXPIRE_DEFAULT 60 * 2
 
+// 在session模块中使用的全局变量
+static HashNode g_session_all_dec[ HASH_DEC_LEN ];
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -16,27 +16,33 @@ limitations under the License.
 */
 #include <conf/conf.h>
 
+// conf 全局的配置变量
+Server_Conf g_server_conf_all;
+
+
 void ConfInit()
 {
+
+    printf("[Conf: Info] start confguring...\n");
 
     xmlKeepBlanksDefault(0);
     xmlDocPtr doc = xmlReadFile("./conf.xml", "gbk", XML_PARSE_NOBLANKS);
     if (doc != NULL) {
-        printf("[Server: Info] conf.xml loaded!\n");
+        printf("[Conf: Info] conf.xml loaded!\n");
     }
     xmlNodePtr curNode;
     // cyg win
     // 得到根节点
     curNode = xmlDocGetRootElement(doc);
     if (curNode == NULL) {
-        printf("[Server: Warn] doc is empty \n");
+        printf("[Conf: Warn] doc is empty \n");
         xmlFreeDoc(doc);
         return;
     }
 
     //  查看根节点名字是否是 dmfserver
     if (xmlStrcmp(curNode->name, BAD_CAST "dmfserver")) {
-        printf("[Server: Warn] root not dmfserver\n");
+        printf("[Conf: Warn] root not dmfserver\n");
         xmlFreeDoc(doc);
         return;
     }
@@ -83,5 +89,5 @@ void ConfInit()
     g_server_conf_all._conf_server.mode = SimpleServer;
 
 
-    printf("[Server: Info] conf init successfully...\n");
+    printf("[Conf: Info] conf init successfully...\n");
 }
