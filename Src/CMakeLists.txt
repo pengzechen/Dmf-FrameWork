@@ -23,10 +23,10 @@ file( GLOB main_SRC "*.h" "*.c" )
 aux_source_directory(./model model_SRC)
 aux_source_directory(./elr_mpl elr_mpl_SRC)
 aux_source_directory(./conf conf_SRC)
-
+aux_source_directory(./views views_SRC)
 
 #添加子目录
 add_subdirectory(${PROJECT_SOURCE_DIR}/Src/link) 
 
 #指定生成目标
-add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} )
+add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} ${views_SRC})
