@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include "server.h"
+#include <server.h>
 #include <link.h>
 
 #include "./views/session.c"
@@ -43,9 +43,6 @@ int main(int arg, char* args[]) {
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
 					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd", "/updatesession", NULL};
 	
-	// SimpleServerMake(cf, keys);
-	// SSLservermake(cf, keys);
-	
 	ContFunMap cmp;
 	cmp.cf[0] = &getsession;
 	cmp.cf[1] = &template;
@@ -67,8 +64,11 @@ int main(int arg, char* args[]) {
 	cmp.keys[7] = "/sessionadd";
 	cmp.keys[8] = "/updatesession";
 	cmp.keys[9] = NULL;
+	
+	
 	iocpServerMake(cmp);
-
+	// SimpleServerMake(cf, keys);
+	// SSLservermake(cf, keys);
 	
 	return 0;
 }
