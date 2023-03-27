@@ -82,3 +82,9 @@ void sessiondebug(int a, const Request* req) {
 	SessionAll();
 	Res_row(a, "This is a test str");
 }
+
+RouterAdd(session){
+	ContFun cf[] = {&setsession, &getsession, &sessionadd, &updatesession, &sessiondebug, NULL };
+	char* keys[] = {"/setsession", "/getsession", "/sessionadd", "/updatesession", "/sessiondebug", NULL};
+	router_add_app(cf, keys, __func__);
+}

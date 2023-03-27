@@ -20,8 +20,8 @@ limitations under the License.
 #define FINAL_STR_SIZE 4096*5
 
 
-#include "template.h"		// 以模板作为响应
-#include "utility.h"        // 引入时间
+#include <template.h>		// 以模板作为响应
+#include <utility.h>        // 引入时间
 #include <string.h>
 #include <stdio.h>
 #include <WinSock2.h>		// 为了使用 send

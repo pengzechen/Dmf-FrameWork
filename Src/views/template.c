@@ -33,3 +33,8 @@ void template(int a, const Request *req)
 	Res_render(a, "./templates/test.html", kv, 4);
 }
 
+RouterAdd(apptemp){
+	ContFun cf[] = {&template, NULL};
+	char* keys[] = {"/template", NULL};
+	router_add_app(cf, keys, __func__);
+}

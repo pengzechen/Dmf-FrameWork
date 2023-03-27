@@ -20,27 +20,37 @@ limitations under the License.
 #define STATIC_DIR "./static"
 #define STATIC_FILES_MAX_NUM 128
 
-#include "request.h"	// Router要接受req并把req传给 control function
-#include "response.h"   // Router找不到资源时直接调用 response 返回
+#include <request.h>	// Router要接受req并把req传给 control function
+#include <response.h>   // Router找不到资源时直接调用 response 返回
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
 
-
+#define ContFunNUM 60
 
 typedef void (*ContFun)(int acceptFd, const Request *req );
 
 typedef struct _ContFunMap {
 	
-	ContFun cf[20];
-	char* keys[20];
+	ContFun cf[ ContFunNUM ];
+	char* keys[ ContFunNUM ];
+	int curr_num;
 	
 } ContFunMap;
+
+// 全局 view 回调函数
+extern ContFunMap g_cmp;
+
+
+#define RouterAdd(name) void name()
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void Router_init();
 
 void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
@@ -49,6 +59,8 @@ void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
 static int searchLocalFile(char* local_paths[]);
 
 static char* loadFile(char *path);
+
+void router_add_app(ContFun cf[], char* keys[], const char* name);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

@@ -22,3 +22,10 @@ void mysqltest1(int a, const Request* req)
 
 	Res_row(a, "ok");
 }
+
+
+RouterAdd(model){
+	ContFun cf[] = {&mysqltest, &mysqltest1,NULL};
+	char* keys[] = {"/mysqltest", "/mysqltest1",NULL};
+	router_add_app(cf, keys, __func__);
+}

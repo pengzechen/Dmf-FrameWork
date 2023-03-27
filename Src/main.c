@@ -29,12 +29,7 @@ limitations under the License.
 #include "./views/other.c"
 
 #include <link.h>
-int main(int arg, char* args[]) {
-	ConfInit();
-	SessionInit();
-	mysql_pool_init();
-	elr_mpl_init();
-	
+void linkload(){
 	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 	Sleep(500);
 	HMODULE handle = LoadLibrary("./link/liblink.dll");
@@ -44,36 +39,37 @@ int main(int arg, char* args[]) {
 	dll_read_shm();
 	Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
 	dll_write_shm("rewrite shm data");
+}
+
+
+
+
+int main(int arg, char* args[]) {
+	system("cls");
+	system("tasklist /nh | find /i \"mysqld.exe\"");
+
+	
+	ConfInit();
+	SessionInit();
+	Router_init();
+	mysql_pool_init();
+	elr_mpl_init();
+
+
+	model();
+	other();
+	session();
+	apptemp();
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
-					&mysqltest, &datamodeltest, &elrtest, &sessionadd, &updatesession, NULL};
+					&mysqltest, &datamodeltest, &elrtest, &sessionadd, 
+					&updatesession, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
-					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd", "/updatesession", NULL};
+					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd",
+					"/updatesession", NULL};
 	
-	ContFunMap cmp;
-	cmp.cf[0] = &getsession;
-	cmp.cf[1] = &template;
-	cmp.cf[2] = &setsession;
-	cmp.cf[3] = &sessiondebug;
-	cmp.cf[4] = &mysqltest;
-	cmp.cf[5] = &datamodeltest;
-	cmp.cf[6] = &elrtest;
-	cmp.cf[7] = &sessionadd;
-	cmp.cf[8] = &updatesession;
-	cmp.cf[9] = NULL;
-	cmp.keys[0] = "/getsession";
-	cmp.keys[1] = "/template";
-	cmp.keys[2] = "/setsession";
-	cmp.keys[3] = "/sessiondebug";
-	cmp.keys[4] = "/mysqltest";
-	cmp.keys[5] = "/datamodeltest";
-	cmp.keys[6] = "/elrtest";
-	cmp.keys[7] = "/sessionadd";
-	cmp.keys[8] = "/updatesession";
-	cmp.keys[9] = NULL;
-	
-	
-	iocpServerMake(cmp);
+
+	iocpServerMake(g_cmp);
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 	

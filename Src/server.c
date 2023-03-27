@@ -236,8 +236,8 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 		// send(PerHandleData->Socket, "HTTP/1.1 200 \r\n\r\n hello", 23,0);
 		// closesocket(PerHandleData->Socket);
 		
-		free( PerIoData);
-		free( PerHandleData);
+		free( PerIoData );
+		free( PerHandleData );
 
 		continue;
 

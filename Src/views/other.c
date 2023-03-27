@@ -33,3 +33,9 @@ void elrtest(int a, const Request* req)
 
 	Res_row(a, "test ok");
 }
+
+RouterAdd(other){
+	ContFun cf[] = {&datamodeltest, &elrtest, NULL};
+	char* keys[] = {"/datamodeltest", "/elrtest", NULL};
+	router_add_app(cf, keys, __func__);
+}

@@ -16,6 +16,9 @@ limitations under the License.
 */
 #include "router.h"
 
+// 全局 view 回调函数
+ContFunMap g_cmp;
+
 void Rou_init(
 	// 服务启动时传来的
 	ContFun cf[], 
@@ -150,4 +153,53 @@ char* loadFile(char *path) {
 	fclose(fp);
 	
 	return _context;
+}
+
+
+void Router_init() {
+	for(int i=0; i < ContFunNUM; i++){
+		g_cmp.cf[i] = NULL;
+		g_cmp.keys[i] = NULL;
+	}
+	g_cmp.curr_num = 0;
+
+	printf("[Router: Info] Router init successfully...\n");
+}
+
+#define RED "\033[0;32;31m"
+#define NONE "\033[m"
+#define YELLOW "\033[1;33m"
+
+void router_add_app(ContFun cf[], char* keys[], const char* name) {
+	
+	int icf=0, ikeys=0;
+	while(cf[icf] != NULL){
+		icf ++;
+		if(icf > 1000) return;
+	}
+	while(keys[ikeys] != NULL){
+		ikeys ++;
+		if(ikeys > 1000) return;
+	}
+	char appname[64] = {0};
+
+	if(icf != ikeys)
+	{
+		printf("[Router: info] App: %s Failed \n", name);
+	}
+	int curr_num = g_cmp.curr_num;
+
+	for(int i = 0; i < icf; i++){
+		g_cmp.cf[ curr_num + i ] = cf[i];
+		strcat(appname, "/");
+		strcat(appname, name);
+		strcat(appname, keys[i]);
+		g_cmp.keys[ curr_num + i ] = (char*)malloc(sizeof(char) * strlen(appname));
+		strcpy(g_cmp.keys[ curr_num + i ], appname);
+		memset(appname, 0, 64);
+	}
+
+	g_cmp.curr_num = g_cmp.curr_num + icf;
+
+	printf("[Router: info] App: "YELLOW" %s"NONE" %d function loaded\n", name, icf);
 }
