@@ -20,7 +20,7 @@ limitations under the License.
 #include "./views/session.c"
 #include "./views/template.c"
 #include "./views/mysql.c"
-
+#include "./views/other.c"
 
 int main(int arg, char* args[]) {
 	ConfInit();
