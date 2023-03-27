@@ -29,4 +29,4 @@ aux_source_directory(./views views_SRC)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Src/link) 
 
 #指定生成目标
-add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} ${views_SRC})
+add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} )

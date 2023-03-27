@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License. 
 */
 #include "server.h"
-
-
+#include <link.h>
 
 void datamodeltest(int a, const Request* req) 
 {
@@ -41,8 +40,6 @@ void datamodeltest(int a, const Request* req)
 	Res_row(a, "This is a test str");
 }
 
-
-
 void elrtest(int a, const Request* req)
 {
 	//char* str = (char*) malloc (sizeof(char)* 50);
@@ -53,25 +50,26 @@ void elrtest(int a, const Request* req)
 	Res_row(a, "test ok");
 }
 
-
-
 #include "./views/session.c"
 #include "./views/template.c"
+#include "./views/mysql.c"
 
-#include <link.h>
 
 int main(int arg, char* args[]) {
 	ConfInit();
 	SessionInit();
 	mysql_pool_init();
 	elr_mpl_init();
-
+	
+	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_HIDE);
+	Sleep(500);
 	HMODULE handle = LoadLibrary("./link/liblink.dll");
 	Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
 	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
 	dll_read_shm();
-
+	Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
+	dll_write_shm("rewrite shm data");
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
 					&mysqltest, &datamodeltest, &elrtest, &sessionadd, &updatesession, NULL};

@@ -16,6 +16,15 @@ limitations under the License.
 */
 #include <link.h>
 
+
+// 多进程实现数据共享的方法
+#pragma data_seg("flag_data")
+int itestlink = 0;
+char string[1024*1024] = {0};
+#pragma data_seg()
+#pragma comment(linker,"/SECTION:flag_data,RWS")
+
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
 	switch(ul_reason_for_call){
 		case DLL_PROCESS_ATTACH:
@@ -38,11 +47,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserve
 }
 
 void set(int a){
-	testlink = a;
+	itestlink = a;
 }
 
 int get(){
-	return testlink;
+	return itestlink;
 }
 
 void dll_read_shm(){
@@ -60,7 +69,6 @@ void dll_read_shm(){
 	if (hMapFile == NULL){
 		MessageBox(NULL, "Failed to open file mapping.\n", "Error", MB_ICONERROR);
 		DWORD error = GetLastError();
-		printf("%d\n", error);
 		return;
 	}
 	pBuf = (LPCTSTR)MapViewOfFile(
@@ -80,7 +88,8 @@ void dll_read_shm(){
 	ZeroMemory(str, 1024*1024);
 	strncpy(str, (char*)pBuf, 1024*1024-1);
 
-	MessageBox(NULL, str, "Shared Memory", MB_OK);
+	//MessageBox(NULL, str, "Shared Memory", MB_OK);
+	printf("[Shared Memory: ]%s\n", str);
 
 	UnmapViewOfFile(pBuf);
 	CloseHandle(hMapFile);

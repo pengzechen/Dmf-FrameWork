@@ -14,16 +14,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <windows.h>
-#include <stdio.h>
-
-typedef int(*Get)();
-typedef void(*Set)(int);
-typedef void(*Dll_read_shm)();
-typedef void(*Dll_write_shm)(char*);
+#include <link.h>
 
 int main() {
-    HMODULE handle = LoadLibrary("./views/libviews.dll");
+    HMODULE handle = LoadLibrary("./link/liblink.dll");
     
     Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
@@ -37,7 +31,10 @@ int main() {
     dll_write_shm(data);
 
 
-    while(1){Sleep(2000);}
+    while(1){
+        dll_read_shm();
+        Sleep(2000);
+    }
     FreeLibrary(handle);
     return 0;
 }

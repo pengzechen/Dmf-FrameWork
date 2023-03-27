@@ -1,5 +1,6 @@
 #include <request.h>
 #include <response.h>
+#include <cpool.h>
 
 void mysqltest(int a, const Request* req) 
 {

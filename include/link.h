@@ -22,16 +22,12 @@ limitations under the License.
 
 #include <windows.h>
 #include <stdio.h>
-// 多进程实现数据共享的方法
-#pragma data_seg("flag_data")
-int testlink = 0;
-char string[1024*1024] = {0};
-#pragma data_seg()
-#pragma comment(linker,"/SECTION:flag_data,RWS")
+
 
 typedef int(*Get)();
 typedef void(*Set)(int);
 typedef void(*Dll_read_shm)();
+typedef void(*Dll_write_shm)(char*);
 
 
 #ifdef __cplusplus    // If used by C++ code, 
