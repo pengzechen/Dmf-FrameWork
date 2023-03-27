@@ -41,9 +41,6 @@ extern void Res_init(int fd, Response* res){
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
 static void ResHandel( int acceptFd, char* res_str ){
-	if(g_server_conf_all._conf_server.mode = SSLServer){
-		
-	}
 	send(acceptFd, res_str, strlen(res_str),0);
 	closesocket(acceptFd);
 }
@@ -71,12 +68,10 @@ extern void SetCookie(Response* res, char* name, char* value){
 	strcat(res->Set_cookie, "\r\n");
 }
 
-extern void SetSession(Response*res , char* key, char* value){
-	char Session_str[11] = {'\0'};
-	SessionCreate(Session_str, key, value);
+extern void SetSession(Response*res , char* Session_str) {
+	
 	SetCookie(res, "dmfsession", Session_str);
 }
-
 
 // 设置 body
 extern void SetBody(Response* res, char* body){
@@ -99,6 +94,8 @@ extern void ResParse(Response* res){
 	ResHandel(res->fd, final_str);
 }
 
+
+
 // 以纯的字符串返回
 extern void Res_row(int acceptFd, char* res_str) {
 	char final_str[FINAL_STR_SIZE] = {'\0'};
@@ -108,7 +105,7 @@ extern void Res_row(int acceptFd, char* res_str) {
 	ResHandel(acceptFd, final_str);
 }
 
-
+// 返回 Not Found
 extern void Res_NotFound(int acceptFd){
 	char final_str[FINAL_STR_SIZE] = {'\0'};
 	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
@@ -117,11 +114,11 @@ extern void Res_NotFound(int acceptFd){
 	ResHandel(acceptFd, final_str);
 }
 
-
+// 以模板返回
 extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
-	char* context = loadTemplate("./templates/test.html");			// 需要释放内存
-	char* res = parseContext(context, kv, num-1);						// 模板返回值
-	
+	char* context = loadTemplate(path);					// 需要释放内存
+	char* res = parseContext(context, kv, num-1);		// 模板返回值
 	Res_row(acceptFd, res);
 	free(res);
 }
+

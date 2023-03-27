@@ -1,5 +1,4 @@
-#include <request.h>
-#include <response.h>
+
 
 
 void mfunction(char *out, char *in) {
@@ -31,6 +30,6 @@ void template(int a, const Request *req)
 	kv[3].type = 3;
 
 	
-	Res_render(a, NULL, kv, 4);
+	Res_render(a, "./templates/test.html", kv, 4);
 }
 

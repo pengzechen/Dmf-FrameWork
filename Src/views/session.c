@@ -1,5 +1,4 @@
-#include <request.h>
-#include <response.h>
+
 
 void setsession(int a, const Request *req) {
 	char res_str[80] = {0};
@@ -12,12 +11,15 @@ void setsession(int a, const Request *req) {
 	strcat(key, req->query[0].key);
 	strcat(data, req->query[0].data);
 
+	char Session_str[11] = {'\0'};
+	SessionCreate(Session_str, key, data);
+
 	Response res;
 	Res_init(a, &res);
 	SetHead(&res, "200");
 	SetType(&res, "text/html;utf-8;");
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, key, data);
+	SetSession(&res, Session_str);
 	SetBody(&res, res_str);
 	ResParse(&res);
 }

@@ -15,21 +15,27 @@ See the License for the specific language governing permissions and
 limitations under the License. 
 */
 
+
 #include <server.h>
-#include <link.h>
+
+#include <session.h>			// 初始化 session
+#include <cpool.h>				// 初始化 mysqlpool
+#include <conf/conf.h>			// 初始化 全局配置
+#include <elr_mpl/elr_mpl.h>	// 初始化 内存池
 
 #include "./views/session.c"
 #include "./views/template.c"
 #include "./views/mysql.c"
 #include "./views/other.c"
 
+#include <link.h>
 int main(int arg, char* args[]) {
 	ConfInit();
 	SessionInit();
 	mysql_pool_init();
 	elr_mpl_init();
 	
-	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_HIDE);
+	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 	Sleep(500);
 	HMODULE handle = LoadLibrary("./link/liblink.dll");
 	Get link_get = (Get)GetProcAddress(handle, "get");

@@ -27,21 +27,17 @@ limitations under the License.
 #define OutMsg(a) printf("%s", a);
 
 
-#include <session.h>			// 需要初始化 session
-#include <cpool.h>				// 初始化 mysqlpool
 #include <conf/conf.h>			// 初始化 全局配置
-#include <elr_mpl/elr_mpl.h>	// 初始化内存池
+#include <utility.h>	
+#include <router.h>				// router 中已经有 server 需要的 request 和 response
 
-#include <utility.h>			
-#include <router.h>
-
-#include<stdio.h>
-#include<string.h>
-#include<time.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include <openssl/applink.c>
+// #include <openssl/applink.c>
 
 
 #ifdef __WIN32__

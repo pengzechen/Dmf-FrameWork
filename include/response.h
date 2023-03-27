@@ -21,14 +21,10 @@ limitations under the License.
 
 
 #include "template.h"		// 以模板作为响应
-#include "session.h"
 #include "utility.h"        // 引入时间
 #include <string.h>
 #include <stdio.h>
 #include <WinSock2.h>		// 为了使用 send
-
-#include <openssl/ssl.h>    // 为了使用 ssl_write
-#include "conf/conf.h"
 
 typedef struct _Response {
 	char Server[32];
@@ -56,7 +52,7 @@ extern void SetType(Response* res, char* type);
 
 extern void SetCookie(Response* res, char* name, char* value);
 
-extern void SetSession(Response*res , char* key, char* value);
+extern void SetSession(Response*res , char* Session_str);
 
 extern void SetBody(Response* res, char* body);
 
