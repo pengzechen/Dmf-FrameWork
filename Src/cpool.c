@@ -27,7 +27,7 @@ unsigned int query_times = 0; //mysql所有的查询次数，用于测试
 //创建一个新的mysql连接节点
 mysql_conn * mysql_new_connection()
 {
-	mysql_conn * conn = malloc(sizeof(mysql_conn));    //定义一个类型为mysql_conn的名为conn的指针变量,分配内存
+	mysql_conn * conn = malloc(sizeof(mysql_conn));
 	
 	if (mysql_init(&conn->conn) == NULL){
 		printf("can not init mysql: [%s]\n",strerror(errno));
@@ -52,6 +52,26 @@ mysql_conn * mysql_new_connection()
 	conn->prev = NULL;
 	return conn;
 }
+
+
+//向连接池中加入一个mysql连接conn
+void conn_push(mysql_conn * conn)
+{
+	mysql_conn *lc = pool_mysql.mysql_list;   //*lc指针变量
+	if (lc == NULL){
+
+		pool_mysql.mysql_list = conn;     //如果连接池为空，直接把第一个放进去
+	}else{
+
+		while(lc->next)    //循环到末尾，直到next属性为null
+			lc=lc->next;
+
+		lc->next = conn;   //连接池的下一个是当前连接conn
+		conn->prev = lc;   //当前连接的上一个是过去的lc
+	}
+	pool_mysql.free_connections++;
+}
+
 
 //初始化mysql连接池
 void mysql_pool_init()
@@ -81,25 +101,6 @@ void mysql_pool_init()
 	pthread_mutex_unlock(&pool_mysql.lock);
 
 	printf("[mysqlpool: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.min_connections);
-}
-
-
-//向连接池中加入一个mysql连接conn
-void conn_push(mysql_conn * conn)
-{
-	mysql_conn *lc = pool_mysql.mysql_list;   //*lc指针变量
-	if (lc == NULL){
-
-		pool_mysql.mysql_list = conn;     //如果连接池为空，直接把第一个放进去
-	}else{
-
-		while(lc->next)    //循环到末尾，直到next属性为null
-			lc=lc->next;
-
-		lc->next = conn;   //连接池的下一个是当前连接conn
-		conn->prev = lc;   //当前连接的上一个是过去的lc
-	}
-	pool_mysql.free_connections++;
 }
 
 //从连接池中取出一个mysql连接,返回类型为mysql_conn,如果没有可用的连接，返回null。

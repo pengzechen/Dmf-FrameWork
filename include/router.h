@@ -26,10 +26,26 @@ limitations under the License.
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
+#define MAX_PATH_LENGTH 512
+#define MAX_FILES 1500
 #define ContFunNUM 60
 
+#define RED "\033[0;32;31m"
+#define NONE "\033[m"
+#define YELLOW "\033[1;33m"
+
+struct FileInfo {
+    char path[MAX_PATH_LENGTH];
+    char type[16];
+    off_t size;
+    char ext[16];
+};
+
 typedef void (*ContFun)(int acceptFd, const Request *req );
+
+#define RouterAdd(name) void name()
 
 typedef struct _ContFunMap {
 	
@@ -42,9 +58,8 @@ typedef struct _ContFunMap {
 // 全局 view 回调函数
 extern ContFunMap g_cmp;
 
-
-#define RouterAdd(name) void name()
-
+extern struct FileInfo g_file_list[MAX_FILES];
+extern int g_num_files;
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +72,8 @@ void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
 void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
 
 static int searchLocalFile(char* local_paths[]);
+
+void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files);
 
 static char* loadFile(char *path);
 

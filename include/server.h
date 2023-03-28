@@ -23,6 +23,7 @@ limitations under the License.
 #define DATA_BUFSIZE 8192
 
 #define MAXBUF 4096
+
 #define OutErr(a) printf("%s %s %d %d", a, WSAGetLastError(), __FILE__ , __LINE__ );
 #define OutMsg(a) printf("%s", a);
 

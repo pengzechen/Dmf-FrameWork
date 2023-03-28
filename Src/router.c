@@ -18,6 +18,8 @@ limitations under the License.
 
 // 全局 view 回调函数
 ContFunMap g_cmp;
+struct FileInfo g_file_list[MAX_FILES];
+int g_num_files = 0;
 
 void Rou_init(
 	// 服务启动时传来的
@@ -137,6 +139,61 @@ int searchLocalFile(char* local_paths[]){
 }
 
 
+void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files) {
+    DIR *dir;
+    struct dirent *entry;
+
+    if ((dir = opendir(path)) == NULL) {
+        printf("Error: Failed to open directory %s\n", path);
+        return;
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char full_path[MAX_PATH_LENGTH];
+        snprintf(full_path, MAX_PATH_LENGTH, "%s/%s", path, entry->d_name);
+
+        struct stat st;
+        if (stat(full_path, &st) != 0) {
+            printf("Error: Failed to get file information for %s\n", full_path);
+            continue;
+        }
+
+        struct FileInfo info;
+        strncpy(info.path, full_path, MAX_PATH_LENGTH);
+
+        if (entry->d_type == DT_DIR) {
+            strncpy(info.type, "Directory", 16);
+            info.size = 0;
+            info.ext[0] = '\0';
+            traverse_directory(full_path, file_list, num_files);
+        } else {
+            strncpy(info.type, "File", 16);
+            info.size = st.st_size;
+            char *dot_pos = strrchr(entry->d_name, '.');
+            if (dot_pos == NULL || dot_pos == entry->d_name) {
+                info.ext[0] = '\0';
+            } else {
+                strncpy(info.ext, dot_pos + 1, 16);
+            }
+        }
+
+        if (*num_files >= MAX_FILES) {
+            printf("Warning: Reached maximum number of files.\n");
+            break;
+        }
+
+        file_list[*num_files] = info;
+        (*num_files)++;
+    }
+
+    closedir(dir);
+}
+
+
 char* loadFile(char *path) {
 	FILE *fp;
 	fp = fopen( path, "r" );
@@ -166,9 +223,6 @@ void Router_init() {
 	printf("[Router: Info] Router init successfully...\n");
 }
 
-#define RED "\033[0;32;31m"
-#define NONE "\033[m"
-#define YELLOW "\033[1;33m"
 
 void router_add_app(ContFun cf[], char* keys[], const char* name) {
 	

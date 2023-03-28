@@ -44,10 +44,15 @@ typedef struct mysql_pool
 	int min_connections;	//最小连接数
 	int max_connections;	//最大连接数
 	int free_connections;	//保持空闲的最大连接数
-	int is_idle_block;		//是否开启无可用 连接阻塞
+
+	
 	pthread_mutex_t lock;	//mysql链表锁
+
+	int is_idle_block;			//是否开启无可用 连接阻塞
 	pthread_cond_t idle_signal;	//等待可用连接的条件变量
+
 	mysql_conn * mysql_list; 	//mysql连接池链表
+
 } mysql_pool;
 
 #ifdef __cplusplus
