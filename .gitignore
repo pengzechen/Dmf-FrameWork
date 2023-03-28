@@ -8,4 +8,4 @@ bin/*.exe
 build/
 
 bin/link/
-bin/static
+bin/static/
