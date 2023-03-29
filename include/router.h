@@ -27,20 +27,25 @@ limitations under the License.
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
-#define MAX_PATH_LENGTH 512
-#define MAX_FILES 1500
+#define MAX_PATH_LENGTH 1024
+#define MAX_FILES 500
 #define ContFunNUM 60
 
 #define RED "\033[0;32;31m"
 #define NONE "\033[m"
 #define YELLOW "\033[1;33m"
 
+// #define Router_Debug
+
 struct FileInfo {
     char path[MAX_PATH_LENGTH];
     char type[16];
     off_t size;
     char ext[16];
+    char content_type[64];
+    char url[512];
 };
 
 typedef void (*ContFun)(int acceptFd, const Request *req );
@@ -69,13 +74,13 @@ void Router_init();
 
 void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
-void Rou_iocp_init(ContFunMap cmp, int acceptFd, Request *req);
+void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req);
 
 static int searchLocalFile(char* local_paths[]);
 
 void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files);
 
-static char* loadFile(char *path);
+char* get_content_type(char *file_ext);
 
 void router_add_app(ContFun cf[], char* keys[], const char* name);
 

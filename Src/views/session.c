@@ -20,7 +20,7 @@ void setsession(int a, const Request *req) {
 	SetType(&res, "text/html;utf-8;");
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
 	SetSession(&res, Session_str);
-	SetBody(&res, res_str);
+	SetBody(&res, res_str, strlen(res_str));
 	ResParse(&res);
 }
 

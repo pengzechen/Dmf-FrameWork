@@ -43,17 +43,11 @@ void linkload(){
 
 
 
-
+#include <unistd.h>
+#include <stdlib.h>
 int main(int argc, char* argv[]) {
 	system("cls");
 	system("tasklist /nh | find /i \"mysqld.exe\"");
-
-    traverse_directory("C:/Users/92706/Desktop/TEMP/C_learn/Myserver/Dmfserver/request/bin/static/", g_file_list, &g_num_files);
-
-    printf("Found %d files.\n", g_num_files);
-    for (int i = 0; i < g_num_files; i++) {
-        printf("%s (%s, %ld bytes, %s)\n", g_file_list[i].path, g_file_list[i].type, g_file_list[i].size, g_file_list[i].ext);
-    }
 
 	ConfInit();
 	SessionInit();

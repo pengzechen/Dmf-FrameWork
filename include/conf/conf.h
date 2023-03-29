@@ -55,10 +55,16 @@ typedef struct conf_model {
 } conf_model;
 
 
+// Router 模块
+typedef struct conf_router{
+    char static_dir[1024];
+} conf_router;
+
 
 typedef struct Server_Conf {
     conf_model _conf_model;
     conf_server _conf_server;
+    conf_router _conf_router;
 } Server_Conf;
 
 

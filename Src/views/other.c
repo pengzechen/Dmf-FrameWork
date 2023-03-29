@@ -1,5 +1,5 @@
 #include <model/data.h>
-
+#include <request.h>
 
 void datamodeltest(int a, const Request* req) 
 {
@@ -29,7 +29,9 @@ void elrtest(int a, const Request* req)
 	//char* str = (char*) malloc (sizeof(char)* 50);
 
 	//free(str);
-	printf("g_server_conf_all: database %s\n", g_server_conf_all._conf_model.database);
+	//printf("g_server_conf_all: database %s\n", g_server_conf_all._conf_model.database);
+
+	printf("%s\n", req->query[0].key);
 
 	Res_row(a, "test ok");
 }

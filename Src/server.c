@@ -116,6 +116,8 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
+	
+	
 	stop = clock();     /*  停止计时  */
 		
 	// printf("[server]Handel Time: %Lf\n", ((double)(stop - start)) / CLK_TCK );
@@ -193,53 +195,39 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
  	char time [30] = {'\0'};
 
 	while(1){
-		/*
-		if(0 == GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE))
-		{
-		if( (GetLastError() ==WAIT_TIMEOUT) || (GetLastError() == ERROR_NETNAME_DELETED) )
-		{
-			cout << "closingsocket" << PerHandleData->Socket << endl; 
-			closesocket(PerHandleData->Socket);
 
-			free( PerIoData);
-			free( PerHandleData);
-			continue;
-		}
-		else
-		{
-			OutErr("GetQueuedCompletionStatus failed!");
-		}
-		return 0;
+		if(0 == GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE)){
+			if( (GetLastError() == WAIT_TIMEOUT)){
+				printf("closingsocket %d\n", PerHandleData->Socket); 
+				closesocket(PerHandleData->Socket);
+
+				free( PerIoData);
+				free( PerHandleData);
+				continue;
+			}else{
+				OutErr("GetQueuedCompletionStatus failed!");
+			}
+			return 0;
 		}
 
 		// 说明客户端已经退出
-		if(BytesTransferred == 0)
-		{
-			cout << "closing socket" <<PerHandleData->Socket << endl;
+		if(BytesTransferred == 0){
+			printf("closingsocket %d\n", PerHandleData->Socket);
 			closesocket(PerHandleData->Socket);
 			free( PerIoData);
 			free( PerHandleData);
 			continue;
 		}
-		*/
-		GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE);
-
 		
 		ParseHttp(&req1, PerIoData->Buffer);
 		serverTime(time);
 		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
 		memset(time, 0, 30);
-		
-		Rou_iocp_init(PerIoData->cmp, PerHandleData->Socket, &req1);
-		
+		Rou_iocp_handle(PerIoData->cmp, PerHandleData->Socket, &req1);
 		freeReq(&req1);
-		// send(PerHandleData->Socket, "HTTP/1.1 200 \r\n\r\n hello", 23,0);
-		// closesocket(PerHandleData->Socket);
 		
 		free( PerIoData );
 		free( PerHandleData );
-
-		continue;
 
 		/*
 		// 继续向 socket 投递WSARecv操作

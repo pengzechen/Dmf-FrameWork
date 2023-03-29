@@ -41,24 +41,14 @@ void Rou_init(
 	}
 	if(flag == 0) {
 	
-		char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
-		
-		int num = searchLocalFile(local_path);
-		for(int i=0; i <= num; i++){
+		for(int i=0; i <= g_num_files; i++){
 
-			if( strcmp(req->path, local_path[i]) == 0){
+			if( strcmp(req->path, g_file_list[i].url) == 0){
 				
-				char name[512] = {'\0'};
-				strcat(name, STATIC_DIR);
-				strcat(name, local_path[i]);
-				char* block = loadFile(name);
-				Res_row(acceptFd, block);
-				free(block);
+				Res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
+
 				flag = 1;	// 静态资源找到了
 			}
-		}
-		for(int i=0; i <= num; i++){
-			free(local_path[i]);
 		}
 		
 		if(flag == 0){
@@ -68,7 +58,8 @@ void Rou_init(
 	}
 }
 
-void Rou_iocp_init(
+
+void Rou_iocp_handle(
 	ContFunMap cmp, 
 	int acceptFd, 
 	Request *req)
@@ -87,32 +78,20 @@ void Rou_iocp_init(
 	
 	if(flag == 0) {
 	
-		char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
-		
-		int num = searchLocalFile(local_path);
-		for(int i=0; i <= num; i++){
-
-			if( strcmp(req->path, local_path[i]) == 0){
-				
-				char name[1024] = {'\0'};
-				strcat(name, STATIC_DIR);
-				strcat(name, local_path[i]);
-				char* block = loadFile(name);
-				Res_row(acceptFd, block);
-				free(block);
+		// char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
+		// int num = searchLocalFile(local_path);
+		for(int i=0; i <= g_num_files; i++){
+			if( strcmp(req->path, g_file_list[i].url) == 0){
+				Res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
 				flag = 1;	// 静态资源找到了
 			}
 		}
-		for(int i=0; i <= num; i++){
-			free(local_path[i]);
-		}
-		
-		if(flag == 0){
-			
+		if(flag == 0){	
 			Res_NotFound(acceptFd);   // 返回404Not Found
 		}
 	}
 }
+
 
 int searchLocalFile(char* local_paths[]){
 	struct dirent *ptr;
@@ -163,8 +142,10 @@ void traverse_directory(const char *path, struct FileInfo file_list[], int *num_
         }
 
         struct FileInfo info;
+		memset(&info, 0, sizeof(struct FileInfo));
         strncpy(info.path, full_path, MAX_PATH_LENGTH);
-
+		
+		
         if (entry->d_type == DT_DIR) {
             strncpy(info.type, "Directory", 16);
             info.size = 0;
@@ -194,31 +175,45 @@ void traverse_directory(const char *path, struct FileInfo file_list[], int *num_
 }
 
 
-char* loadFile(char *path) {
-	FILE *fp;
-	fp = fopen( path, "r" );
-	if(fp == NULL){ printf(" open Failed");  }
-	unsigned long int file_size;
-	fseek(fp, 0L, 2);
-	file_size = ftell(fp);
-	fseek(fp, 0L, 0);
-	
-	char * _context = (char*)malloc(file_size * sizeof(char)); 
-	
-	memset(_context, '\0', file_size * sizeof(char));
-	fread(_context, sizeof(char), file_size, fp);
-	fclose(fp);
-	
-	return _context;
-}
-
-
 void Router_init() {
 	for(int i=0; i < ContFunNUM; i++){
 		g_cmp.cf[i] = NULL;
 		g_cmp.keys[i] = NULL;
 	}
 	g_cmp.curr_num = 0;
+
+	char *buffer;  
+    if((buffer = getcwd(NULL, 0)) == NULL) {  
+        perror("getcwd error");  
+		return;
+    }  
+	char static_dir[1024] = {0};
+	strcat(static_dir, buffer);
+	strcat(static_dir, "\\");
+	strcat(static_dir, g_server_conf_all._conf_router.static_dir);
+	free(buffer);
+
+	traverse_directory(static_dir, g_file_list, &g_num_files);
+
+	#ifdef Router_Debug
+    printf("Found %d files.\n", g_num_files);
+	#endif
+	char* content_type;
+	char* url;
+    for (int i = 0; i < g_num_files; i++) {
+		content_type = get_content_type(g_file_list[i].ext);
+		strcpy(g_file_list[i].content_type, content_type);
+
+		url = strstr(g_file_list[i].path, "/");
+		strcpy(g_file_list[i].url, url);
+        #ifdef Router_Debug
+		printf("%d: %s (%s, "YELLOW"%ld bytes"NONE", %s, %s, "YELLOW"%s"NONE")\n", i, g_file_list[i].path, 
+				g_file_list[i].type, g_file_list[i].size, 
+				g_file_list[i].ext, g_file_list[i].content_type, g_file_list[i].url);
+        // printf(" (%s, %ld bytes, %s, %s)\n", g_file_list[i].type, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
+		#endif
+	}
+	
 
 	printf("[Router: Info] Router init successfully...\n");
 }
@@ -256,4 +251,67 @@ void router_add_app(ContFun cf[], char* keys[], const char* name) {
 	g_cmp.curr_num = g_cmp.curr_num + icf;
 
 	printf("[Router: info] App: "YELLOW" %s"NONE" %d function loaded\n", name, icf);
+}
+
+
+char* get_content_type(char *file_ext) {
+    int i;
+    char *ext = malloc(strlen(file_ext) + 1);
+    strcpy(ext, file_ext);
+    for (i = 0; ext[i]; i++) {
+        ext[i] = tolower(ext[i]);
+    }
+    if (strcasecmp(ext, "html") == 0 || strcasecmp(ext, "htm") == 0) {
+		free(ext);
+        return "text/html";
+    } else if (strcasecmp(ext, "txt") == 0) {
+		free(ext);
+        return "text/plain";
+    } else if (strcasecmp(ext, "css") == 0) {
+		free(ext);
+        return "text/css";
+    } else if (strcasecmp(ext, "js") == 0) {
+		free(ext);
+        return "application/javascript";
+    } else if (strcasecmp(ext, "json") == 0) {
+		free(ext);
+        return "application/json";
+    } else if (strcasecmp(ext, "xml") == 0) {
+		free(ext);
+        return "application/xml";
+    } else if (strcasecmp(ext, "gif") == 0) {
+		free(ext);
+        return "image/gif";
+    } else if (strcasecmp(ext, "jpg") == 0 || strcasecmp(ext, "jpeg") == 0) {
+		free(ext);
+        return "image/jpeg";
+    } else if (strcasecmp(ext, "png") == 0) {
+		free(ext);
+        return "image/png";
+    } else if (strcasecmp(ext, "bmp") == 0) {
+		free(ext);
+        return "image/bmp";
+    } else if (strcasecmp(ext, "ico") == 0) {
+		free(ext);
+        return "image/x-icon";
+    } else if (strcasecmp(ext, "pdf") == 0) {
+		free(ext);
+        return "application/pdf";
+    } else if (strcasecmp(ext, "doc") == 0 || strcasecmp(ext, "docx") == 0) {
+		free(ext);
+        return "application/msword";
+    } else if (strcasecmp(ext, "xls") == 0 || strcasecmp(ext, "xlsx") == 0) {
+		free(ext);
+        return "application/vnd.ms-excel";
+    } else if (strcasecmp(ext, "ppt") == 0 || strcasecmp(ext, "pptx") == 0) {
+		free(ext);
+        return "application/vnd.ms-powerpoint";
+    }else if (strcasecmp(ext, "mp4") == 0) {
+		free(ext);
+        return "audio/mp4";
+    } else {
+		free(ext);
+        return "application/octet-stream";
+    }
+    
 }

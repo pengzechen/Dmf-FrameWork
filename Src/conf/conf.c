@@ -88,6 +88,8 @@ void ConfInit()
     strcpy(g_server_conf_all._conf_server.cert_private, "./cert/localhost-key.pem");
     g_server_conf_all._conf_server.mode = SimpleServer;
 
+    strcpy(g_server_conf_all._conf_router.static_dir, "static");
+
 
     printf("[Conf: Info] conf init successfully...\n");
 }
