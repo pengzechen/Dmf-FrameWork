@@ -14,8 +14,22 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <dmfserver/conf/conf.h>
+#ifndef UTILITY
+#define UTILITY
 
-void test () {
-    printf("test ok\n");
-}
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern void serverTime(char* str);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
+
+#endif

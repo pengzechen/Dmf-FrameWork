@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include "model.h"
+#include <dmfserver/model.h>
 
 void ModelInit(ModelPtr mPtr) {
 	mPtr->my_connection = (MYSQL*)malloc(sizeof(MYSQL));

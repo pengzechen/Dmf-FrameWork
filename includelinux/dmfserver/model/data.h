@@ -14,8 +14,33 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <dmfserver/conf/conf.h>
 
-void test () {
-    printf("test ok\n");
-}
+#ifndef DATA_STRUCT
+#define DATA_STRUCT
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+typedef struct objectNode objectNode;
+typedef objectNode* objPtr;
+
+struct objectNode {
+	char NodeName[64];
+	void* data;
+	int size;
+	objPtr mnChild;
+	objPtr mnBro;
+	int type;
+};
+
+
+extern objPtr CreateObjectNode(char* nodeName, char* data);
+
+extern void AppendBro(objPtr mn, objPtr bro);
+
+extern void AppendChild(objPtr mn, objPtr child);
+
+extern void ShowNodeData(objPtr mn);
+
+#endif

@@ -14,9 +14,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include "server.h"
+#include <dmfserver/server.h>
 
-clock_t start, stop;
+#ifdef __WIN32__  // WIN32
+
 
 void SSLservermake(ContFun cf[], char* keys[]){
 	unsigned int myport, lisnum;
@@ -96,8 +97,6 @@ void SSLservermake(ContFun cf[], char* keys[]){
 
 
 void Handler(int acceptFd, ContFun cf[], char* keys[]) {
-	start = clock();    /*  开始计时  */
-	
 	
 	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
 
@@ -116,11 +115,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
-	
-	
-	stop = clock();     /*  停止计时  */
-		
-	// printf("[server]Handel Time: %Lf\n", ((double)(stop - start)) / CLK_TCK );
+
 }
 
 
@@ -161,7 +156,152 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 }
 
 
-#ifdef __WIN32__
+
+#elif __linux__  // linux 由于socket库不同 要重写三个函数
+
+void SSLservermake(ContFun cf[], char* keys[]){
+	unsigned int myport, lisnum;
+
+	SSL_CTX *ctx;
+    SSL_library_init();
+    OpenSSL_add_all_algorithms();
+    SSL_load_error_strings();
+    ctx = SSL_CTX_new(SSLv23_server_method());
+    if (ctx == NULL) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+    if (SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public , SSL_FILETYPE_PEM) <= 0) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+    if (SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private , SSL_FILETYPE_PEM) <= 0) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+    if (!SSL_CTX_check_private_key(ctx)) {
+        ERR_print_errors_fp(stdout);
+        exit(1);
+    }
+
+	SOCKET sListen, sAccept;
+    struct sockaddr_in ser, cli;
+	WSADATA wsaData;
+	WSAStartup(MAKEWORD(2, 2), &wsaData);
+    char buf[MAXBUF + 1]; 
+
+    /* 开启一个 socket 监听 */
+	sListen = socket(AF_INET, SOCK_STREAM, 0);
+
+    ser.sin_family = AF_INET; 
+    ser.sin_port = htons(443); 
+    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
+
+    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
+    listen(sListen,5);
+	
+	int iLen = sizeof(cli);
+    while (1) {
+        SSL *ssl;
+
+        sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
+
+        ssl = SSL_new(ctx);
+        SSL_set_fd(ssl, sAccept);
+        
+        int ret = SSL_accept(ssl);
+       
+        printf("error code: %d %d\n", SSL_get_error(ssl, ret), ret);
+
+        memset(buf, 0, MAXBUF + 1);
+        int len = SSL_read(ssl, buf, MAXBUF);
+        // printf("%s\n", buf);
+        
+
+        char res[128] = "HTTP/1.1 200 OK\r\n"
+                        "Content-Type:text/html\r\n"
+                        "Server:Dmfserver\r\n"
+                        "\r\n OK OK";
+						
+        len = SSL_write(ssl, res, strlen(res));
+        
+
+        SSL_shutdown(ssl);
+        SSL_free(ssl);
+        close(sAccept);
+    }
+
+    close(sListen);
+    SSL_CTX_free(ctx);
+}
+
+
+void Handler(int acceptFd, ContFun cf[], char* keys[]) {
+	
+	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
+
+	Request req1;
+	int receive_bytes;
+	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
+
+	ParseHttp(&req1, res_str);
+	
+	char time [30] = {'\0'};
+	serverTime(time);
+	printf("[%s][Server: Info] %s\n",time , req1.path);
+	
+	
+	Rou_init( cf, keys, acceptFd, &req1);
+	//通过请求的 path 掉用了对应的处理函数
+	
+	freeReq(&req1);
+}
+
+
+void SimpleServerMake(ContFun cf[], char* keys[]) {
+	
+	int serverPort;
+	// if configure not define port then use SERVER_PORT
+	if(g_server_conf_all._conf_server.port == 0)
+	serverPort = SERVER_PORT;
+	else serverPort = g_server_conf_all._conf_server.port;
+
+    WSADATA wsaData;
+    SOCKET sListen, sAccept;
+
+    struct sockaddr_in ser, cli;
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+
+    sListen = socket(AF_INET, SOCK_STREAM, 0);
+
+    ser.sin_family = AF_INET; 
+    ser.sin_port = htons(serverPort); 
+    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
+
+    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
+    listen(sListen,5);
+    
+	int iLen = sizeof(cli);
+	
+
+	while(1){
+		sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
+		
+		Handler( sAccept, cf, keys);
+	}
+	
+    closesocket(sListen); //关闭 socket
+    WSACleanup(); 
+}
+
+#endif // linux
+
+
+
+
+
+
+#ifdef __WIN32__  // WIN32 windows 启动IOCP服务器
 
 SOCKET BindServerOverlapped(int nPort){
 

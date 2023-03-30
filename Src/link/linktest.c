@@ -14,9 +14,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <link.h>
+#include <dmfserver/link.h>
 
-int main() {
+#ifdef __WIN32__
+
+void winLoad() {
     HMODULE handle = LoadLibrary("./link/liblink.dll");
     
     Get link_get = (Get)GetProcAddress(handle, "get");
@@ -36,5 +38,13 @@ int main() {
         Sleep(2000);
     }
     FreeLibrary(handle);
+}
+
+#endif  // WIN32
+
+
+int main() {
+    //winLoad();
+
     return 0;
 }

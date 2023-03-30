@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 
-#include "template.h"
+#include <dmfserver/template.h>
 
 char * loadTemplate(char * template_path) {
 	FILE *fp;

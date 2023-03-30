@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <link.h>
+#include <dmfserver/link.h>
 
 
 // 多进程实现数据共享的方法
@@ -24,6 +24,7 @@ char string[1024*1024] = {0};
 #pragma data_seg()
 #pragma comment(linker,"/SECTION:flag_data,RWS")
 
+#ifdef __WIN32__
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
 	switch(ul_reason_for_call){
@@ -44,14 +45,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserve
 	}
 
 	return TRUE;
-}
-
-void set(int a){
-	itestlink = a;
-}
-
-int get(){
-	return itestlink;
 }
 
 void dll_read_shm(){
@@ -131,3 +124,12 @@ void dll_write_shm(char* str){
 	// CloseHandle(hMapFile);
 }
 
+#endif  // WIN32
+
+void set(int a){
+	itestlink = a;
+}
+
+int get(){
+	return itestlink;
+}

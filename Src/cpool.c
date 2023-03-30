@@ -18,7 +18,7 @@ limitations under the License.
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
-#include "cpool.h"
+#include <dmfserver/cpool.h>
 
 static mysql_pool pool_mysql; //连接池定义
 unsigned int query_times = 0; //mysql所有的查询次数，用于测试

@@ -16,11 +16,11 @@ limitations under the License.
 */
 
 
-#include <server.h>
+#include <dmfserver/server.h>
 
-#include <session.h>			// 初始化 session
-#include <cpool.h>				// 初始化 mysqlpool
-#include <conf/conf.h>			// 初始化 全局配置
+#include <dmfserver/session.h>			// 初始化 session
+#include <dmfserver/cpool.h>				// 初始化 mysqlpool
+#include <dmfserver/conf/conf.h>			// 初始化 全局配置
 #include <elr_mpl/elr_mpl.h>	// 初始化 内存池
 
 #include "./views/session.c"
@@ -28,7 +28,9 @@ limitations under the License.
 #include "./views/mysql.c"
 #include "./views/other.c"
 
-#include <link.h>
+#include <dmfserver/link.h>
+
+#ifdef __WIN32__
 void linkload(){
 	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 	Sleep(500);
@@ -40,11 +42,9 @@ void linkload(){
 	Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
 	dll_write_shm("rewrite shm data");
 }
+#endif //WIN32
 
 
-
-#include <unistd.h>
-#include <stdlib.h>
 int main(int argc, char* argv[]) {
 	system("cls");
 	system("tasklist /nh | find /i \"mysqld.exe\"");
@@ -68,10 +68,11 @@ int main(int argc, char* argv[]) {
 					"/updatesession", NULL};
 	
 
+#ifdef __WIN32__
 	iocpServerMake(g_cmp);
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
-
+#endif // WIN32
 	
 	return 0;
 }

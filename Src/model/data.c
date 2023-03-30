@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License. 
 */
 
-#include <model/data.h>
+#include <dmfserver/model/data.h>
 
 // create a new modle node with NodeName
 extern objPtr CreateObjectNode(char* nodeName, char* data)
