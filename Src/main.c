@@ -74,8 +74,8 @@ int main(int argc, char* argv[]) {
 	iocpServerMake(g_cmp);
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
-#endif // WIN32
-	// SimpleServerMake(cf, keys);
-	
+#elif __linux__ // linux
+	SimpleServerMake(cf, keys);
+#endif // linux
 	return 0;
 }

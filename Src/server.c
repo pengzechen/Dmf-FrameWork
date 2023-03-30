@@ -185,10 +185,10 @@ void SSLservermake(ContFun cf[], char* keys[]){
         exit(1);
     }
 
-	SOCKET sListen, sAccept;
+	int sListen, sAccept;
     struct sockaddr_in ser, cli;
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
+	
+
     char buf[MAXBUF + 1]; 
 
 	sListen = socket(AF_INET, SOCK_STREAM, 0);
@@ -197,7 +197,7 @@ void SSLservermake(ContFun cf[], char* keys[]){
     ser.sin_port = htons(443); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
 
-    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
+    bind(sListen, (struct sockaddr*)&ser, sizeof(ser) );
     listen(sListen,5);
 	
 	int iLen = sizeof(cli);
