@@ -142,7 +142,7 @@ static unsigned int BKDRHash(char *str)
 void* FroundCheck() {
     while(1){
         // SessionAll();
-        Sleep(5000);
+        // Sleep(5000);
     }
 }
 

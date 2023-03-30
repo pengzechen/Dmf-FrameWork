@@ -18,90 +18,49 @@ limitations under the License.
 #include <model/data.h>
 
 // create a new modle node with NodeName
-ObjectNode* CreateObjectNode(char* nodeName, NodeDataType ndt, void* anyData)
+extern objPtr CreateObjectNode(char* nodeName, char* data)
 {
-	ObjectNode* mn = (ObjectNode*)malloc(sizeof(ObjectNode));
-	if(mn == NULL) 
-	{
+	objPtr mn = (objPtr)malloc(sizeof(objectNode));
+	if(mn == NULL){
 		printf("Create error \n");
 		return NULL;
 	}
 	strcpy(mn->NodeName, nodeName);
-
+	mn->data = malloc(sizeof(data)* strlen(data));
+	strcpy(mn->data, data);
 	mn->mnBro = NULL;
 	mn->mnChild = NULL;
-	mn->ndt = ndt;
-	switch(ndt){
-		case D_CHAR:
-			mn->nd.d_str = (char*)malloc(sizeof(char)*strlen((char*)anyData));
-			memset(mn->nd.d_str, 0, sizeof(char)*strlen((char*)anyData));
-			strcpy(mn->nd.d_str, (char*)anyData);
-			break;
-		case D_INT:
-			mn->nd.d_int = (int*)malloc(sizeof(int));
-			mn->nd.d_int = (int*)anyData;
-			break;
-		default:
-			// No such type
-			break;
-	}
 	return mn;
 }
 
-// create a new modle node with NodeName
-ObjectNode* CreateRootNode(char* nodeName, NodeDataType ndt, void* anyData)
-{
-	ObjectNode* mn = (ObjectNode*)malloc(sizeof(ObjectNode));
-	if(mn == NULL) 
-	{
-		printf("Create error \n");
-		return NULL;
-	}
-	strcpy(mn->NodeName, nodeName);
 
-	mn->mnBro = NULL;
-	mn->mnChild = NULL;
-	mn->ndt = ndt;
-	
-	return mn;
-}
-
-// append a Bro to a ObjectNode
-void AppendBro(ObjectNode* mn, ObjectNode* on)
+// append a Bro to a objectNode
+void AppendBro(objPtr mn, objPtr bro)
 {
 	if(mn->mnBro == NULL){
-		mn->mnBro = on;
+		mn->mnBro = bro;
 	}else{
-		on->mnBro = mn->mnBro;
-		mn->mnBro = on;
+		bro->mnBro = mn->mnBro;
+		mn->mnBro = bro;
 	}
-
 	//return mn;
 }
 
-// append a child to a ObjectNode
-void AppendChild(ObjectNode* mn, ObjectNode* child)
+// append a child to a objectNode
+void AppendChild(objPtr mn, objPtr child)  // 孩子是有序的 不能从链头加
 {
 	if(mn->mnChild != NULL)
 		return;
 	mn->mnChild = child;
 }
 
-void ShowNodeData(ObjectNode* mn)
+void ShowNodeData(objPtr mn)
 {
-	if(mn == NULL) return;
-	switch(mn->ndt){
-		case D_CHAR:
-			printf("%s: %s \n", mn->NodeName, mn->nd.d_str);
-			break;
-		case D_INT:
-			printf("%s: %d \n", mn->NodeName, mn->nd.d_int);
-			break;
-		case D_NODE:
-			printf("%s: Object \n", mn->NodeName);
-			break;
-		default:
-			// No such type
-			return;
-	}
+	objPtr p = mn;
+	
+	do{
+		printf("%s ", p->data);
+		p = p->mnBro;
+	}while(p != NULL);
+	
 }

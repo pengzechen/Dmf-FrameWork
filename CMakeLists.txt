@@ -13,6 +13,10 @@ set(CMAKE_SYSTEM_VERSION 1)
 #指定编译目录
 set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/build)
 
+#指定二进制文件输出目录
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+
 
 #添加子目录
 add_subdirectory(${PROJECT_SOURCE_DIR}/Src) 

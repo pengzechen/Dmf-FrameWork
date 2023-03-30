@@ -24,7 +24,12 @@ limitations under the License.
 #include <utility.h>        // 引入时间
 #include <string.h>
 #include <stdio.h>
+
+#ifdef __WIN32__
 #include <WinSock2.h>		// 为了使用 send
+#elif __linux__
+#include <sys/socket.h>
+#endif
 
 typedef struct _Response {
 	char Server[32];

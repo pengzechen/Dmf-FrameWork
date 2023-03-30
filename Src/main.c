@@ -55,7 +55,6 @@ int main(int argc, char* argv[]) {
 	mysql_pool_init();
 	elr_mpl_init();
 
-
 	model();
 	other();
 	session();

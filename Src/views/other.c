@@ -3,23 +3,24 @@
 
 void datamodeltest(int a, const Request* req) 
 {
-	ObjectNode* root = CreateRootNode("root", D_NODE, NULL);
-	ObjectNode* mn2 = CreateObjectNode("Child", D_NODE, NULL);
-	ObjectNode* mn3 = CreateObjectNode("Bro1", D_INT, (void*)(int*)14);
-	ObjectNode* mn4 = CreateObjectNode("Bro2", D_INT, (void*)(int*)146);
-	ObjectNode* mn5 = CreateObjectNode("Bro3", D_INT, (void*)(int*)1464);
-
-	AppendChild(root, mn2);
-	AppendBro(mn2, mn3);
-	AppendBro(mn2, mn4);
-	AppendBro(mn2, mn5);
+	int i = 0;
+	objPtr root = CreateObjectNode("root", "hhh");
+	objPtr mn1 = CreateObjectNode("Bro0", "ppp");
+	objPtr mn2 = CreateObjectNode("Bro1","sss");
+	objPtr mn3 = CreateObjectNode("Bro2","sss1");
+	objPtr mn4 = CreateObjectNode("Bro3","sss2");
+	
+	
+	AppendChild(root, mn1);
+	AppendBro(mn1, mn2);
+	AppendBro(mn1, mn3);
+	AppendBro(mn1, mn4);
 
 
 	ShowNodeData(root);
-	ShowNodeData(root->mnChild);
-	ShowNodeData(root->mnChild->mnBro);
-	ShowNodeData(root->mnChild->mnBro->mnBro);
-	ShowNodeData(root->mnChild->mnBro->mnBro->mnBro);
+	printf("\n");
+	ShowNodeData(mn1);
+	printf("\n");
 
 	Res_row(a, "This is a test str");
 }

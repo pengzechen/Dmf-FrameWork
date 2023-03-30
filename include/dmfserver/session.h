@@ -24,7 +24,7 @@ limitations under the License.
 #include <unistd.h>
 #include <pthread.h>
 #include <request.h>
-#include <windows.h>
+// #include <windows.h>
 
 #define HASH_DEC_LEN 5
 

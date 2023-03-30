@@ -59,11 +59,7 @@ void Rou_init(
 }
 
 
-void Rou_iocp_handle(
-	ContFunMap cmp, 
-	int acceptFd, 
-	Request *req)
-{
+void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req) {
 	int flag = 0;
 	
 	// 先在control回调函数列表中寻找

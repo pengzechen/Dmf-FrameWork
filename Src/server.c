@@ -161,6 +161,8 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 }
 
 
+#ifdef __WIN32__
+
 SOCKET BindServerOverlapped(int nPort){
 
 	SOCKET sServer = WSASocket(AF_INET,SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -197,7 +199,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 	while(1){
 
 		if(0 == GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE)){
-			if( (GetLastError() == WAIT_TIMEOUT)){
+			if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
 				printf("closingsocket %d\n", PerHandleData->Socket); 
 				closesocket(PerHandleData->Socket);
 
@@ -207,11 +209,12 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 			}else{
 				OutErr("GetQueuedCompletionStatus failed!");
 			}
-			return 0;
+		return 0;
 		}
 
 		// 说明客户端已经退出
-		if(BytesTransferred == 0){
+		if(BytesTransferred == 0)
+		{
 			printf("closingsocket %d\n", PerHandleData->Socket);
 			closesocket(PerHandleData->Socket);
 			free( PerIoData);
@@ -223,7 +226,9 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 		serverTime(time);
 		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
 		memset(time, 0, 30);
+		
 		Rou_iocp_handle(PerIoData->cmp, PerHandleData->Socket, &req1);
+		
 		freeReq(&req1);
 		
 		free( PerIoData );
@@ -316,3 +321,5 @@ int iocpServerMake(ContFunMap cmp) {
 	
 	return 0;
 }
+
+#endif   // WIN32

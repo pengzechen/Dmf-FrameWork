@@ -44,7 +44,7 @@ limitations under the License.
 
 #ifdef __WIN32__
 
-#include<WinSock2.h>
+#include <WinSock2.h>
 
 typedef struct {
 	
@@ -61,6 +61,7 @@ typedef struct {
 	SOCKET Socket;
 	
 }PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,6 +81,22 @@ extern "C" {
 
 
 #elif __linux__
+
+#include <sys/socket.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
+	static void Handler(int acceptFd, ContFun cf[], char* keys[]);
+
+	extern void SimpleServerMake(ContFun cf[], char* keys[]);
+
+	extern void SSLservermake(ContFun cf[], char* keys[]);
+
+#ifdef __cplusplus
+}		/* end of the 'extern "C"' block */
+#endif
 
 #endif  // Windows or Linux
 

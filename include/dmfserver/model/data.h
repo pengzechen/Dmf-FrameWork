@@ -22,40 +22,25 @@ limitations under the License.
 #include<stdlib.h>
 #include<string.h>
 
-typedef struct ObjectNode ObjectNode;
-typedef union NodeData NodeData;
-typedef enum NodeDataType NodeDataType;
+typedef struct objectNode objectNode;
+typedef objectNode* objPtr;
 
-union NodeData {
-	char* d_str;
-	int* d_int;
-	
+struct objectNode {
+	char NodeName[64];
+	void* data;
+	int size;
+	objPtr mnChild;
+	objPtr mnBro;
+	int type;
 };
 
-enum NodeDataType {
-	D_CHAR = 1,
-	D_INT,
-	D_NODE
-};
 
-struct ObjectNode {
-	char NodeName[32];
-	NodeDataType ndt;
-	NodeData nd;
+extern objPtr CreateObjectNode(char* nodeName, char* data);
 
-	ObjectNode* mnChild;
-	ObjectNode* mnBro;
-	
-};
+extern void AppendBro(objPtr mn, objPtr bro);
 
-extern ObjectNode* CreateObjectNode(char* nodeName, NodeDataType ndt, void* anyData);
+extern void AppendChild(objPtr mn, objPtr child);
 
-extern ObjectNode* CreateRootNode(char* nodeName, NodeDataType ndt, void* anyData);
-
-extern void AppendBro(ObjectNode* mn, ObjectNode* on);
-
-extern void AppendChild(ObjectNode* mn, ObjectNode* child);
-
-extern void ShowNodeData(ObjectNode* mn);
+extern void ShowNodeData(objPtr mn);
 
 #endif
