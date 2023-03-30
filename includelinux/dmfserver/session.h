@@ -24,6 +24,7 @@ limitations under the License.
 #include <unistd.h>
 #include <pthread.h>
 #include <dmfserver/request.h>
+#include <dmfserver/utility.h>
 // #include <windows.h>
 
 #define HASH_DEC_LEN 5

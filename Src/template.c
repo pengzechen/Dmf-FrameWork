@@ -21,7 +21,7 @@ limitations under the License.
 char * loadTemplate(char * template_path) {
 	FILE *fp;
 	fp = fopen( template_path, "r" );
-	if(fp == NULL){ printf(" open Failed");  }
+	if(fp == NULL){ printf("[Template: ]open Failed \n"); return ""; }
 	unsigned long int file_size;
 	fseek(fp, 0L, 2);
 	file_size = ftell(fp);
@@ -52,7 +52,7 @@ void ParseDec(char* tt, char* dec[], char* inner) {
 	}
 }
 
-
+// 释放存放模板信息字符串  context
 char* parseContext(char *context, struct Kvmap *kv, int kv_num) {
 	
 	char *p = context;

@@ -140,10 +140,9 @@ static unsigned int BKDRHash(char *str)
 
 
 void* FroundCheck() {
-    while(1){
-        // SessionAll();
-        // Sleep(5000);
-    }
+    // while(1){
+    //     SessionAll();
+    // }
 }
 
 
@@ -158,6 +157,7 @@ extern void SessionInit()
 
     pthread_t roundCheck;
 	pthread_create(&roundCheck, NULL, FroundCheck, NULL);
+
     // pthread_join(roundCheck, NULL);
 }
 
@@ -247,6 +247,7 @@ extern void SessionCreate(char* random_str, char* key, char* value) {
     new_node->value->time_store = time(&t);
     new_node->value->expire = SESSION_EXPIRE_DEFAULT;
     new_node->value->next = NULL;
+
 
     if(g_session_all_dec[a % HASH_DEC_LEN].next == NULL){
         // 某个节点第一次添加数据

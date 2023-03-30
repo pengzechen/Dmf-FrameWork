@@ -33,6 +33,7 @@ limitations under the License.
 #include <unistd.h>
 #include <stdlib.h>
 
+
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 // #include <openssl/applink.c>
@@ -62,6 +63,8 @@ limitations under the License.
 
 #ifdef __linux__ // Linux
 #include <sys/socket.h>
+#include <fcntl.h>
+#include <netinet/in.h>
 #endif  // Linux
 
 #ifdef __cplusplus

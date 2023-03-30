@@ -28,6 +28,8 @@ extern "C" {
 
 extern void serverTime(char* str);
 
+char *itoa(int value,char *string,int radix);
+
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
 #endif

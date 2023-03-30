@@ -160,6 +160,7 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 #elif __linux__  // linux 由于socket库不同 要重写三个函数
 
 void SSLservermake(ContFun cf[], char* keys[]){
+	/*
 	unsigned int myport, lisnum;
 
 	SSL_CTX *ctx;
@@ -190,7 +191,6 @@ void SSLservermake(ContFun cf[], char* keys[]){
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
     char buf[MAXBUF + 1]; 
 
-    /* 开启一个 socket 监听 */
 	sListen = socket(AF_INET, SOCK_STREAM, 0);
 
     ser.sin_family = AF_INET; 
@@ -233,6 +233,8 @@ void SSLservermake(ContFun cf[], char* keys[]){
 
     close(sListen);
     SSL_CTX_free(ctx);
+
+	*/
 }
 
 
@@ -266,32 +268,30 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 	serverPort = SERVER_PORT;
 	else serverPort = g_server_conf_all._conf_server.port;
 
-    WSADATA wsaData;
-    SOCKET sListen, sAccept;
 
+    int sListen, sAccept;
     struct sockaddr_in ser, cli;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
+
 
     sListen = socket(AF_INET, SOCK_STREAM, 0);
 
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(serverPort); 
-    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
-
-    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
+    ser.sin_port = htons(serverPort);
+	ser.sin_addr.s_addr = htonl(INADDR_ANY);
+     
+    bind(sListen, (struct sockaddr*)&ser, sizeof(ser) );
     listen(sListen,5);
     
 	int iLen = sizeof(cli);
 	
-
+	printf("Simple Server is running! \n");
 	while(1){
 		sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-		
 		Handler( sAccept, cf, keys);
 	}
 	
-    closesocket(sListen); //关闭 socket
-    WSACleanup(); 
+    close(sListen); //关闭 socket
+
 }
 
 #endif // linux

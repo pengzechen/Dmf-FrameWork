@@ -177,17 +177,20 @@ void Router_init() {
 		g_cmp.keys[i] = NULL;
 	}
 	g_cmp.curr_num = 0;
+	char buffer[1024];
 
-	char *buffer;  
-    if((buffer = getcwd(NULL, 0)) == NULL) {  
-        perror("getcwd error");  
+    if( !getcwd(buffer, 1024) ) {
+        perror("getcwd error\n");  
 		return;
     }  
 	char static_dir[1024] = {0};
+	
 	strcat(static_dir, buffer);
-	strcat(static_dir, "\\");
+	strcat(static_dir, "/");
+
+	printf("%s\n", static_dir);
 	strcat(static_dir, g_server_conf_all._conf_router.static_dir);
-	free(buffer);
+	//free(buffer);
 
 	traverse_directory(static_dir, g_file_list, &g_num_files);
 

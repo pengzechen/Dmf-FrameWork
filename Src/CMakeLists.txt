@@ -31,7 +31,7 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     find_package(OpenSSL REQUIRED)
     find_package(LibXml2 REQUIRED)
 
-    link_libraries(Threads:Threads mysqlclient ssl crypto ${LIBXML2_LIBRARIES_DIRS})
+    link_libraries(pthread mysqlclient ssl crypto xml2)
     include_directories(${MYSQL_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS} ${LIBXML2_INCLUDE_DIRS})
 
     #指定生成目标

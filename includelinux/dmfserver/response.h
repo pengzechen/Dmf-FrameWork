@@ -17,7 +17,7 @@ limitations under the License.
 #ifndef RESPONSE
 #define RESPONSE
 
-#define FINAL_STR_SIZE 1024*1024*5
+#define FINAL_STR_SIZE 1024*1024
 
 #include <dmfserver/conf/conf.h>
 #include <dmfserver/template.h>		// 以模板作为响应
@@ -29,6 +29,8 @@ limitations under the License.
 #include <WinSock2.h>		// 为了使用 send
 #elif __linux__
 #include <sys/socket.h>
+#include <fcntl.h>
+#include <netinet/in.h>
 #endif
 
 typedef struct _Response {
@@ -63,7 +65,7 @@ extern void SetSession(Response*res , char* Session_str);
 
 extern void SetBody(Response* res, char* body, unsigned int size);
 
-extern void ResParse(Response* res);
+extern void ResParseSend(Response* res);
 
 extern void Res_NotFound(int acceptFd);
 

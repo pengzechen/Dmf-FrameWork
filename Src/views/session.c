@@ -21,7 +21,9 @@ void setsession(int a, const Request *req) {
 	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
 	SetSession(&res, Session_str);
 	SetBody(&res, res_str, strlen(res_str));
-	ResParse(&res);
+	ResParseSend(&res);
+
+	
 }
 
 void getsession(int a, const Request *req) {
@@ -80,6 +82,7 @@ void updatesession(int a, const Request *req) {
 
 void sessiondebug(int a, const Request* req) {
 	SessionAll();
+	printf("ok");
 	Res_row(a, "This is a test str");
 }
 

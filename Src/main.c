@@ -46,8 +46,10 @@ void linkload(){
 
 
 int main(int argc, char* argv[]) {
+	#ifdef __WIN32__
 	system("cls");
 	system("tasklist /nh | find /i \"mysqld.exe\"");
+	#endif // WIN32
 
 	ConfInit();
 	SessionInit();
@@ -73,6 +75,7 @@ int main(int argc, char* argv[]) {
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 #endif // WIN32
+	// SimpleServerMake(cf, keys);
 	
 	return 0;
 }

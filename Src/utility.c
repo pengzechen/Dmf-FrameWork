@@ -26,14 +26,45 @@ int file(){
 	// ch = fgetc(fp);
 	// putchar(ch);
 	// }
-	unsigned long int n;
+	long long int n;
 	fseek(fp, 0L, 2);
 	n = ftell(fp);
 	fseek(fp, 0L, 0);
-	printf("File size %d Bytes.\n", n);
+	printf("File size %lld Bytes.\n", n);
 	fclose(fp);
 }
 
+#ifdef __linux__
+
+char *itoa(int value,char *string,int radix) {
+
+	char zm[37]="0123456789abcdefghijklmnopqrstuvwxyz";
+	char aa[100]={0};
+	int sum=value;
+	char *cp=string;
+	int i=0;
+	if(radix<2||radix>36)//增加了对错误的检测
+	{
+		return string;
+	}
+	if(value<0)
+	{
+		return string;
+	}
+	while(sum>0)
+	{
+		aa[i++]=zm[sum%radix];
+		sum/=radix;
+	}
+	for(int j=i-1;j>=0;j--)
+	{
+		*cp++=aa[j];
+	}
+	*cp='\0';
+	return string;
+}
+
+#endif // linux
 
 void serverTime(char* str){
 	char *wday[] = {"Sun","Mon","Tue","Wed","Thu","Fri","Sat"}; //指针数组-字符串
