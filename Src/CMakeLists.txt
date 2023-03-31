@@ -4,6 +4,7 @@ aux_source_directory(./elr_mpl elr_mpl_SRC)
 aux_source_directory(./conf conf_SRC)
 aux_source_directory(./views views_SRC)
 
+include_directories(${PROJECT_SOURCE_DIR}/include/dmfserver)
 
 if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -25,7 +26,7 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
 
 elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
 
-    include_directories(${PROJECT_SOURCE_DIR}/includelinux)
+    #include_directories(${PROJECT_SOURCE_DIR}/includelinux)
 
     find_package(Threads REQUIRED)
     find_package(OpenSSL REQUIRED)
