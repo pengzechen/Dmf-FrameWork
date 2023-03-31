@@ -75,7 +75,8 @@ int main(int argc, char* argv[]) {
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 #elif __linux__ // linux
-	SimpleServerMake(cf, keys);
+	threadingServerRunning();
+	// SimpleServerMake(cf, keys);
 #endif // linux
 	return 0;
 }

@@ -28,6 +28,8 @@ limitations under the License.
 #include <dirent.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include <unistd.h>
+
 
 #define MAX_PATH_LENGTH 1024
 #define MAX_FILES 500
@@ -37,7 +39,7 @@ limitations under the License.
 #define NONE "\033[m"
 #define YELLOW "\033[1;33m"
 
-// #define Router_Debug
+#define Router_Debug
 
 struct FileInfo {
     char path[MAX_PATH_LENGTH];

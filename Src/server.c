@@ -160,7 +160,7 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 #elif __linux__  // linux 由于socket库不同 要重写三个函数
 
 void SSLservermake(ContFun cf[], char* keys[]){
-	/*
+
 	unsigned int myport, lisnum;
 
 	SSL_CTX *ctx;
@@ -234,7 +234,6 @@ void SSLservermake(ContFun cf[], char* keys[]){
     close(sListen);
     SSL_CTX_free(ctx);
 
-	*/
 }
 
 
@@ -258,7 +257,6 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	
 	freeReq(&req1);
 }
-
 
 void SimpleServerMake(ContFun cf[], char* keys[]) {
 	
@@ -292,6 +290,78 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 	
     close(sListen); //关闭 socket
 
+}
+
+int createSocket() 
+{
+	int i_listenfd;
+	struct sockaddr_in st_sersock;
+	i_listenfd = socket(AF_INET, SOCK_STREAM, 0);
+	memset(&st_sersock, 0, sizeof(st_sersock));
+	st_sersock.sin_family = AF_INET;
+//	st_sersock.sin_addr.s_addr = htonl(INADDR_ANY);
+	st_sersock.sin_port = htons( 8080 );
+	int out = 2;
+	setsockopt(i_listenfd, SOL_SOCKET, SO_REUSEADDR, &out, sizeof(out));
+	bind(i_listenfd,(struct sockaddr*)&st_sersock, sizeof(st_sersock));
+	listen(i_listenfd, 20);
+	return i_listenfd;
+}
+
+void threadingServerMake(int i_listenfd)
+{	
+	struct epoll_event ev, events[1024];
+	int epfd, nCounts;
+	int i_connfd;
+	epfd = epoll_create(1024);
+
+	ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+	ev.data.fd = i_listenfd;
+	epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
+
+	while(1)
+	{
+		nCounts = epoll_wait(epfd, events, 1024, -1);
+		for(int i = 0; i < nCounts; i++)
+		{
+			int tmp_epoll_recv_fd = events[i].data.fd;
+			if(tmp_epoll_recv_fd == i_listenfd)	{
+				i_connfd = accept(i_listenfd, (struct sockaddr*)NULL, NULL);	
+				ev.events = EPOLLIN;
+				ev.data.fd = i_connfd;
+				epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
+			} else {
+				char res_str[RECEIVE_MAX_BYTES] = {'\0'};
+				int receive_bytes;
+				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
+
+				send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
+
+
+				printf("[dmfServer Thread]\n");
+				epoll_ctl(epfd, EPOLL_CTL_DEL, tmp_epoll_recv_fd, NULL);
+				close(tmp_epoll_recv_fd);
+			}
+		}
+	}
+	close(i_listenfd);
+	close(epfd);
+}
+
+int threadingServerRunning() {
+	
+
+	int fd = createSocket();
+	if(fd == 0) {return 1;}
+
+	for (int i = 0; i < 4; ++i) {
+		pthread_t roundCheck;
+		pthread_create(&roundCheck, NULL, &threadingServerMake, fd);
+		pthread_join(&roundCheck, NULL);
+	}
+	
+	
+	return 0;
 }
 
 #endif // linux

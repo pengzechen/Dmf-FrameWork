@@ -65,6 +65,9 @@ limitations under the License.
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <netinet/in.h>
+
+#include <pthread.h>
+#include <sys/epoll.h>
 #endif  // Linux
 
 #ifdef __cplusplus
@@ -75,11 +78,14 @@ extern "C" {
 
 	extern void SimpleServerMake(ContFun cf[], char* keys[]);
 
-	extern void SSLservermake(ContFun cf[], char* keys[]);
+	void SSLservermake(ContFun cf[], char* keys[]);
 
 	#ifdef __WIN32__   // Windows IOCP 函数
 	extern int iocpServerMake(ContFunMap cmp);
-	#endif  // Windows
+	#endif  // Windows#
+	#ifdef __linux__
+	extern int threadingServerRunning();
+	#endif  // linux
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

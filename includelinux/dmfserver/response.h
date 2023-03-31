@@ -31,7 +31,6 @@ limitations under the License.
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <netinet/in.h>
-#include <unistd.h> 			// for close
 #endif
 
 typedef struct _Response {

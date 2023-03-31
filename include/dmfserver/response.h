@@ -31,7 +31,6 @@ limitations under the License.
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <netinet/in.h>
-#include <unistd.h> 			// for close
 #endif
 
 typedef struct _Response {
@@ -56,7 +55,6 @@ static void ResHandel( int acceptFd, char* res_str, unsigned int size);
 
 static char* loadFile(char *path);
 
-
 extern void SetHead(Response* res, char* code);
 
 extern void SetType(Response* res, char* type);
@@ -69,15 +67,11 @@ extern void SetBody(Response* res, char* body, unsigned int size);
 
 extern void ResParseSend(Response* res);
 
-
-
 extern void Res_NotFound(int acceptFd);
 
 extern void Res_row( int acceptFd, char* res_str);
 
 extern void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
-
-
 
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 
