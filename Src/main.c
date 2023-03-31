@@ -31,7 +31,7 @@ limitations under the License.
 #include <dmfserver/link.h>
 
 void aaaaa(){
-	
+	return;
 }
 
 
