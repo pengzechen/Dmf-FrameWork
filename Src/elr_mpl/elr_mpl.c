@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "elr_mpl/elr_mpl.h"
+#include "dmfserver/elr_mpl/elr_mpl.h"
 
 #ifdef ELR_USE_THREAD
 #include "elr_mpl/elr_mtx.h"

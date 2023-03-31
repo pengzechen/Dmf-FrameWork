@@ -21,7 +21,7 @@ limitations under the License.
 #include <dmfserver/session.h>			// 初始化 session
 #include <dmfserver/cpool.h>				// 初始化 mysqlpool
 #include <dmfserver/conf/conf.h>			// 初始化 全局配置
-#include <elr_mpl/elr_mpl.h>	// 初始化 内存池
+#include <dmfserver/elr_mpl/elr_mpl.h>	// 初始化 内存池
 
 #include "./views/session.c"
 #include "./views/template.c"
