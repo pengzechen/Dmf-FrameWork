@@ -159,6 +159,7 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 
 #elif __linux__  // linux 由于socket库不同 要重写三个函数
 
+
 void SSLservermake(ContFun cf[], char* keys[]){
 
 	unsigned int myport, lisnum;
@@ -258,6 +259,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	freeReq(&req1);
 }
 
+
 void SimpleServerMake(ContFun cf[], char* keys[]) {
 	
 	int serverPort;
@@ -292,6 +294,7 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 
 }
 
+
 int createSocket() 
 {
 	int i_listenfd;
@@ -307,6 +310,7 @@ int createSocket()
 	listen(i_listenfd, 20);
 	return i_listenfd;
 }
+
 
 typedef struct thread_arg {
 	ContFunMap cmp;
@@ -348,7 +352,7 @@ void* threadingServerMake(void* p)
 				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
 				ParseHttp(&req1, res_str);
 				serverTime(time);
-				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(res_str), getpid());
+				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getppid());
 				memset(time, 0, 30);
 				
 				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);

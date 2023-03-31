@@ -16,7 +16,7 @@ set(PROJECT_BINARY_DIR ${PROJECT_SOURCE_DIR}/build)
 #指定二进制文件输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-
+set (CMAKE_BUILD_TYPE "")
 
 #添加子目录
 add_subdirectory(${PROJECT_SOURCE_DIR}/Src) 

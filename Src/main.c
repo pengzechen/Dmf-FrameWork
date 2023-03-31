@@ -77,12 +77,17 @@ int main(int argc, char* argv[]) {
 	
 
 #ifdef __WIN32__
+
 	iocpServerMake(g_cmp);
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
+
 #elif __linux__ // linux
+
 	threadingServerRunning();
 	// SimpleServerMake(cf, keys);
-#endif // linux
+	// SSLservermake(cf, keys);
+
+#endif 			// linux
 	return 0;
 }
