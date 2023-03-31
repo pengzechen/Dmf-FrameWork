@@ -14,9 +14,9 @@
   <model>
     <host>localhost</host>
     <port>3306</port>
-    <username>root</username>
-    <password>dmfserver2023</password>
-    <database>test</database>
+    <username>pzc</username>
+    <password>pzc123</password>
+    <database>pzc</database>
   </model>
 
   <template>

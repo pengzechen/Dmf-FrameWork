@@ -303,7 +303,7 @@ int createSocket()
 	memset(&st_sersock, 0, sizeof(st_sersock));
 	st_sersock.sin_family = AF_INET;
 //	st_sersock.sin_addr.s_addr = htonl(INADDR_ANY);
-	st_sersock.sin_port = htons( 8080 );
+	st_sersock.sin_port = htons( 80 );
 	int out = 2;
 	setsockopt(i_listenfd, SOL_SOCKET, SO_REUSEADDR, &out, sizeof(out));
 	bind(i_listenfd,(struct sockaddr*)&st_sersock, sizeof(st_sersock));
@@ -350,15 +350,16 @@ void* threadingServerMake(void* p)
 				char res_str[RECEIVE_MAX_BYTES] = {'\0'};
 				int receive_bytes;
 				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
+				
 				ParseHttp(&req1, res_str);
 				serverTime(time);
-				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getppid());
+				//printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getppid());
 				memset(time, 0, 30);
 				
 				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);
 				
 				freeReq(&req1);
-				// send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
+				//send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
 
 				//printf("[dmfServer Thread]\n");
@@ -374,7 +375,6 @@ void* threadingServerMake(void* p)
 
 
 int threadingServerRunning() {
-	
 
 	long fd = createSocket();
 	thread_arg* ta = malloc(sizeof(thread_arg));
