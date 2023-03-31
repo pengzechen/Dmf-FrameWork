@@ -328,7 +328,8 @@ void* threadingServerMake(void* p)
 	int i_connfd;
 	epfd = epoll_create(1024);
 
-	ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+	//ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+	ev.events = EPOLLIN | EPOLLET;
 	ev.data.fd = i_listenfd;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
 
