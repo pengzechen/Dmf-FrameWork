@@ -30,6 +30,11 @@ limitations under the License.
 
 #include <dmfserver/link.h>
 
+void aaaaa(){
+	
+}
+
+
 #ifdef __WIN32__
 	void linkload(){
 		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
