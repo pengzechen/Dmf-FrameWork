@@ -322,19 +322,22 @@ void* threadingServerMake(void* p)
 {	
 	thread_arg* arg = (thread_arg*)p;
 	long i_listenfd = arg->fd;
+	i_listenfd = createSocket();
 
 	struct epoll_event ev, events[1024];
 	int epfd, nCounts;
 	int i_connfd;
 	epfd = epoll_create(1024);
 
-	//ev.events = EPOLLIN | EPOLLEXCLUSIVE;
-	ev.events = EPOLLIN | EPOLLET;
+	ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+	//ev.events = EPOLLIN | EPOLLET;
 	ev.data.fd = i_listenfd;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
 
 	Request req1;
  	char time [30] = {'\0'};
+	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
+	int receive_bytes;
 
 	while(1)
 	{
@@ -348,8 +351,8 @@ void* threadingServerMake(void* p)
 				ev.data.fd = i_connfd;
 				epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
 			} else {
-				char res_str[RECEIVE_MAX_BYTES] = {'\0'};
-				int receive_bytes;
+				
+				
 				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
 				
 				ParseHttp(&req1, res_str);
@@ -377,14 +380,15 @@ void* threadingServerMake(void* p)
 
 int threadingServerRunning() {
 
-	long fd = createSocket();
+	//long fd = createSocket();
+	long fd = 1;
 	thread_arg* ta = malloc(sizeof(thread_arg));
 	ta->cmp = g_cmp;
 	ta->fd = fd;
 	
 	if(fd == 0) {return 1;}
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 18; ++i) {
 		pthread_t roundCheck;
 		pthread_create(&roundCheck, NULL, threadingServerMake, (void*)ta);
 		pthread_join(roundCheck, NULL);
