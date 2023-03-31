@@ -31,17 +31,17 @@ limitations under the License.
 #include <dmfserver/link.h>
 
 #ifdef __WIN32__
-void linkload(){
-	ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
-	Sleep(500);
-	HMODULE handle = LoadLibrary("./link/liblink.dll");
-	Get link_get = (Get)GetProcAddress(handle, "get");
-	Set link_set = (Set)GetProcAddress(handle, "set");
-	Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
-	dll_read_shm();
-	Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
-	dll_write_shm("rewrite shm data");
-}
+	void linkload(){
+		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
+		Sleep(500);
+		HMODULE handle = LoadLibrary("./link/liblink.dll");
+		Get link_get = (Get)GetProcAddress(handle, "get");
+		Set link_set = (Set)GetProcAddress(handle, "set");
+		Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
+		dll_read_shm();
+		Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
+		dll_write_shm("rewrite shm data");
+	}
 #endif //WIN32
 
 
@@ -64,10 +64,10 @@ int main(int argc, char* argv[]) {
 
 	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
 					&mysqltest, &datamodeltest, &elrtest, &sessionadd, 
-					&updatesession, NULL};
+					&updatesession, &mysqltest1, NULL};
 	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
 					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd",
-					"/updatesession", NULL};
+					"/updatesession", "mysqltest1", NULL};
 	
 
 #ifdef __WIN32__
