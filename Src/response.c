@@ -132,6 +132,7 @@ extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
 	char* context = loadTemplate(path);					// 需要释放内存
 	char* res = parseContext(context, kv, num-1);		// 模板返回值
 	Res_row(acceptFd, res);
+	memset(res, 0, TEMPLATE_RESULT_SIZE);
 	free(res);
 }
 

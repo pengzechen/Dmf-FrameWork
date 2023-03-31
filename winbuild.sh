@@ -1,0 +1,1 @@
+rm build -r && mkdir build && cd build && cmake ../CMakeLists.txt -G "MinGW Makefiles" && make
