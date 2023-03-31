@@ -59,7 +59,7 @@ void ShowNodeData(objPtr mn)
 	objPtr p = mn;
 	
 	do{
-		printf("%s ", p->data);
+		printf("%s ", (char*)p->data);
 		p = p->mnBro;
 	}while(p != NULL);
 	

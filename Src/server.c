@@ -308,8 +308,17 @@ int createSocket()
 	return i_listenfd;
 }
 
-void threadingServerMake(int i_listenfd)
+typedef struct thread_arg {
+	ContFunMap cmp;
+	long fd;
+} thread_arg;
+
+
+void* threadingServerMake(void* p)
 {	
+	thread_arg* arg = (thread_arg*)p;
+	long i_listenfd = arg->fd;
+
 	struct epoll_event ev, events[1024];
 	int epfd, nCounts;
 	int i_connfd;
@@ -318,6 +327,9 @@ void threadingServerMake(int i_listenfd)
 	ev.events = EPOLLIN | EPOLLEXCLUSIVE;
 	ev.data.fd = i_listenfd;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
+
+	Request req1;
+ 	char time [30] = {'\0'};
 
 	while(1)
 	{
@@ -334,11 +346,18 @@ void threadingServerMake(int i_listenfd)
 				char res_str[RECEIVE_MAX_BYTES] = {'\0'};
 				int receive_bytes;
 				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
+				ParseHttp(&req1, res_str);
+				serverTime(time);
+				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(res_str), getpid());
+				memset(time, 0, 30);
+				
+				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);
+				
+				freeReq(&req1);
+				// send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
-				send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
-
-				printf("[dmfServer Thread]\n");
+				//printf("[dmfServer Thread]\n");
 				epoll_ctl(epfd, EPOLL_CTL_DEL, tmp_epoll_recv_fd, NULL);
 				close(tmp_epoll_recv_fd);
 			}
@@ -348,16 +367,22 @@ void threadingServerMake(int i_listenfd)
 	close(epfd);
 }
 
+
+
 int threadingServerRunning() {
 	
 
-	int fd = createSocket();
+	long fd = createSocket();
+	thread_arg* ta = malloc(sizeof(thread_arg));
+	ta->cmp = g_cmp;
+	ta->fd = fd;
+	
 	if(fd == 0) {return 1;}
 
 	for (int i = 0; i < 4; ++i) {
 		pthread_t roundCheck;
-		pthread_create(&roundCheck, NULL, &threadingServerMake, fd);
-		pthread_join(&roundCheck, NULL);
+		pthread_create(&roundCheck, NULL, threadingServerMake, (void*)ta);
+		pthread_join(roundCheck, NULL);
 	}
 	
 	
