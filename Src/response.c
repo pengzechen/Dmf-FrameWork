@@ -17,6 +17,50 @@ limitations under the License.
 #include <dmfserver/response.h>
 
 
+// Response 模块最后调用此函数  发送并关闭此次TCP连接
+static void ResHandel( int acceptFd, char* res_str, unsigned int size) {
+	int sendbyets = send(acceptFd, res_str, size, 0);
+
+	// printf("[Response: ] Send: %d byets \n", sendbyets);
+	#ifdef __WIN32__
+	closesocket(acceptFd);
+	#elif __linux__
+	close(acceptFd);
+	#endif // linux 
+
+}
+
+
+// 以纯的字符串返回
+extern void Res_row(int acceptFd, char* res_str) {
+	char final_str[FINAL_STR_SIZE] = {0};
+
+	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
+	strcat( final_str, res_str);
+	
+	ResHandel(acceptFd, final_str, strlen(final_str));
+}
+
+// 返回 Not Found
+extern void Res_NotFound(int acceptFd){
+	char final_str[FINAL_STR_SIZE] = {0};
+	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
+	strcat( final_str, "Not Found");
+	
+	ResHandel(acceptFd, final_str, strlen(final_str));
+}
+
+// 以模板返回
+extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
+	char* context = loadTemplate(path);					// 需要释放内存
+	char* res = parseContext(context, kv, num-1);		// 模板返回值
+	Res_row(acceptFd, res);
+	memset(res, 0, TEMPLATE_RESULT_SIZE);
+	free(res);
+}
+
+
+
 extern void Res_init(int fd, Response* res){
 	memset(res->Server, 0, 32);
 	memset(res->Content_type, 0, 32);
@@ -38,19 +82,6 @@ extern void Res_init(int fd, Response* res){
 	strcat(res->Connection, "\r\n");
 	
 	res->fd = fd;
-}
-
-// Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void ResHandel( int acceptFd, char* res_str, unsigned int size) {
-	int sendbyets = send(acceptFd, res_str, size, 0);
-
-	// printf("[Response: ] Send: %d byets \n", sendbyets);
-	#ifdef __WIN32__
-	closesocket(acceptFd);
-	#elif __linux__
-	close(acceptFd);
-	#endif // linux 
-
 }
 
 
@@ -91,7 +122,8 @@ extern void SetBody(Response* res, char* body, unsigned int size){
 
 // 将结构体中的变量组合成字符串 发送
 extern void ResParseSend(Response* res) {
-	char final_str[FINAL_STR_SIZE] = {0};
+	char* final_str = malloc(sizeof(char)* FINAL_STR_SIZE);
+	memset(final_str, 0, FINAL_STR_SIZE);
 
 	strcat(final_str, res->Head_code);
 	strcat(final_str, res->Server);
@@ -99,46 +131,18 @@ extern void ResParseSend(Response* res) {
 	strcat(final_str, res->Content_type);
 	strcat(final_str, res->Set_cookie);
 	strcat(final_str, res->Connection);
-	strcat(final_str, "\r\n\r\n");
+	strcat(final_str, "\r\n");
 
 	int head_len = strlen(final_str);
 	memcpy(final_str + head_len, res->pbody, res->body_size);
 
 	ResHandel(res->fd, final_str, head_len + res->body_size);
-}
-
-
-// 以纯的字符串返回
-extern void Res_row(int acceptFd, char* res_str) {
-	char final_str[FINAL_STR_SIZE] = {0};
-
-	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
-	strcat( final_str, res_str);
-	
-	ResHandel(acceptFd, final_str, strlen(final_str));
-}
-
-// 返回 Not Found
-extern void Res_NotFound(int acceptFd){
-	char final_str[FINAL_STR_SIZE] = {0};
-	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
-	strcat( final_str, "Not Found");
-	
-	ResHandel(acceptFd, final_str, strlen(final_str));
-}
-
-// 以模板返回
-extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
-	char* context = loadTemplate(path);					// 需要释放内存
-	char* res = parseContext(context, kv, num-1);		// 模板返回值
-	Res_row(acceptFd, res);
-	memset(res, 0, TEMPLATE_RESULT_SIZE);
-	free(res);
+	free(final_str);
 }
 
 
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type) {
-	if(size > 1024*1024*2) {				//  文件大于 2Mb 调用文件handle
+	if(size > 1024*1024*1) {				//  文件大于 1Mb 调用文件handle
 		ResFileHandel(acceptFd, path, content_type, size);
 		return;
 	}
@@ -149,6 +153,7 @@ extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, c
 	SetType(&res, content_type);
 	SetBody(&res, res_str, size);
 	ResParseSend(&res);
+	// free(res.pbody);
 	free(res_str);
 }
 
