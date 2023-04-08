@@ -63,12 +63,11 @@ limitations under the License.
 
 #ifdef __linux__ // Linux
 #include <sys/socket.h>
-#include <fcntl.h>
-#include <netinet/in.h>
-
-#include <pthread.h>
-#include <sys/epoll.h>
-#endif  // Linux
+	#include <fcntl.h>
+	#include <netinet/in.h>
+	#include <pthread.h>
+	#include <sys/epoll.h>
+#endif  		// Linux
 
 #ifdef __cplusplus
 extern "C" {

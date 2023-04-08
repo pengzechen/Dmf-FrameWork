@@ -377,7 +377,6 @@ void* threadingServerMake(void* p)
 }
 
 
-
 int threadingServerRunning() {
 
 	//long fd = createSocket();
