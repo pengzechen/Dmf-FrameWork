@@ -26,7 +26,7 @@ make
 ```
 Pay attention: You need to have MinGW and it need to be in PATH
 Or you can Install Vistual Studio 2019
-
+ ```
 #### 3.Configure "conf.xml"
 
 Here is example:
@@ -57,4 +57,9 @@ Here is example:
 ```
 cd ../bin
 ./server
+```
+#### 5.Linux Configure
+```
+apt-get install -y libmysqlclient-dev libssl-dev libxml2-dev
+
 ```
