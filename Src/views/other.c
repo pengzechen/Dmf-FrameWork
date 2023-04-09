@@ -32,7 +32,7 @@ void elrtest(int a, const Request* req)
     pool_free(block1);
     pool_free(block2);
 
-	printf("%s\n", req->query[0].key);
+	//printf("%s\n", req->query[0].key);
 
 	Res_row(a, "test ok");
 }

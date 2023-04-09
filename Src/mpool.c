@@ -1,6 +1,6 @@
 #include <dmfserver/mpool.h>
 
-static pool_t pool;
+pool_t pool;
 
 
 void pool_init(int block_size, int total_size) {
@@ -41,68 +41,56 @@ void pool_destroy() {
 void *pool_alloc() {
     pthread_mutex_lock(&pool.lock);
 
-    if ( pool.count == 0) {
-        // Wait for a block to become available
+    if ( pool.count == 0 ) {
+        printf("可用为0\n");
         pthread_cond_wait(&pool.cond, &pool.lock);
     }
+    printf("%d\n", pool.count);
 
-    // Find the first free block
     node_t *current = pool.head;
-    while (current != NULL && current->used != 0) {
+    
+    while (current != NULL) {
+        if(current->used == 0)
+        break;
         current = current->next;
     }
 
     if (current == NULL) {
-        // No free block found (should not happen)
+        printf(" No free block found (should not happen) \n");
         pthread_mutex_unlock(&pool.lock);
         return NULL;
     }
 
-    // Mark the block as used
     current->used = 1;
 
-    // Remove the block from the list
-    if (current == pool.head) {
-        pool.head = current->next;
-    } else {
-        node_t *prev = pool.head;
-        while (prev != NULL && prev->next != current) {
-            prev = prev->next;
-        }
-        prev->next = current->next;
-    }
     pool.count--;
 
     pthread_mutex_unlock(&pool.lock);
-
-    // Return the data from the block
     return current->data;
 }
 
 void pool_free(void *data) {
     pthread_mutex_lock(&pool.lock);
 
-    // Find the node corresponding to the data
     node_t *current = pool.head;
-    while (current != NULL && current->data != data) {
+
+    while (current != NULL) {
+        if(current->data == data)
+        break;
         current = current->next;
     }
 
     if (current == NULL) {
-        // Invalid data pointer (should not happen)
+        printf("Invalid data pointer\n");
         pthread_mutex_unlock(&pool.lock);
         return;
     }
 
-    // Mark the block as free
     current->used = 0;
 
-    // Add the block back to the list
-    current->next = pool.head;
-    pool.head = current;
     pool.count++;
 
-    // Signal a waiting thread that a block is available
+
     pthread_cond_signal(&pool.cond);
     pthread_mutex_unlock(&pool.lock);
 }

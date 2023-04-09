@@ -12,7 +12,7 @@
   </server>
 
   <model>
-    <host>localhost</host>
+    <host>192.168.2.74</host>
     <port>3306</port>
     <username>pzc</username>
     <password>pzc123</password>

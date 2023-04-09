@@ -18,7 +18,8 @@ limitations under the License.
 #ifndef MPOOL
 #define MPOOL
 
-
+#include <sys/types.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
