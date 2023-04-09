@@ -9,3 +9,5 @@ build/
 
 bin/link/
 bin/static/
+bin/server
+bin/linktest
