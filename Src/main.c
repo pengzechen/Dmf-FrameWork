@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 	Router_init();
 	mysql_pool_init();
 	elr_mpl_init();
-	pool_init(16, 512);
+	pool_init(32, 512);
 
 	model();
 	other();

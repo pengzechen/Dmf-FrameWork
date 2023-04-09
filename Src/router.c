@@ -206,9 +206,11 @@ void Router_init() {
 		url = strstr(g_file_list[i].path, "/");
 		strcpy(g_file_list[i].url, url);
         #ifdef Router_Debug
-		printf("%d: %s (%s, "YELLOW"%ld bytes"NONE", %s, %s, "YELLOW"%s"NONE")\n", i, g_file_list[i].path, 
+		printf("%d: %s \n    (%s, "YELLOW"%ld bytes"NONE", %s, %s, "YELLOW"%s"NONE")\n",
+				i, g_file_list[i].path, 
 				g_file_list[i].type, g_file_list[i].size, 
 				g_file_list[i].ext, g_file_list[i].content_type, g_file_list[i].url);
+
         // printf(" (%s, %ld bytes, %s, %s)\n", g_file_list[i].type, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
 		#endif
 	}

@@ -44,7 +44,7 @@ void *pool_alloc() {
         printf("可用为0\n");
         pthread_cond_wait(&pool.cond, &pool.lock);
     }
-    printf("%d\n", pool.count);
+    // printf("%d\n", pool.count);
 
     node_t *current = pool.head;
     
