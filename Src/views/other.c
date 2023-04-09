@@ -27,10 +27,10 @@ void datamodeltest(int a, const Request* req)
 
 void elrtest(int a, const Request* req)
 {
-	//char* str = (char*) malloc (sizeof(char)* 50);
-
-	//free(str);
-	//printf("g_server_conf_all: database %s\n", g_server_conf_all._conf_model.database);
+	void *block1 = pool_alloc();
+    void *block2 = pool_alloc();
+    pool_free(block1);
+    pool_free(block2);
 
 	printf("%s\n", req->query[0].key);
 

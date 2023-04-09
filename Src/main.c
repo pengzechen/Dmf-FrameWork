@@ -22,6 +22,7 @@ limitations under the License.
 #include <dmfserver/cpool.h>				// 初始化 mysqlpool
 #include <dmfserver/conf/conf.h>			// 初始化 全局配置
 #include <dmfserver/elr_mpl/elr_mpl.h>	// 初始化 内存池
+#include <dmfserver/mpool.h>
 
 #include "./views/session.c"
 #include "./views/template.c"
@@ -62,6 +63,7 @@ int main(int argc, char* argv[]) {
 	Router_init();
 	mysql_pool_init();
 	elr_mpl_init();
+	pool_init(16, 256);
 
 	model();
 	other();
@@ -89,5 +91,7 @@ int main(int argc, char* argv[]) {
 	// SSLservermake(cf, keys);
 
 #endif 			// linux
+
+	pool_destroy();
 	return 0;
 }
