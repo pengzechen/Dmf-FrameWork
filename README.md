@@ -26,10 +26,11 @@ make
 ```
 Pay attention: You need to have MinGW and it need to be in PATH
 Or you can Install Vistual Studio 2019
- ```
-#### 3.Configure "conf.xml"
 
+
+#### 3.Configure "conf.xml"
 Here is example:
+
 ```
 <?xml version="1.0" encoding="gbk"?>
 <dmfserver>
@@ -53,11 +54,11 @@ Here is example:
 ```
 
 #### 4.Run Server
-
 ```
 cd ../bin
 ./server
 ```
+
 #### 5.Linux Configure
 ```
 apt-get install -y libmysqlclient-dev libssl-dev libxml2-dev
