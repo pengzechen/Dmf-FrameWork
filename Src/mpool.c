@@ -12,7 +12,6 @@ void pool_init(int block_size, int total_size) {
     pthread_cond_init(&pool.cond, NULL);
     pool.count = 0;
 
-    // Divide the memory pool into blocks and add them to the free list
     char *ptr = pool.mem_pool;
     int num_blocks = total_size / block_size;
     for (int i = 0; i < num_blocks; i++) {
@@ -87,9 +86,7 @@ void pool_free(void *data) {
     }
 
     current->used = 0;
-
     pool.count++;
-
 
     pthread_cond_signal(&pool.cond);
     pthread_mutex_unlock(&pool.lock);
