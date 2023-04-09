@@ -357,7 +357,7 @@ void* threadingServerMake(void* p)
 				
 				ParseHttp(&req1, res_str);
 				serverTime(time);
-				//printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getppid());
+				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
 				memset(time, 0, 30);
 				
 				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);
@@ -375,7 +375,6 @@ void* threadingServerMake(void* p)
 	close(i_listenfd);
 	close(epfd);
 }
-
 
 
 int threadingServerRunning() {
