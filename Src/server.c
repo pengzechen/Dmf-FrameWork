@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License. 
 */
 #include <dmfserver/server.h>
-#include <dmfserver/log.h>
+
 
 #ifdef __WIN32__  // WIN32
 
@@ -361,7 +361,9 @@ void* threadingServerMake(void* p)
 				
 				ParseHttp(&req1, res_str);
 				serverTime(time);
-				printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
+
+				log_info("SERVER", 365, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
+				
 				memset(time, 0, 30);
 				
 				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);
@@ -474,7 +476,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam)
 		ParseHttp(&req1, PerIoData->Buffer);
 		serverTime(time);
 		
-		log_info("SERVER", 447, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+		log_info("SERVER", 447, "[%s][Server: Info] %s %d id: %d ",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
 		
 		memset(time, 0, 30);
 		
