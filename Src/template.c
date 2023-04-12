@@ -22,7 +22,12 @@ char * loadTemplate(char * template_path)
 {
 	FILE *fp;
 	fp = fopen( template_path, "r" );
-	if(fp == NULL){ printf("[Template: ]open Failed \n"); return ""; }
+	if(fp == NULL){ 
+		printf("[Template: ]open Failed \n");
+		char* res = (char*)malloc(sizeof(char)*1);
+		strcpy(res, ""); 
+		return res; 
+	}
 	unsigned long int file_size;
 	fseek(fp, 0L, 2);
 	file_size = ftell(fp);
