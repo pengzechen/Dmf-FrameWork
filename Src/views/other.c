@@ -25,6 +25,10 @@ void datamodeltest(int a, const Request* req)
 	Res_row(a, "This is a test str");
 }
 
+<<<<<<< HEAD
+=======
+#ifdef __WIN32__
+>>>>>>> daf3edf1a47a8031107775e7a4c1e40f906afb5a
 void usleep1(unsigned long usec)
 {
     HANDLE timer;
@@ -36,6 +40,7 @@ void usleep1(unsigned long usec)
     WaitForSingleObject(timer, INFINITE);
     CloseHandle(timer);
 }
+#endif
 
 void elrtest(int a, const Request* req)
 {
