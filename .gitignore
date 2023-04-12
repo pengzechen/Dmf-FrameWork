@@ -11,3 +11,4 @@ bin/link/
 bin/static/
 bin/server
 bin/linktest
+bin/server.log
