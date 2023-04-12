@@ -3,10 +3,12 @@
 pool_t pool;
 
 
-void pool_init(int block_size, int total_size) {
+void pool_init(int block_size, int total_size) 
+{
     pool.block_size = block_size;
     pool.total_size = total_size;
     pool.mem_pool = malloc(total_size);
+    
     pool.head = NULL;
     pthread_mutex_init(&pool.lock, NULL);
     pthread_cond_init(&pool.cond, NULL);
@@ -25,7 +27,8 @@ void pool_init(int block_size, int total_size) {
     }
 }
 
-void pool_destroy() {
+void pool_destroy()
+{
     node_t *current = pool.head;
     while (current != NULL) {
         node_t *temp = current;
@@ -37,7 +40,8 @@ void pool_destroy() {
     pthread_cond_destroy(&pool.cond);
 }
 
-void *pool_alloc() {
+void *pool_alloc() 
+{
     pthread_mutex_lock(&pool.lock);
 
     if ( pool.count == 0 ) {
@@ -61,14 +65,13 @@ void *pool_alloc() {
     }
 
     current->used = 1;
-
     pool.count--;
-
     pthread_mutex_unlock(&pool.lock);
     return current->data;
 }
 
-void pool_free(void *data) {
+void pool_free(void *data) 
+{
     pthread_mutex_lock(&pool.lock);
 
     node_t *current = pool.head;

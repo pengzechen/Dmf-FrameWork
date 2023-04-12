@@ -1,6 +1,7 @@
 
 
-void setsession(int a, const Request *req) {
+void setsession(int a, const Request *req) 
+{
 	char res_str[80] = {0};
 	strcat(res_str, "SET session ");
 	strcat(res_str, req->query[0].key);
@@ -26,7 +27,8 @@ void setsession(int a, const Request *req) {
 	
 }
 
-void getsession(int a, const Request *req) {
+void getsession(int a, const Request *req) 
+{
 	char key[32] = {0}; char data[32] = {0};
 	strcat(key, req->query[0].key);
 	strcat(data, req->query[0].data);
@@ -43,7 +45,8 @@ void getsession(int a, const Request *req) {
 	}
 }
 
-void sessionadd(int a, const Request *req) {
+void sessionadd(int a, const Request *req) 
+{
 
 	char key[32] = {0}; char data[32] = {0};
 	strcat(key, req->query[0].key);
@@ -67,7 +70,8 @@ void sessionadd(int a, const Request *req) {
 	Res_row(a, res_str);
 }
 
-void updatesession(int a, const Request *req) {
+void updatesession(int a, const Request *req) 
+{
 	char key[32] = {0}; char data[32] = {0};
 	strcat(key, req->query[0].key);
 	strcat(data, req->query[0].data);
@@ -80,13 +84,15 @@ void updatesession(int a, const Request *req) {
 		Res_row(a, "Update faild");
 }
 
-void sessiondebug(int a, const Request* req) {
+void sessiondebug(int a, const Request* req) 
+{
 	SessionAll();
 	printf("ok");
 	Res_row(a, "This is a test str");
 }
 
-RouterAdd(session){
+RouterAdd(session)
+{
 	ContFun cf[] = {&setsession, &getsession, &sessionadd, &updatesession, &sessiondebug, NULL };
 	char* keys[] = {"/setsession", "/getsession", "/sessionadd", "/updatesession", "/sessiondebug", NULL};
 	router_add_app(cf, keys, __func__);

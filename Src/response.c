@@ -18,7 +18,8 @@ limitations under the License.
 
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void ResHandel( int acceptFd, char* res_str, unsigned int size) {
+static void ResHandel( int acceptFd, char* res_str, unsigned int size) 
+{
 	int sendbyets = send(acceptFd, res_str, size, 0);
 
 	// printf("[Response: ] Send: %d byets \n", sendbyets);
@@ -32,7 +33,8 @@ static void ResHandel( int acceptFd, char* res_str, unsigned int size) {
 
 
 // 以纯的字符串返回
-extern void Res_row(int acceptFd, char* res_str) {
+extern void Res_row(int acceptFd, char* res_str) 
+{
 	char final_str[FINAL_STR_SIZE] = {0};
 
 	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
@@ -42,7 +44,8 @@ extern void Res_row(int acceptFd, char* res_str) {
 }
 
 // 返回 Not Found
-extern void Res_NotFound(int acceptFd){
+extern void Res_NotFound(int acceptFd)
+{
 	char final_str[FINAL_STR_SIZE] = {0};
 	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
 	strcat( final_str, "Not Found");
@@ -51,7 +54,8 @@ extern void Res_NotFound(int acceptFd){
 }
 
 // 以模板返回
-extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
+extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) 
+{
 	char* context = loadTemplate(path);					// 需要释放内存
 	char* res = parseContext(context, kv, num-1);		// 模板返回值
 	Res_row(acceptFd, res);
@@ -61,7 +65,8 @@ extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) {
 
 
 
-extern void Res_init(int fd, Response* res){
+extern void Res_init(int fd, Response* res)
+{
 	memset(res->Server, 0, 32);
 	memset(res->Content_type, 0, 32);
 	memset(res->Date, 0, 32);
@@ -86,21 +91,24 @@ extern void Res_init(int fd, Response* res){
 
 
 // 设置 响应代码（首行）
-extern void SetHead(Response* res, char* code){	
+extern void SetHead(Response* res, char* code)
+{	
 	strcat(res->Head_code, "HTTP/1.1 ");
 	strcat(res->Head_code, code);
 	strcat(res->Head_code, "\r\n");
 }
 
 // 设置 Content-type
-extern void SetType(Response* res, char* type){
+extern void SetType(Response* res, char* type)
+{
 	strcat(res->Content_type, "Content-type:");
 	strcat(res->Content_type, type);
 	strcat(res->Content_type, "\r\n");
 }
 
 // 设置 Set-cookie 
-extern void SetCookie(Response* res, char* name, char* value){
+extern void SetCookie(Response* res, char* name, char* value)
+{
 	strcat(res->Set_cookie, "Set-cookie:");
 	strcat(res->Set_cookie, name);
 	strcat(res->Set_cookie, "=");
@@ -109,19 +117,22 @@ extern void SetCookie(Response* res, char* name, char* value){
 }
 
 // 设置 session
-extern void SetSession(Response*res , char* Session_str) {
+extern void SetSession(Response*res , char* Session_str) 
+{
 	
 	SetCookie(res, "dmfsession", Session_str);
 }
 
 // 设置 body
-extern void SetBody(Response* res, char* body, unsigned int size){
+extern void SetBody(Response* res, char* body, unsigned int size)
+{
 	res->pbody = body;
 	res->body_size = size;
 }
 
 // 将结构体中的变量组合成字符串 发送
-extern void ResParseSend(Response* res) {
+extern void ResParseSend(Response* res) 
+{
 	char* final_str = malloc(sizeof(char)* FINAL_STR_SIZE);
 	memset(final_str, 0, FINAL_STR_SIZE);
 
@@ -141,7 +152,8 @@ extern void ResParseSend(Response* res) {
 }
 
 
-extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type) {
+extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type) 
+{
 	if(size > 1024*1024*1) {				//  文件大于 1Mb 调用文件handle
 		ResFileHandel(acceptFd, path, content_type, size);
 		return;
@@ -159,7 +171,8 @@ extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, c
 
 // 返回文件内容指针 调用者使用完文件内容要释放内存
 // 对于小文件直接全部读取
-static char* loadFile(char *path) {
+static char* loadFile(char *path) 
+{
 	FILE *fp;
 	fp = fopen( path, "rb" );
 	if(fp == NULL){ 
@@ -181,7 +194,8 @@ static char* loadFile(char *path) {
 }
 
 // 大文件调用此模块进行返回 
-static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size) {
+static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size) 
+{
 	char head[512] = {0};
 	strcat(head, "HTTP/1.1 200 OK\r\n");
 	strcat(head, "Content-Type: ");

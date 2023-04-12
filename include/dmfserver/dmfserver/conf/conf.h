@@ -76,7 +76,7 @@ extern "C" {
 #endif
 
 extern void test();
-extern void ConfInit();
+extern void conf_init();
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

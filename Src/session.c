@@ -116,8 +116,8 @@ static int get_random_str(char* random_str, const int random_len)
     seed_num = (unsigned int)(tv.tv_sec + tv.tv_usec);
     srand(seed_num);
 
-    for(i = 0; i < random_len; i++)
-    {
+    for(i = 0; i < random_len; i++){
+
         random_num = rand()%seed_str_len;
         random_str[i] = seed_str[random_num];
     }
@@ -131,8 +131,7 @@ static unsigned int BKDRHash(char *str)
 {
     unsigned int seed = 131;   // 31 131 1313 13131 131313 etc..
     unsigned int hash = 0;
-    while (*str)
-    {
+    while (*str){
         hash = hash * seed + (*str++);
     }
     return (hash & 0x7FFFFFFF);
@@ -177,7 +176,8 @@ static HashNode* CreateNewHashNode()
 
 
 // debug 使用
-extern void SessionAll() {
+extern void SessionAll()
+{
     HashNode* temp;
     SessionData* dtemp;
     char buff[10] = {0};
@@ -223,7 +223,8 @@ extern void SessionAll() {
 
 
 // 创建一个新的session并往session里面加一个sessiondata 
-extern void SessionCreate(char* random_str, char* key, char* value) {
+extern void SessionCreate(char* random_str, char* key, char* value) 
+{
     
     get_random_str(random_str, 10);
     unsigned int a = BKDRHash(random_str);
@@ -263,7 +264,8 @@ extern void SessionCreate(char* random_str, char* key, char* value) {
 
 /*  \brief 通过 session_str 和数据名得到对应数据 
     \param 传入 req   */
-extern char* getSessionR(const Request* req, char* key) {
+extern char* getSessionR(const Request* req, char* key) 
+{
     char *str1;
     char* session_res = NULL;
 
@@ -282,7 +284,8 @@ extern char* getSessionR(const Request* req, char* key) {
 
 
 /* \brief 通过 session_str 和数据名得到对应数据 */
-extern char* getSession(char* session_str, char* key) {
+extern char* getSession(char* session_str, char* key) 
+{
     // 计算当前 session 序号是多少
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
@@ -323,7 +326,8 @@ extern char* getSession(char* session_str, char* key) {
     \return  成功返回 1, 失败返回非0 
     \return -2: session 链中没有找到目标 session_str 
     \return -1: req 对象没有 session  */
-extern int SessionAddR(const Request* req, char* key, char* data) {
+extern int SessionAddR(const Request* req, char* key, char* data) 
+{
     char *str1;
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
@@ -341,7 +345,8 @@ extern int SessionAddR(const Request* req, char* key, char* data) {
 
 /*  \brief 往已经存在的一个session里面添加sessiondata
     \return 成功返回 1, 失败返回 0    */
-extern int SessionAdd(char* session_str, char* key, char* value) {
+extern int SessionAdd(char* session_str, char* key, char* value) 
+{
     
     SessionData* dataNode = (SessionData*)malloc(sizeof(SessionData));    // data node
     dataNode->key = (char*)malloc(sizeof(char)*strlen(key));       // malloc data name
@@ -380,7 +385,8 @@ extern int SessionAdd(char* session_str, char* key, char* value) {
 
 /*  \brief 修改session data 
     \return 修改成功返回1  */
-extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) {
+extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) 
+{
     char *str1;
 	for(int i=0; i<=req->p_int; i++) {
 		if(strcmp(req->params[i].key, "Cookie")==0) {
@@ -398,7 +404,8 @@ extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) {
 
 /*  \brief 修改session data 
     \return 修改成功返回1  */
-extern int UpdateSessionData(char* session_str, char* key, char* newdata) {
+extern int UpdateSessionData(char* session_str, char* key, char* newdata) 
+{
     // 计算当前 session 序号是多少
     unsigned int index = BKDRHash(session_str) % HASH_DEC_LEN;
     HashNode* temp;
@@ -438,7 +445,8 @@ extern int UpdateSessionData(char* session_str, char* key, char* newdata) {
 
 /* \brief 删除 Session data 
     \return  返回1 删除成功*/
-extern int DeleteSessionData(char* session_str, char* key) {
+extern int DeleteSessionData(char* session_str, char* key) 
+{
 
 
     return 1;

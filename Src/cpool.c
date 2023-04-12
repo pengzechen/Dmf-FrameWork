@@ -29,22 +29,24 @@ mysql_conn * mysql_new_connection()
 {
 	mysql_conn * conn = malloc(sizeof(mysql_conn));
 	
-	if (mysql_init(&conn->conn) == NULL){
+	if (mysql_init(&conn->conn) == NULL) {
 		printf("can not init mysql: [%s]\n",strerror(errno));
 		free(conn);
 		return NULL;
 	}
 	if(mysql_options(&conn->conn,MYSQL_SET_CHARSET_NAME,"utf8") != 0) {
-		printf("can not set mysql options[errno = %d]: [%s]\n",mysql_errno(&conn->conn),mysql_error(&conn->conn));
+		printf("can not set mysql options[errno = %d]: [%s]\n",
+				mysql_errno(&conn->conn),mysql_error(&conn->conn) );
 		free(conn);
 		return NULL;
 	}
 	//连接到mysql服务端
 	if(mysql_real_connect(&conn->conn,pool_mysql.host,pool_mysql.username,
 		pool_mysql.password,pool_mysql.database,pool_mysql.port,NULL,
-		CLIENT_MULTI_STATEMENTS) == NULL){
+		CLIENT_MULTI_STATEMENTS) == NULL) {
 
-		printf("can not connect mysql server[errno = %d]:[%s]\n",mysql_errno(&conn->conn),mysql_error(&conn->conn));
+		printf("can not connect mysql server[errno = %d]:[%s]\n",
+				mysql_errno(&conn->conn),mysql_error(&conn->conn) );
 		free(conn);
 		return NULL;
 	}
@@ -58,10 +60,10 @@ mysql_conn * mysql_new_connection()
 void conn_push(mysql_conn * conn)
 {
 	mysql_conn *lc = pool_mysql.mysql_list;   //*lc指针变量
-	if (lc == NULL){
+	if (lc == NULL) {
 
 		pool_mysql.mysql_list = conn;     //如果连接池为空，直接把第一个放进去
-	}else{
+	} else {
 
 		while(lc->next)    //循环到末尾，直到next属性为null
 			lc=lc->next;
@@ -93,7 +95,7 @@ void mysql_pool_init()
 	pthread_cond_init(&pool_mysql.idle_signal,NULL);
 	
 	pthread_mutex_lock(&pool_mysql.lock);
-	for (int i = 0; i < pool_mysql.min_connections; ++i){
+	for (int i = 0; i < pool_mysql.min_connections; ++i) {
 		conn = mysql_new_connection();
 		if (conn)
 			conn_push(conn);
@@ -107,10 +109,10 @@ void mysql_pool_init()
 mysql_conn * conn_pop()
 {
 	mysql_conn * conn = pool_mysql.mysql_list;
-	if (conn != NULL){
+	if (conn != NULL) {
 
 		pool_mysql.mysql_list = conn->next;
-		if (pool_mysql.mysql_list){
+		if (pool_mysql.mysql_list) {
 
 			pool_mysql.mysql_list->prev = NULL;
 		}
@@ -136,8 +138,8 @@ mysql_conn * get_mysql_connection_block()
 	pthread_mutex_lock(&pool_mysql.lock);
 	mysql_conn *conn = conn_pop();
 	// printf("current free connections %d\n ", pool_mysql.free_connections);
-	if (conn == NULL)
-	{
+	if (conn == NULL) {
+
 		pool_mysql.is_idle_block++;
 		pthread_cond_wait(&pool_mysql.idle_signal,&pool_mysql.lock);
 		conn = conn_pop();
@@ -156,8 +158,8 @@ void release_mysql_connection(mysql_conn *conn)
 	conn->next = NULL;
 	conn->prev = NULL;
 	conn_push(conn);
-	if(pool_mysql.is_idle_block)
-	{
+	if(pool_mysql.is_idle_block) {
+
 		pthread_cond_signal(&pool_mysql.idle_signal);		// 如果连接池处于阻塞状态则解除
 	}
 	pthread_mutex_unlock(&pool_mysql.lock);
@@ -178,8 +180,7 @@ void destroy_mysql_pool()
 	mysql_conn *conn;
 	pthread_mutex_lock(&pool_mysql.lock);
 	conn = conn_pop();
-	for (;conn;conn=conn_pop())
-	{
+	for (;conn;conn=conn_pop()) {
 		destroy_mysql_connection(conn);
 	}
 
@@ -193,8 +194,7 @@ MYSQL_RES * mysql_execute_query(const char *sql,unsigned long length,int *flag)
 	int res;
 	MYSQL_RES *res_ptr;
 	mysql_conn *con = get_mysql_connection_block();
-	if (con == NULL)
-	{
+	if (con == NULL) {
 		printf("can not get mysql connections from the pool\n");
 		*flag = -2;
 		return NULL;
@@ -202,8 +202,7 @@ MYSQL_RES * mysql_execute_query(const char *sql,unsigned long length,int *flag)
 
 	*flag = 0;
 	res = mysql_real_query(&con->conn,sql,length);   //执行sql语句，成功返回0，否则返回非0的整数
-	if (res != 0)
-	{
+	if (res != 0) {
 		printf("mysql_real_query error [errno=%d]:[%s]\n",mysql_errno(&con->conn),mysql_error(&con->conn));
 		release_mysql_connection(con);
 		*flag=res;
@@ -211,8 +210,7 @@ MYSQL_RES * mysql_execute_query(const char *sql,unsigned long length,int *flag)
 	}
 
 	res_ptr = mysql_store_result(&con->conn);
-	if (res_ptr == NULL)
-	{
+	if (res_ptr == NULL) {
 		printf("mysql_store_result error [errno = %d]:[%s]\n",mysql_errno(&con->conn),mysql_error(&con->conn));
 	}
 

@@ -21,12 +21,7 @@ ContFunMap g_cmp;
 struct FileInfo g_file_list[MAX_FILES];
 int g_num_files = 0;
 
-void Rou_init(
-	// 服务启动时传来的
-	ContFun cf[], 
-	char* keys[], 
-	int acceptFd, 
-	Request *req) 
+void Rou_init(ContFun cf[], char* keys[], int acceptFd, Request *req) 
 {
 	int flag = 0;
 	
@@ -59,7 +54,8 @@ void Rou_init(
 }
 
 
-void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req) {
+void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req) 
+{
 	int flag = 0;
 	
 	// 先在control回调函数列表中寻找
@@ -89,7 +85,8 @@ void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req) {
 }
 
 
-int searchLocalFile(char* local_paths[]){
+int searchLocalFile(char* local_paths[])
+{
 	struct dirent *ptr;
 	DIR *dir;
 	
@@ -114,7 +111,8 @@ int searchLocalFile(char* local_paths[]){
 }
 
 
-void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files) {
+void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files) 
+{
     DIR *dir;
     struct dirent *entry;
 
@@ -171,7 +169,8 @@ void traverse_directory(const char *path, struct FileInfo file_list[], int *num_
 }
 
 
-void Router_init() {
+void Router_init() 
+{
 	for(int i=0; i < ContFunNUM; i++){
 		g_cmp.cf[i] = NULL;
 		g_cmp.keys[i] = NULL;
@@ -220,7 +219,8 @@ void Router_init() {
 }
 
 
-void router_add_app(ContFun cf[], char* keys[], const char* name) {
+void router_add_app(ContFun cf[], char* keys[], const char* name) 
+{
 	
 	int icf=0, ikeys=0;
 	while(cf[icf] != NULL){
@@ -255,7 +255,8 @@ void router_add_app(ContFun cf[], char* keys[], const char* name) {
 }
 
 
-char* get_content_type(char *file_ext) {
+char* get_content_type(char *file_ext) 
+{
     int i;
     char *ext = malloc(strlen(file_ext) + 1);
     strcpy(ext, file_ext);

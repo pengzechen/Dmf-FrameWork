@@ -16,7 +16,8 @@ limitations under the License.
 */
 #include <dmfserver/request.h>
 
-void MultiParse (Request *request, char *boundary ) {
+void MultiParse (Request *request, char *boundary ) 
+{
 	
 	char *p = NULL;
 	char *pp = NULL;
@@ -219,7 +220,8 @@ void MultiParse (Request *request, char *boundary ) {
 }
 
 
-void ParseHttp(Request *request, char *data) {
+void ParseHttp(Request *request, char *data) 
+{
 	
 	//p 指向 data 首地址
 	char *p;
@@ -486,7 +488,8 @@ void ParseHttp(Request *request, char *data) {
 }
 
 
-void freeReq(Request *req) {
+void freeReq(Request *req) 
+{
 	
 	free(req->body.body);
 	

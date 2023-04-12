@@ -24,6 +24,7 @@ void datamodeltest(int a, const Request* req)
 
 	Res_row(a, "This is a test str");
 }
+
 void usleep1(unsigned long usec)
 {
     HANDLE timer;

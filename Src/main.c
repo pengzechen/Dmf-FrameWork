@@ -31,14 +31,10 @@ limitations under the License.
 
 #include <dmfserver/link.h>
 
-void aaaaa(){
-	printf("ok");
-	return;
-}
-
 
 #ifdef __WIN32__
-	void linkload(){
+	void linkload()
+	{
 		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 		Sleep(500);
 		HMODULE handle = LoadLibrary("./link/liblink.dll");
@@ -52,13 +48,15 @@ void aaaaa(){
 #endif //WIN32
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
 	#ifdef __WIN32__
 	system("cls");
 	system("tasklist /nh | find /i \"mysqld.exe\"");
 	#endif // WIN32
 
-	ConfInit();
+	log_init();
+	conf_init();
 	SessionInit();
 	Router_init();
 	mysql_pool_init();
@@ -78,19 +76,19 @@ int main(int argc, char* argv[]) {
 					"/updatesession", "mysqltest1", NULL};
 	
 
-#ifdef __WIN32__
+#ifdef __WIN32__	// Win32
 
 	iocpServerMake(g_cmp);
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 
-#elif __linux__ // linux
+#elif __linux__ 	// linux
 
 	threadingServerRunning();
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 
-#endif 			// linux
+#endif 				// linux
 
 	pool_destroy();
 	return 0;

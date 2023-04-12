@@ -16,16 +16,17 @@ limitations under the License.
 */
 #include <dmfserver/model.h>
 
-void ModelInit(ModelPtr mPtr) {
+void ModelInit(ModelPtr mPtr) 
+{
 	mPtr->my_connection = (MYSQL*)malloc(sizeof(MYSQL));
 	mPtr->res_ptr = NULL;
 	mysql_init(mPtr->my_connection);
 }
 
 // 返回值非零 连接成功
-int ModelConnection(ModelPtr mPtr) {
-	if(mysql_real_connect(mPtr->my_connection, HOST, USERNAME, PASSWORD, DATABASE, 0,NULL, CLIENT_FOUND_ROWS))
-	{
+int ModelConnection(ModelPtr mPtr) 
+{
+	if(mysql_real_connect(mPtr->my_connection, HOST, USERNAME, PASSWORD, DATABASE, 0,NULL, CLIENT_FOUND_ROWS)){
 		return 1;
 	}else{
 		free(mPtr->my_connection);
@@ -34,18 +35,21 @@ int ModelConnection(ModelPtr mPtr) {
 }
 
 // 返回值为0执行成功
-int ModelQuery(ModelPtr mPtr, char* sql) {
+int ModelQuery(ModelPtr mPtr, char* sql) 
+{
 	return mysql_query(mPtr->my_connection, sql);
 }
 
 
-static void GetModelResultInfo(ModelPtr mPtr) {
+static void GetModelResultInfo(ModelPtr mPtr) 
+{
 	mPtr->row = mysql_num_rows(mPtr->res_ptr);
 	mPtr->column = mysql_num_fields(mPtr->res_ptr);
 }
 
 // 保存查询到的信息 行数 列数
-int GetModelResult(ModelPtr mPtr) {
+int GetModelResult(ModelPtr mPtr) 
+{
 	mPtr->res_ptr = mysql_store_result(mPtr->my_connection);
 	if(mPtr->res_ptr){
 		GetModelResultInfo(mPtr);
@@ -56,13 +60,15 @@ int GetModelResult(ModelPtr mPtr) {
 }
 
 
-void ModelClose(ModelPtr mPtr) {
+void ModelClose(ModelPtr mPtr) 
+{
 	mysql_close(mPtr->my_connection);
 	free(mPtr->my_connection);
 }
 
 
-void exeSql(char* sql) {
+void exeSql(char* sql) 
+{
 
 	Model modeltest;
 	ModelPtr mPtr= &modeltest;

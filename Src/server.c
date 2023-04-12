@@ -15,11 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License. 
 */
 #include <dmfserver/server.h>
+#include <dmfserver/log.h>
 
 #ifdef __WIN32__  // WIN32
 
 
-void SSLservermake(ContFun cf[], char* keys[]){
+void SSLservermake(ContFun cf[], char* keys[])
+{
 	unsigned int myport, lisnum;
 
 	SSL_CTX *ctx;
@@ -96,7 +98,8 @@ void SSLservermake(ContFun cf[], char* keys[]){
 }
 
 
-void Handler(int acceptFd, ContFun cf[], char* keys[]) {
+void Handler(int acceptFd, ContFun cf[], char* keys[]) 
+{
 	
 	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
 
@@ -119,7 +122,8 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 }
 
 
-void SimpleServerMake(ContFun cf[], char* keys[]) {
+void SimpleServerMake(ContFun cf[], char* keys[]) 
+{
 	
 	int serverPort;
 	// if configure not define port then use SERVER_PORT
@@ -406,7 +410,8 @@ int threadingServerRunning() {
 
 #ifdef __WIN32__  // WIN32 windows 启动IOCP服务器
 
-SOCKET BindServerOverlapped(int nPort){
+SOCKET BindServerOverlapped(int nPort)
+{
 
 	SOCKET sServer = WSASocket(AF_INET,SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 
@@ -430,7 +435,8 @@ SOCKET BindServerOverlapped(int nPort){
 }
 
 
-DWORD WINAPI ProcessIO(LPVOID lpParam){
+DWORD WINAPI ProcessIO(LPVOID lpParam)
+{
 	
     HANDLE CompletionPort = (HANDLE)lpParam;
     DWORD BytesTransferred;
@@ -467,7 +473,9 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 		
 		ParseHttp(&req1, PerIoData->Buffer);
 		serverTime(time);
-		printf("[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+		
+		log_info("SERVER", 447, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+		
 		memset(time, 0, 30);
 		
 		Rou_iocp_handle(PerIoData->cmp, PerHandleData->Socket, &req1);
@@ -492,7 +500,8 @@ DWORD WINAPI ProcessIO(LPVOID lpParam){
 }
 
 
-int iocpServerMake(ContFunMap cmp) {
+int iocpServerMake(ContFunMap cmp) 
+{
 
 	int serverPort;
 	WSADATA wsd;

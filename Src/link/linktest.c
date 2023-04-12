@@ -18,7 +18,7 @@ limitations under the License.
 
 #ifdef __WIN32__
 
-void winLoad() {
+void if_win() {
     HMODULE handle = LoadLibrary("./link/liblink.dll");
     
     Get link_get = (Get)GetProcAddress(handle, "get");

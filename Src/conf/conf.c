@@ -20,7 +20,7 @@ limitations under the License.
 Server_Conf g_server_conf_all;
 
 
-void ConfInit()
+void conf_init()
 {
 
     printf("[Conf: Info] start confguring...\n");
@@ -89,7 +89,6 @@ void ConfInit()
     g_server_conf_all._conf_server.mode = SimpleServer;
 
     strcpy(g_server_conf_all._conf_router.static_dir, "static");
-
 
     printf("[Conf: Info] conf init successfully...\n");
 }

@@ -18,7 +18,8 @@ limitations under the License.
 
 #include <dmfserver/template.h>
 
-char * loadTemplate(char * template_path) {
+char * loadTemplate(char * template_path) 
+{
 	FILE *fp;
 	fp = fopen( template_path, "r" );
 	if(fp == NULL){ printf("[Template: ]open Failed \n"); return ""; }
@@ -36,7 +37,8 @@ char * loadTemplate(char * template_path) {
 }
 
 
-void ParseDec(char* tt, char* dec[], char* inner) {
+void ParseDec(char* tt, char* dec[], char* inner) 
+{
 	
 	char *start = strstr(inner, "{{item}}");
 	char other[1024] = {'\0'};
@@ -53,7 +55,8 @@ void ParseDec(char* tt, char* dec[], char* inner) {
 }
 
 // 释放存放模板信息字符串  context
-char* parseContext(char *context, struct Kvmap *kv, int kv_num) {
+char* parseContext(char *context, struct Kvmap *kv, int kv_num) 
+{
 	
 	char *p = context;
 	char *pp = p + 1;
