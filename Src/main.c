@@ -84,7 +84,8 @@ int main(int argc, char* argv[])
 
 #elif __linux__ 	// linux
 
-	threadingServerRunning();
+	// threadingServerRunning();
+	epool_ssl_server();
 	// SimpleServerMake(cf, keys);
 	// SSLservermake(cf, keys);
 

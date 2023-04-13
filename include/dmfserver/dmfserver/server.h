@@ -33,11 +33,35 @@ limitations under the License.
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-
+#include <pthread.h>
+#include <stdbool.h>
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 // #include <openssl/applink.c>
+
+#ifdef __linux__ // Linux
+	#include <stdarg.h>
+	#include <assert.h>
+	#include <errno.h>
+	#include <fcntl.h>
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <arpa/inet.h>
+	#include <netdb.h>
+	#include <sys/epoll.h>
+	#include <openssl/crypto.h>
+	#include <openssl/rand.h>
+
+
+	typedef struct fd_ssl_map {
+		int fd;
+		SSL* ssl;
+		struct fd_ssl_map* next;
+	} fd_ssl_map ;
+
+#endif  		// Linux
 
 
 #ifdef __WIN32__   // Windows
@@ -62,13 +86,6 @@ limitations under the License.
 
 #endif  // Windows
 
-#ifdef __linux__ // Linux
-#include <sys/socket.h>
-	#include <fcntl.h>
-	#include <netinet/in.h>
-	#include <pthread.h>
-	#include <sys/epoll.h>
-#endif  		// Linux
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,12 +97,13 @@ extern "C" {
 
 	void SSLservermake(ContFun cf[], char* keys[]);
 
-	#ifdef __WIN32__   // Windows IOCP 函数
-	extern int iocpServerMake(ContFunMap cmp);
-	#endif  // Windows#
-	#ifdef __linux__
-	extern int threadingServerRunning();
-	#endif  // linux
+	#ifdef __WIN32__   // Windows IOCP Model
+		extern int iocpServerMake(ContFunMap cmp);
+	#endif  		   // Windows
+	#ifdef __linux__   // linux epool Model
+		extern int threadingServerRunning();
+		extern int epool_ssl_server();
+	#endif  		   // linux
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
