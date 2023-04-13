@@ -74,7 +74,7 @@ extern "C" {
 
 void Router_init();
 
-void Rou_init( ContFun cf[], char* keys[], int acceptFd, Request *req);
+void Rou_handel( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
 void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req);
 

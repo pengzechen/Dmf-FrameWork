@@ -21,7 +21,7 @@ ContFunMap g_cmp;
 struct FileInfo g_file_list[MAX_FILES];
 int g_num_files = 0;
 
-void Rou_init(ContFun cf[], char* keys[], int acceptFd, Request *req) 
+void Rou_handel(ContFun cf[], char* keys[], int acceptFd, Request *req) 
 {
 	int flag = 0;
 	

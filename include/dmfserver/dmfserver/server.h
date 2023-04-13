@@ -33,11 +33,14 @@ limitations under the License.
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
+#include <signal.h>
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 // #include <openssl/applink.c>
+
+extern volatile bool is_running;
 
 
 #ifdef __WIN32__   // Windows
@@ -73,6 +76,8 @@ limitations under the License.
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+	extern void handle_signal(int sig_num);
 	
 	static void Handler(int acceptFd, ContFun cf[], char* keys[]);
 
