@@ -16,6 +16,7 @@ limitations under the License.
 */
 #include <dmfserver/model/model.h>
 
+
 void ModelInit(ModelPtr mPtr) 
 {
 	mPtr->my_connection = (MYSQL*)malloc(sizeof(MYSQL));
