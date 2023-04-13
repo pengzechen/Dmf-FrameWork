@@ -24,7 +24,7 @@ struct FileInfo g_file_list[MAX_FILES];
 int g_num_files = 0;
 
 
-void Router_init() 
+void router_init() 
 {
 	for(int i=0; i < ContFunNUM; i++){
 		g_cmp.cf[i] = NULL;
@@ -71,6 +71,7 @@ void Router_init()
 
 	printf("[Router: Info] Router init successfully...\n");
 }
+
 
 void Rou_handle(ContFun cf[], char* keys[], int acceptFd, Request *req) 
 {

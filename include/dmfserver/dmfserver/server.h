@@ -35,12 +35,17 @@ limitations under the License.
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <signal.h>
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 // #include <openssl/applink.c>
 
+#define OutErr(a) printf("%s %s %d \n", a, __FILE__ , __LINE__ );
+
+
 #ifdef __linux__ // Linux
+
 	#include <stdarg.h>
 	#include <assert.h>
 	#include <errno.h>
@@ -54,7 +59,6 @@ limitations under the License.
 	#include <openssl/crypto.h>
 	#include <openssl/rand.h>
 
-
 	typedef struct fd_ssl_map {
 		int fd;
 		SSL* ssl;
@@ -64,11 +68,8 @@ limitations under the License.
 #endif  		// Linux
 
 
-#ifdef __WIN32__   // Windows
+#ifdef __WIN32__ // Windows
 	#include <WinSock2.h>
-
-	#define OutErr(a) printf("%s %s %d %d", a, WSAGetLastError(), __FILE__ , __LINE__ );
-	#define OutMsg(a) printf("%s", a);
 
 	typedef struct {
 		
@@ -84,7 +85,7 @@ limitations under the License.
 		
 	}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
 
-#endif  // Windows
+#endif  		// Windows
 
 
 #ifdef __cplusplus
@@ -102,6 +103,7 @@ extern "C" {
 	#ifdef __WIN32__   // Windows IOCP Model
 		extern int iocpServerMake(ContFunMap cmp);
 	#endif  		   // Windows
+	
 	#ifdef __linux__   // linux epool Model
 		extern int threadingServerRunning();
 		extern int epool_ssl_server();

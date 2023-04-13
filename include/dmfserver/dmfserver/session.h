@@ -55,7 +55,7 @@ static HashNode g_session_all_dec[ HASH_DEC_LEN ];
 extern "C" {
 #endif
 
-    extern void SessionInit();
+    extern void session_init();
 
     extern void SessionCreate(char* ,char*, char*);
 

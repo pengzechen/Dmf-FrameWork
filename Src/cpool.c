@@ -21,7 +21,7 @@ limitations under the License.
 #include <dmfserver/cpool.h>
 
 static mysql_pool pool_mysql; //连接池定义
-unsigned int query_times = 0; //mysql所有的查询次数，用于测试
+
 
 
 //创建一个新的mysql连接节点
@@ -102,7 +102,7 @@ void mysql_pool_init()
 	}
 	pthread_mutex_unlock(&pool_mysql.lock);
 
-	printf("[mysqlpool: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.min_connections);
+	printf("[mysqlpool: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.free_connections);
 }
 
 //从连接池中取出一个mysql连接,返回类型为mysql_conn,如果没有可用的连接，返回null。
@@ -145,7 +145,6 @@ mysql_conn * get_mysql_connection_block()
 		conn = conn_pop();
 		pool_mysql.is_idle_block--;
 	}
-	query_times++;
 	pthread_mutex_unlock(&pool_mysql.lock);
 	return conn;
 }

@@ -59,8 +59,9 @@ int main(int argc, char* argv[])
 
 	conf_init();
 	log_init();
-	SessionInit();
-	Router_init();
+	session_init();
+	router_init();
+
 	mysql_pool_init();
 	elr_mpl_init();
 	pool_init(32, 512);

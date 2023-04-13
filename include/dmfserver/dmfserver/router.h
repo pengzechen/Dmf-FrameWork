@@ -75,7 +75,7 @@ extern int g_num_files;
 extern "C" {
 #endif
 
-void Router_init();
+void router_init();
 
 void Rou_handle( ContFun cf[], char* keys[], int acceptFd, Request *req);
 

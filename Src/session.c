@@ -145,7 +145,7 @@ void* FroundCheck() {
 }
 
 
-extern void SessionInit()
+extern void session_init()
 {
     for(int i=0; i<HASH_DEC_LEN; i++) {
         g_session_all_dec[i].key = NULL;
