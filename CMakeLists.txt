@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 3.10.0)
 project(DmfServer)
 
 #可以输出中文
+if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
 add_definitions("-fexec-charset=gbk")
+endif()
 
 #指定版本信息
 set(CMAKE_SYSTEM_VERSION 1)
