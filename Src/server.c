@@ -16,6 +16,14 @@ limitations under the License.
 */
 #include <dmfserver/server.h>
 
+volatile bool is_running = true;
+
+void handle_signal(int sig_num)
+{
+	if(sig_num == SIGINT || sig_num == SIGTERM)
+		is_running = false;
+}
+
 
 #ifdef __WIN32__  // WIN32
 
@@ -114,7 +122,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[])
 	printf("[%s][Server: Info] %s\n",time , req1.path);
 	
 	
-	Rou_init( cf, keys, acceptFd, &req1);
+	Rou_handle( cf, keys, acceptFd, &req1);
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
@@ -255,7 +263,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[]) {
 	printf("[%s][Server: Info] %s\n",time , req1.path);
 	
 	
-	Rou_init( cf, keys, acceptFd, &req1);
+	Rou_handle( cf, keys, acceptFd, &req1);
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
@@ -482,8 +490,8 @@ DWORD WINAPI ProcessIO(LPVOID lpParam)
 		
 		freeReq(&req1);
 		
-		free( PerIoData );
-		free( PerHandleData );
+		free(PerIoData);
+		free(PerHandleData);
 
 		/*
 		// 继续向 socket 投递WSARecv操作
@@ -495,6 +503,7 @@ DWORD WINAPI ProcessIO(LPVOID lpParam)
 		WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
 		*/
 	}
+
  
 	return 0;
 }
@@ -539,7 +548,7 @@ int iocpServerMake(ContFunMap cmp)
 
 
 	
-	while(1){
+	while(is_running) {
 		
 		// wait for client
 		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
@@ -564,12 +573,16 @@ int iocpServerMake(ContFunMap cmp)
 		WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
 	}
 
+	
+
 	DWORD dwByteTrans;
 	//将一个已经完成的IO通知添加到IO完成端口的队列中.
 	//提供了与线程池中的所有线程通信的方式.
 	PostQueuedCompletionStatus(CompletionPort,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
 
 	closesocket(sListen);
+
+	printf("[MAIN: %d] exit\n", GetCurrentThreadId());
 	
 	return 0;
 }

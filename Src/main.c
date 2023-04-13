@@ -51,12 +51,14 @@ limitations under the License.
 int main(int argc, char* argv[]) 
 {
 	#ifdef __WIN32__
-	system("cls");
-	system("tasklist /nh | find /i \"mysqld.exe\"");
+		system("cls");
+		system("tasklist /nh | find /i \"mysqld.exe\"");
 	#endif // WIN32
+	signal(SIGINT, handle_signal);
+	signal(SIGTERM, handle_signal);
 
-	log_init();
 	conf_init();
+	log_init();
 	SessionInit();
 	Router_init();
 	mysql_pool_init();

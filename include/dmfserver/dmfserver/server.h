@@ -90,6 +90,8 @@ limitations under the License.
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+	extern void handle_signal(int sig_num);
 	
 	static void Handler(int acceptFd, ContFun cf[], char* keys[]);
 
