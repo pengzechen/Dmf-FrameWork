@@ -20,15 +20,14 @@ limitations under the License.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-/* 引入连接Mysql的头文件和lib包 */
 #include <mysql/mysql.h>
-// #pragma comment(lib,"libmysql.lib")
 
-/*定义一些数据库连接需要的宏*/
-#define HOST "192.168.2.74" 			/*MySql服务器地址*/
-#define USERNAME "pzc" 			/*用户名*/
-#define PASSWORD "pzc123" 	/*数据库连接密码*/
-#define DATABASE "pzc" 			/*需要连接的数据库*/
+
+
+#define HOST "192.168.2.74" 
+#define USERNAME "pzc"
+#define PASSWORD "pzc123" 
+#define DATABASE "pzc"	
 
 typedef struct _Model {
 	MYSQL* my_connection;

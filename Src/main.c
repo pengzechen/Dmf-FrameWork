@@ -61,9 +61,9 @@ int main(int argc, char* argv[])
 	log_init();
 	session_init();
 	router_init();
-
 	mysql_pool_init();
 	elr_mpl_init();
+	
 	pool_init(32, 512);
 
 	model();
