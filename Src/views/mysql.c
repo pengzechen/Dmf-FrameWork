@@ -1,4 +1,4 @@
-#include <dmfserver/model.h>
+#include <dmfserver/model/model.h>
 
 
 void mysqltest(int a, const Request* req) 

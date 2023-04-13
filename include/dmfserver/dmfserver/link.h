@@ -25,11 +25,11 @@ typedef void(*Set)(int);
 
 
 #ifdef __WIN32__
-#define DLL_EXPORT __declspec(dllexport)
-#define DLL_IMPORT __declspec(dllimport)
-#include <windows.h>
-typedef void(*Dll_read_shm)();
-typedef void(*Dll_write_shm)(char*);
+	#define DLL_EXPORT __declspec(dllexport)
+	#define DLL_IMPORT __declspec(dllimport)
+	#include <windows.h>
+	typedef void(*Dll_read_shm)();
+	typedef void(*Dll_write_shm)(char*);
 #endif  // WIN32
 
 
