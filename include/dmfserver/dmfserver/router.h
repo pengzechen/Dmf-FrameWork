@@ -39,7 +39,10 @@ limitations under the License.
 #define NONE "\033[m"
 #define YELLOW "\033[1;33m"
 
-#define Router_Debug
+
+
+// #define Router_Debug
+
 
 struct FileInfo {
     char path[MAX_PATH_LENGTH];
@@ -74,7 +77,7 @@ extern "C" {
 
 void Router_init();
 
-void Rou_handel( ContFun cf[], char* keys[], int acceptFd, Request *req);
+void Rou_handle( ContFun cf[], char* keys[], int acceptFd, Request *req);
 
 void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req);
 
