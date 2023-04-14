@@ -3,7 +3,6 @@
 
 void mfunction(char *out, char *in) 
 {
-	
 	strcpy(out, in);
 }
 
@@ -11,10 +10,11 @@ void template(int a, const Request *req)
 {
 	struct Kvmap kv[4];
 	kv[0].key = "name";
-	kv[0].value = "pzc";
+	kv[0].value = "Dmfserver";
 	kv[0].type = 1;
-	kv[1].key = "age";
-	kv[1].value = "22";
+	
+	kv[1].key = "date";
+	kv[1].value = "2023/4/14";
 	kv[1].type = 1;
 
 
@@ -24,9 +24,9 @@ void template(int a, const Request *req)
 
 
 	kv[3].key = "dec1";
-	kv[3].dec[0] = "one";
-	kv[3].dec[1] = "two";
-	kv[3].dec[2] = "three";
+	kv[3].dec[0] = "Apache";
+	kv[3].dec[1] = "Nginx";
+	kv[3].dec[2] = "Http";
 	kv[3].dec[3] = NULL;
 	kv[3].type = 3;
 
