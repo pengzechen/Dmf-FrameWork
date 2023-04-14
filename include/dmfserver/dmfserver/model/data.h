@@ -43,4 +43,4 @@ extern void AppendChild(objPtr mn, objPtr child);
 
 extern void ShowNodeData(objPtr mn);
 
-#endif
+#endif  // DATA_STRUCT
