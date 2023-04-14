@@ -54,7 +54,7 @@ limitations under the License.
 #define EBUFLEN 128
 #define BUFLEN 1024
 
-void pcre_test() 
+int pcre_test() 
 {
 	pcre  *re;
     const char *error;
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 {
 	pcre_test();
 	jannson_test();
-	
+
 	#ifdef __WIN32__
 		system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
