@@ -47,9 +47,14 @@ limitations under the License.
 	}
 #endif //WIN32
 
-
-#include <jansson/jansson.h>
+#ifdef __linux__
+#include <jansson.h>
+#include <pcre.h>
+#elif __WIN32__
+#include <jansson/jansson.h>/
 #include <pcre/pcre.h>
+#endif
+
 #define OVECCOUNT 30 /* should be a multiple of 3 */
 #define EBUFLEN 128
 #define BUFLEN 1024
