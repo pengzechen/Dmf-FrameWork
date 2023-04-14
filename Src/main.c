@@ -51,7 +51,7 @@ limitations under the License.
 #include <jansson.h>
 #include <pcre.h>
 #elif __WIN32__
-#include <jansson/jansson.h>/
+#include <jansson/jansson.h>
 #include <pcre/pcre.h>
 #endif
 
