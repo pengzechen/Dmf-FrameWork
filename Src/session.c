@@ -105,15 +105,19 @@ static HashNode g_session_all_dec[ HASH_DEC_LEN ];
 static int get_random_str(char* random_str, const int random_len)
 {
     int i, random_num, seed_str_len;
-    struct timeval tv;
+
     unsigned int seed_num;
     char seed_str[] = "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     seed_str_len = strlen(seed_str);
 
-    gettimeofday(&tv, NULL);
-    seed_num = (unsigned int)(tv.tv_sec + tv.tv_usec);
+    time_t timep;
+    struct tm *p;
+    time(&timep);
+    p = localtime(&timep); //取得当地具体时间
+
+    seed_num = (unsigned int)(p->tm_min + p->tm_sec);
     srand(seed_num);
 
     for(i = 0; i < random_len; i++){

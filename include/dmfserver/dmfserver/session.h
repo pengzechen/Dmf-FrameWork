@@ -25,6 +25,7 @@ limitations under the License.
 #include <pthread.h>
 #include <dmfserver/request.h>
 #include <dmfserver/utility.h>
+#include <time.h>
 // #include <windows.h>
 
 #define HASH_DEC_LEN 50
