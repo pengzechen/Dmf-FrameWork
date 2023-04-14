@@ -48,6 +48,8 @@ limitations under the License.
 #endif //WIN32
 
 
+#include <jansson/jansson.h>
+
 int main(int argc, char* argv[]) 
 {
 	#ifdef __WIN32__

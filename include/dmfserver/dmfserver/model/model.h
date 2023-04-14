@@ -44,21 +44,21 @@ typedef Model* ModelPtr;
 extern "C" {
 #endif
 
-//  mysql_affected_rows(&my_connection)  返回int
+	//  mysql_affected_rows(&my_connection)  返回int
 
-extern void exeSql(char* sql);
+	extern void exeSql(char* sql);
 
-void ModelInit(ModelPtr mPtr);
+	void ModelInit(ModelPtr mPtr);
 
-int ModelConnection(ModelPtr mPtr);
+	int ModelConnection(ModelPtr mPtr);
 
-int ModelQuery(ModelPtr mPtr, char* sql);
+	int ModelQuery(ModelPtr mPtr, char* sql);
 
-static void GetModelResultInfo(ModelPtr mPtr);
+	static void GetModelResultInfo(ModelPtr mPtr);
 
-int GetModelResult(ModelPtr mPtr);
+	int GetModelResult(ModelPtr mPtr);
 
-void ModelClose(ModelPtr mPtr);
+	void ModelClose(ModelPtr mPtr);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
