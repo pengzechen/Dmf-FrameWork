@@ -18,6 +18,11 @@ limitations under the License.
 
 #include <dmfserver/template.h>
 
+void template_init(){
+
+}
+
+
 char * local_template(char * template_path) 
 {
 	FILE *fp;
@@ -60,7 +65,7 @@ void parse_dec(char* tt, char* dec[], char* inner)
 	}
 }
 
-// 释放存放模板信息字符串  context
+
 char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 {
 	
@@ -76,7 +81,7 @@ char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 	
 	int state = 0;
 
-	char block_str[1024] = {'\0'};
+	char block_str[1024] = {'\0'};	 // [@xxx@' '@] '' 之间的字符串
 
 	char parsed_str[1024] = {'\0'};  // parse dec 或者是 回调函数的返回值
 	
@@ -137,13 +142,13 @@ char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 					*start = '\0';
 					
 					for(int num=0; num<= kv_num; num++) {
-						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 2){
+						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 2) {
 							kv[num].Func(parsed_str, block_str);
 							strcat(result, parsed_str);
 							res_pos = res_pos + strlen(parsed_str);
 							memset(block_str, 0, 1024);
 						}
-						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 3){
+						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 3) {
 							parse_dec(parsed_str, kv[num].dec, block_str);
 							strcat(result, parsed_str);
 							res_pos = res_pos + strlen(parsed_str);

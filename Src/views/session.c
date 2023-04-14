@@ -63,7 +63,7 @@ void sessionadd(int a, const Request *req)
 		case -1:
 		printf("[view: sessionAdd] req hasn't a session\n");break;
 		case -2:
-		printf("[view: sessionAdd] session chain hasn't such session\n");break;break;
+		printf("[view: sessionAdd] session chain hasn't such session\n");break;
 		default: break;
 	}
 	
@@ -86,8 +86,9 @@ void updatesession(int a, const Request *req)
 
 void sessiondebug(int a, const Request* req) 
 {
+	printf("-----------session debug-------------\n");
 	SessionAll();
-	printf("ok");
+	printf("-----------session debug-------------\n");
 	Res_row(a, "This is a test str");
 }
 

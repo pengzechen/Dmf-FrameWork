@@ -57,8 +57,9 @@ extern void Res_NotFound(int acceptFd)
 extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num) 
 {
 	char* context = local_template(path);					// 需要释放内存
-	char* res = parse_context(context, kv, num-1);		// 模板返回值
+	char* res = parse_context(context, kv, num-1);		// 模板返回值  需要释放内存
 	free(context);
+
 	Res_row(acceptFd, res);
 	memset(res, 0, TEMPLATE_RESULT_SIZE);
 	free(res);

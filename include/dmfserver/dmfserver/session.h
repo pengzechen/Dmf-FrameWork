@@ -27,7 +27,7 @@ limitations under the License.
 #include <dmfserver/utility.h>
 // #include <windows.h>
 
-#define HASH_DEC_LEN 5
+#define HASH_DEC_LEN 50
 
 typedef struct _SessionData {
     char* key;
