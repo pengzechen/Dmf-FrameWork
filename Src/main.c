@@ -51,10 +51,10 @@ limitations under the License.
 int main(int argc, char* argv[]) 
 {
 	#ifdef __WIN32__
-		// system("cls");
+		system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
-		FreeConsole();
+		// FreeConsole();
 	#endif // WIN32
 
 	
