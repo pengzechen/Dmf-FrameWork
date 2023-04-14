@@ -17,7 +17,7 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     link_libraries("libcrypto")
     link_libraries("libxml2")
     link_libraries("iconv")
-    link_libraries("jansson_d")
+    link_libraries("libjansson")
 
     # pthread 有冲突
     add_definitions("-DHAVE_STRUCT_TIMESPEC")

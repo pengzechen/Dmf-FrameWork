@@ -52,6 +52,10 @@ limitations under the License.
 
 int main(int argc, char* argv[]) 
 {
+	json_t val;
+    int type = json_typeof(&val);
+    bool Judge = json_is_object(&val);
+
 	#ifdef __WIN32__
 		system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
