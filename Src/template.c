@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <dmfserver/template.h>
 
-char * loadTemplate(char * template_path) 
+char * local_template(char * template_path) 
 {
 	FILE *fp;
 	fp = fopen( template_path, "r" );
@@ -33,8 +33,9 @@ char * loadTemplate(char * template_path)
 	file_size = ftell(fp);
 	fseek(fp, 0L, 0);
 	
-	char * _context = (char*)malloc(file_size * sizeof(char));  // 模板文件一般不会太大， 直接全部读取
-	memset(_context, '\0', file_size * sizeof(char));
+	char * _context = (char*)malloc(file_size * sizeof(char) + 1);  // 模板文件一般不会太大， 直接全部读取
+	memset(_context, '\0', file_size * sizeof(char) + 1);
+
 	fread(_context, sizeof(char), file_size, fp);
 	fclose(fp);
 	
@@ -42,7 +43,7 @@ char * loadTemplate(char * template_path)
 }
 
 
-void ParseDec(char* tt, char* dec[], char* inner) 
+void parse_dec(char* tt, char* dec[], char* inner) 
 {
 	
 	char *start = strstr(inner, "{{item}}");
@@ -60,7 +61,7 @@ void ParseDec(char* tt, char* dec[], char* inner)
 }
 
 // 释放存放模板信息字符串  context
-char* parseContext(char *context, struct Kvmap *kv, int kv_num) 
+char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 {
 	
 	char *p = context;
@@ -68,15 +69,19 @@ char* parseContext(char *context, struct Kvmap *kv, int kv_num)
 	
 	int write_temp = 0;
 	char temp[1024] = {'\0'};
-	int i;
+	int temp_pos = 0;
 	
-	int write_res = 1;
-	int k=0;
+	int write_res = 1;				// 当前是否要写
+	int res_pos = 0;				// 最终解析的长度
 	
 	int state = 0;
+
+	char block_str[1024] = {'\0'};
+
+	char parsed_str[1024] = {'\0'};  // parse dec 或者是 回调函数的返回值
 	
 	char *result = (char*)malloc(sizeof(char) * TEMPLATE_RESULT_SIZE );
-	memset(result, 0, TEMPLATE_RESULT_SIZE );
+	memset(result, '\0', TEMPLATE_RESULT_SIZE );
 	
 	
 	
@@ -95,7 +100,6 @@ char* parseContext(char *context, struct Kvmap *kv, int kv_num)
 					write_res = 0;
 					state = -11;
 				}
-				
 				break;		// 正常字符不做处理
 			
 			case -1:					// 跳过 #
@@ -111,48 +115,39 @@ char* parseContext(char *context, struct Kvmap *kv, int kv_num)
 				if(*p == '#' && *pp == ']') {
 					write_temp = 0;
 					// printf("%s", temp); 
-					
 					for(int num=0; num<= kv_num; num++) {
-						if(kv[num].type == 1){
-							if( strcmp(kv[num].key, temp) == 0 ){
-								// printf("%s   ", kv[num].value);
-								strcat(result, kv[num].value);
-								k = k + strlen(kv[num].value) ;
-								// printf("%s", result);
-							}
+						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 1){
+							// printf("%s   ", kv[num].value);
+							strcat(result, kv[num].value);
+							res_pos = res_pos + strlen(kv[num].value) ;
+							// printf("%s", result);
 						}
 					}
-					
 					state = -2;
 				}
 				break;
 				
 			case 2:							
 				write_temp = 1;
-				if(*p == '@' && *pp == ']'){
+				if(*p == '@' && *pp == ']') {
 					write_temp = 0;
 					char* start = strstr(temp, "@");
 
-					char str[1024] = {'\0'};
-					strcpy( str, start+1 );
+					strcpy( block_str, start + 1 );
 					*start = '\0';
 					
 					for(int num=0; num<= kv_num; num++) {
-						if(kv[num].type == 2){
-							if( strcmp(kv[num].key, temp) == 0 ){
-								char tt[1024] = {'\0'};
-								kv[num].Func(tt, str);								
-								strcat(result, tt);
-								k = k + strlen(tt) ;
-							}
+						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 2){
+							kv[num].Func(parsed_str, block_str);
+							strcat(result, parsed_str);
+							res_pos = res_pos + strlen(parsed_str);
+							memset(block_str, 0, 1024);
 						}
-						if(kv[num].type == 3){
-							if( strcmp(kv[num].key, temp) == 0 ){
-								char tt[1024] = {'\0'};
-								ParseDec(tt, kv[num].dec, str);
-								strcat(result, tt);
-								k = k + strlen(tt) ;
-							}
+						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 3){
+							parse_dec(parsed_str, kv[num].dec, block_str);
+							strcat(result, parsed_str);
+							res_pos = res_pos + strlen(parsed_str);
+							memset(block_str, 0, 1024);
 						}
 					}
 					state = -2;
@@ -166,30 +161,28 @@ char* parseContext(char *context, struct Kvmap *kv, int kv_num)
 			default:
 				printf(" Not Catch");
 				break;
-		
 		}
 		
-
-		if(write_temp){
-			temp[i] = *p;
-			i ++ ;
-		}else{
-			if(i){
-				i = 0;
-				memset( temp, '\0', 64);
-			}
+		if(write_temp) {
+			temp[temp_pos] = *p;
+			temp_pos ++ ;
+		} else {
+			if(temp_pos) { temp_pos = 0; memset( temp, '\0', 64); }
 		}
 		
-		if(write_res){
-			result[k] = *p;
-			k++;
+		// 普通字符串应该要写到 result 中
+		if(write_res) {
+			result[res_pos] = *p;
+			res_pos ++;
 		}
-		
+		// 向后迭代
 		p++;
 		pp = p + 1;
 	}
-	
-	free(context);			// 释放存放模板信息字符串
+	res_pos ++;
+	result[res_pos] = '\0';
+			
+	// printf("res_pos: %s\n", result);
 	return result;
 }
 
