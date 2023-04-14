@@ -54,30 +54,18 @@ limitations under the License.
 #define EBUFLEN 128
 #define BUFLEN 1024
 
-int main(int argc, char* argv[]) 
+void pcre_test() 
 {
-	#ifdef __WIN32__
-		system("cls");
-		// system("tasklist /nh | find /i \"mysqld.exe\"");
-		// ShowWindow(GetConsoleWindow(), SW_HIDE);
-		// FreeConsole();
-	#endif // WIN32
-
-	json_t val;
-    int type = json_typeof(&val);
-    bool Judge = json_is_object(&val);
-
-	
 	pcre  *re;
     const char *error;
     int  erroffset;
     int  ovector[OVECCOUNT];
     int  rc, i;
     char  src [] = "111 <title>Hello World</title> 222";   // 要被用来匹配的字符串
-    char  pattern [] = "<title>(.*)</(tit)le>";              // 将要被编译的字符串形式的正则表达式
+    char  pattern [] = "<title>(.*)</(tit)le>";            // 将要被编译的字符串形式的正则表达式
     printf("String : %s\n", src);
     printf("Pattern: \"%s\"\n", pattern);
-    re = pcre_compile(pattern,       // pattern, 输入参数，将要被编译的字符串形式的正则表达式
+    re = pcre_compile(pattern,      // pattern, 输入参数，将要被编译的字符串形式的正则表达式
                       0,            // options, 输入参数，用来指定编译时的一些选项
                       &error,       // errptr, 输出参数，用来输出错误信息
                       &erroffset,   // erroffset, 输出参数，pattern中出错位置的偏移量
@@ -113,9 +101,26 @@ int main(int argc, char* argv[])
     }
  
     pcre_free(re);                     // 编译正则表达式re 释放内存
-    
+}
 
+void jannson_test()
+{
+	json_t val;
+    int type = json_typeof(&val);
+    bool Judge = json_is_object(&val);
+}
+
+int main(int argc, char* argv[]) 
+{
+	pcre_test();
+	jannson_test();
 	
+	#ifdef __WIN32__
+		system("cls");
+		// system("tasklist /nh | find /i \"mysqld.exe\"");
+		// ShowWindow(GetConsoleWindow(), SW_HIDE);
+		// FreeConsole();
+	#endif // WIN32
 
 	
 	signal(SIGINT, handle_signal);
