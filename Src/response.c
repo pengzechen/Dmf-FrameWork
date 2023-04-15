@@ -18,7 +18,7 @@ limitations under the License.
 
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void ResHandel( int acceptFd, char* res_str, unsigned int size) 
+static void ResHandel( int acceptFd, char* res_str, unsigned int size)
 {
 	int sendbyets = send(acceptFd, res_str, size, 0);
 
