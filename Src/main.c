@@ -155,16 +155,14 @@ int main(int argc, char* argv[])
 
 #ifdef __WIN32__	// Win32
 
-	iocpServerMake(g_cmp);
-	// SimpleServerMake(cf, keys);
-	// SSLservermake(cf, keys);
+	// iocp_server_make();
+	simple_server_make();
+	// simple_ssl_server_make();
 
 #elif __linux__ 	// linux
 
-	// threadingServerRunning();
-	epool_ssl_server();
-	// SimpleServerMake(cf, keys);
-	// SSLservermake(cf, keys);
+	// epoll_server_make();
+	epoll_ssl_server();
 
 #endif 				// linux
 

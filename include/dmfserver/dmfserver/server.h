@@ -18,7 +18,7 @@ limitations under the License.
 #define SERVER
 
 #define SERVER_PORT 80
-#define RECEIVE_MAX_BYTES 1024*1024
+#define RECEIVE_MAX_BYTES 1024*512
 #define DATA_BUFSIZE 8192
 #define MAXBUF 4096
 
@@ -88,25 +88,39 @@ limitations under the License.
 #endif  		// Windows
 
 
+typedef struct thread_arg {
+	ContFunMap cmp;
+	long fd;
+} thread_arg;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 	extern void handle_signal(int sig_num);
+
+	static SSL_CTX* get_ssl_ctx();
+#ifdef __WIN32__
+
+	static void wsa_init();
+
+	static void wsa_cleanup();
 	
-	static void Handler(int acceptFd, ContFun cf[], char* keys[]);
+#endif
+	static void req_res_handler(int acceptFd );
 
-	extern void SimpleServerMake(ContFun cf[], char* keys[]);
+	extern void simple_server_make();
 
-	void SSLservermake(ContFun cf[], char* keys[]);
+	extern void simple_ssl_server_make();
+
 
 	#ifdef __WIN32__   // Windows IOCP Model
-		extern int iocpServerMake(ContFunMap cmp);
+		extern int iocp_server_make();
 	#endif  		   // Windows
 	
 	#ifdef __linux__   // linux epool Model
-		extern int threadingServerRunning();
-		extern int epool_ssl_server();
+		extern int epoll_server_make();
+		extern int epoll_ssl_server();
 	#endif  		   // linux
 
 #ifdef __cplusplus

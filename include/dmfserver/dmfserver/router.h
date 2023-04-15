@@ -77,9 +77,7 @@ extern "C" {
 
 void router_init();
 
-void Rou_handle( ContFun cf[], char* keys[], int acceptFd, Request *req);
-
-void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req);
+void router_handle(int acceptFd, Request *req);
 
 static int searchLocalFile(char* local_paths[]);
 

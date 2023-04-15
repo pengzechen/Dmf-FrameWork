@@ -18,95 +18,56 @@ limitations under the License.
 
 volatile bool is_running = true;
 
-void handle_signal(int sig_num)
+
+extern void handle_signal(int sig_num)
 {
 	if(sig_num == SIGINT || sig_num == SIGTERM)
 		is_running = false;
 }
 
 
-#ifdef __WIN32__  // WIN32
-
-
-void SSLservermake(ContFun cf[], char* keys[])
+static SSL_CTX* get_ssl_ctx()
 {
-	unsigned int myport, lisnum;
-
-	SSL_CTX *ctx;
+    SSL_CTX *ctx ;
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
     ctx = SSL_CTX_new(SSLv23_server_method());
     if (ctx == NULL) {
         ERR_print_errors_fp(stdout);
-        exit(1);
+        return NULL;
     }
     if (SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
-        exit(1);
+        return NULL;
     }
     if (SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private , SSL_FILETYPE_PEM) <= 0) {
         ERR_print_errors_fp(stdout);
-        exit(1);
+        return NULL;
     }
     if (!SSL_CTX_check_private_key(ctx)) {
         ERR_print_errors_fp(stdout);
-        exit(1);
+        return NULL;
     }
-
-	SOCKET sListen, sAccept;
-    struct sockaddr_in ser, cli;
-	WSADATA wsaData;
-	WSAStartup(MAKEWORD(2, 2), &wsaData);
-    char buf[MAXBUF + 1]; 
-
-    /* 开启一个 socket 监听 */
-	sListen = socket(AF_INET, SOCK_STREAM, 0);
-
-    ser.sin_family = AF_INET; 
-    ser.sin_port = htons(443); 
-    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
-
-    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
-    listen(sListen,5);
-	
-	int iLen = sizeof(cli);
-    while (1) {
-        SSL *ssl;
-
-        sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-
-        ssl = SSL_new(ctx);
-        SSL_set_fd(ssl, sAccept);
-        
-        int ret = SSL_accept(ssl);
-       
-        printf("error code: %d %d\n", SSL_get_error(ssl, ret), ret);
-
-        memset(buf, 0, MAXBUF + 1);
-        int len = SSL_read(ssl, buf, MAXBUF);
-        // printf("%s\n", buf);
-        
-
-        char res[128] = "HTTP/1.1 200 OK\r\n"
-                        "Content-Type:text/html\r\n"
-                        "Server:Dmfserver\r\n"
-                        "\r\n OK OK";
-						
-        len = SSL_write(ssl, res, strlen(res));
-        
-
-        SSL_shutdown(ssl);
-        SSL_free(ssl);
-        close(sAccept);
-    }
-
-    close(sListen);
-    SSL_CTX_free(ctx);
+    return ctx;
 }
 
+#ifdef __WIN32__
 
-void Handler(int acceptFd, ContFun cf[], char* keys[]) 
+    static void wsa_init()
+    {
+        WSADATA wsd;
+        if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)  OutErr("WSAStartup()");
+    }
+
+    static void wsa_cleanup()
+    {
+        WSACleanup(); 
+    }
+    
+#endif
+
+static void req_res_handler(int acceptFd ) 
 {
 	
 	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
@@ -121,8 +82,7 @@ void Handler(int acceptFd, ContFun cf[], char* keys[])
 	serverTime(time);
 	printf("[%s][Server: Info] %s\n",time , req1.path);
 	
-	
-	Rou_handle( cf, keys, acceptFd, &req1);
+	router_handle( acceptFd, &req1);
 	//通过请求的 path 掉用了对应的处理函数
 	
 	freeReq(&req1);
@@ -130,88 +90,282 @@ void Handler(int acceptFd, ContFun cf[], char* keys[])
 }
 
 
-void SimpleServerMake(ContFun cf[], char* keys[]) 
+static int create_socket()
 {
-	
+    
 	int serverPort;
-	// if configure not define port then use SERVER_PORT
+	// if configure not define port, we use default SERVER_PORT
 	if(g_server_conf_all._conf_server.port == 0)
 	serverPort = SERVER_PORT;
 	else serverPort = g_server_conf_all._conf_server.port;
 
-    WSADATA wsaData;
-    SOCKET sListen, sAccept;
-
-    struct sockaddr_in ser, cli;
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
-
+    int sListen;
+    struct sockaddr_in ser;
     sListen = socket(AF_INET, SOCK_STREAM, 0);
-
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(serverPort); 
+    ser.sin_port = htons(80); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
-
-    bind(sListen, (LPSOCKADDR)&ser, sizeof(ser) );
-    listen(sListen,5);
-    
-	int iLen = sizeof(cli);
-	
-
-	while(1){
-		sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-		
-		Handler( sAccept, cf, keys);
+    if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
+    {
+		OutErr("bind Failed!");
+		return 1;
 	}
-	
-    closesocket(sListen); //关闭 socket
-    WSACleanup(); 
+    if( listen(sListen,5) != 0) 
+    {
+		OutErr("listen Failed!");
+		return 1;
+	}
+
+    return sListen;
 }
 
+
+void simple_server_make() 
+{
+#ifdef __WIN32__
+    wsa_init();
+#endif 
+    int sListen = create_socket();
+
+    struct sockaddr_in sock_in;
+	int sock_in_len = sizeof(sock_in);
+    int sAccept;
+	while(1){
+		sAccept = accept(sListen, (struct sockaddr *)&sock_in, &sock_in_len);
+		req_res_handler( sAccept );
+	}
+	
+    close(sListen); //关闭 socket
+#ifdef __WIN32__
+    wsa_cleanup();
+#endif
+}
+
+
+void simple_ssl_server_make()
+{
+	SSL_CTX *ctx = get_ssl_ctx();
+#ifdef __WIN32__
+    wsa_init();
+#endif
+    int sListen = create_socket();
+
+    struct sockaddr_in sock_in;
+	int sock_in_len = sizeof(sock_in);
+
+    SSL *ssl;
+    char buf[MAXBUF + 1]; 
+    int sAccept;
+    int len;
+    while (1) {
+        
+        sAccept = accept(sListen, (struct sockaddr *)&sock_in, &sock_in_len);
+
+        ssl = SSL_new(ctx);
+        SSL_set_fd(ssl, sAccept);
+        int ret = SSL_accept(ssl);
+        printf("error code: %d %d\n", SSL_get_error(ssl, ret), ret);
+
+        memset(buf, 0, MAXBUF + 1);
+        len = SSL_read(ssl, buf, MAXBUF);
+        // printf("%s\n", buf);
+        char res[128] = "HTTP/1.1 200 OK\r\nContent-Type:text/html\r\nServer:Dmfserver\r\n\r\n OK OK";
+        len = SSL_write(ssl, res, strlen(res));
+        
+        SSL_shutdown(ssl);
+        SSL_free(ssl);
+        close(sAccept);
+    }
+
+    close(sListen);
+#ifdef __WIN32__
+    wsa_cleanup();
+#endif
+    SSL_CTX_free(ctx);
+}
+
+
+#ifdef __WIN32__  // WIN32
+
+
+SOCKET iocp_bind_socket(int nPort)
+{
+
+	SOCKET sServer = WSASocket(AF_INET,SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+
+
+	struct sockaddr_in servAddr;
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_port = htons(nPort);
+	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if(bind(sServer, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
+	{
+		OutErr("bind Failed!");
+		return 1;
+	}
+	if(listen(sServer, 200) != 0)
+	{
+		OutErr("listen Failed!");
+		return 1;
+	}
+	return sServer;
+}
+
+
+DWORD WINAPI iocp_handle_io(LPVOID lpParam)
+{
+	
+    HANDLE CompletionPort = (HANDLE)lpParam;
+    DWORD BytesTransferred;
+    LPPER_HANDLE_DATA PerHandleData;
+    LPPER_IO_OPERATION_DATA PerIoData;
+ 	Request req1;
+ 	char time [30] = {'\0'};
+
+	while(1){
+
+		if(0 == GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE)){
+			if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
+				printf("closingsocket %d\n", PerHandleData->Socket); 
+				closesocket(PerHandleData->Socket);
+
+				free( PerIoData);
+				free( PerHandleData);
+				continue;
+			}else{
+				OutErr("GetQueuedCompletionStatus failed!");
+			}
+		return 0;
+		}
+
+		// 说明客户端已经退出
+		if(BytesTransferred == 0)
+		{
+			printf("closingsocket %d\n", PerHandleData->Socket);
+			closesocket(PerHandleData->Socket);
+			free( PerIoData);
+			free( PerHandleData);
+			continue;
+		}
+		
+		ParseHttp(&req1, PerIoData->Buffer);
+		serverTime(time);
+		
+		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+		
+		memset(time, 0, 30);
+		
+		router_handle(PerHandleData->Socket, &req1);
+		
+		freeReq(&req1);
+		
+		free(PerIoData);
+		free(PerHandleData);
+
+		/*
+		// 继续向 socket 投递WSARecv操作
+		DWORD Flags = 0;
+		DWORD dwRecv = 0;
+		ZeroMemory(PerIoData,sizeof(PER_IO_OPERATION_DATA));
+		PerIoData->DataBuf.buf =PerIoData->Buffer;
+		PerIoData->DataBuf.len = DATA_BUFSIZE;
+		WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
+		*/
+	}
+
+ 
+	return 0;
+}
+
+
+int iocp_server_make() 
+{
+
+    wsa_init();
+	
+	HANDLE completion_port =CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+
+	SYSTEM_INFO _system_info;
+	GetSystemInfo(&_system_info);
+
+	for(int i = 0; i <_system_info.dwNumberOfProcessors * 2; i++) {
+		
+        HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle_io, completion_port, 0, NULL);
+        
+        if(hProcessIO) CloseHandle(hProcessIO);
+        
+	}
+
+	
+	// if configure not define port then use SERVER_PORT
+    int serverPort;
+	if(g_server_conf_all._conf_server.port == 0)
+	serverPort = SERVER_PORT;
+	else serverPort = g_server_conf_all._conf_server.port;
+	// Listening socket
+	SOCKET sListen = iocp_bind_socket(serverPort);
+
+	SOCKET sClient;
+	LPPER_HANDLE_DATA PerHandleData;
+	LPPER_IO_OPERATION_DATA PerIoData;
+
+
+	
+	while(is_running) {
+		
+		// wait for client
+		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
+		//sClient = accept(sListen, 0, 0);
+
+		PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
+		PerHandleData->Socket = sClient;
+		// 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
+		PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
+
+		// 将接入的客户端和完成端口联系起来
+		CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
+
+		ZeroMemory(PerIoData, sizeof(PER_IO_OPERATION_DATA));
+		PerIoData->DataBuf.buf = PerIoData->Buffer;
+		PerIoData->DataBuf.len = DATA_BUFSIZE;
+
+		// 投递一个WSARecv操作
+		DWORD Flags = 0;
+		DWORD dwRecv = 0;
+		WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
+	}
+
+	
+
+	DWORD dwByteTrans;
+	//将一个已经完成的IO通知添加到IO完成端口的队列中.
+	//提供了与线程池中的所有线程通信的方式.
+	PostQueuedCompletionStatus(completion_port,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
+
+	closesocket(sListen);
+
+    wsa_cleanup();
+
+	printf("[MAIN: %d] exit\n", GetCurrentThreadId());
+	
+	return 0;
+}
 
 
 #elif __linux__  // linux 由于socket库不同 要重写三个函数
 
+/*
+void SSLservermake(){
 
-void SSLservermake(ContFun cf[], char* keys[]){
+	SSL_CTX* ctx = get_ssl_ctx();
 
-	SSL_CTX *ctx;
-    SSL_library_init();
-    OpenSSL_add_all_algorithms();
-    SSL_load_error_strings();
-    ctx = SSL_CTX_new(SSLv23_server_method());
-    if (ctx == NULL) {
-        ERR_print_errors_fp(stdout);
-        exit(1);
-    }
-    if (SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public , SSL_FILETYPE_PEM) <= 0) {
-        ERR_print_errors_fp(stdout);
-        exit(1);
-    }
-    if (SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private , SSL_FILETYPE_PEM) <= 0) {
-        ERR_print_errors_fp(stdout);
-        exit(1);
-    }
-    if (!SSL_CTX_check_private_key(ctx)) {
-        ERR_print_errors_fp(stdout);
-        exit(1);
-    }
+	int sListen = create_socket();
 
-	int sListen, sAccept;
-    struct sockaddr_in ser, cli;
-	
-
+	struct sockaddr_in cli;
+	int iLen = sizeof( struct sockaddr_in );
     char buf[MAXBUF + 1]; 
-
-	sListen = socket(AF_INET, SOCK_STREAM, 0);
-
-    ser.sin_family = AF_INET; 
-    ser.sin_port = htons(443); 
-    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
-
-    bind(sListen, (struct sockaddr*)&ser, sizeof(ser) );
-    listen(sListen,5);
-	
-	int iLen = sizeof(cli);
+    int sAccept;
     while (1) {
         SSL *ssl;
 
@@ -245,28 +399,6 @@ void SSLservermake(ContFun cf[], char* keys[]){
     close(sListen);
     SSL_CTX_free(ctx);
 
-}
-
-
-void Handler(int acceptFd, ContFun cf[], char* keys[]) {
-	
-	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
-
-	Request req1;
-	int receive_bytes;
-	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
-
-	ParseHttp(&req1, res_str);
-	
-	char time [30] = {'\0'};
-	serverTime(time);
-	printf("[%s][Server: Info] %s\n",time , req1.path);
-	
-	
-	Rou_handle( cf, keys, acceptFd, &req1);
-	//通过请求的 path 掉用了对应的处理函数
-	
-	freeReq(&req1);
 }
 
 
@@ -279,33 +411,32 @@ void SimpleServerMake(ContFun cf[], char* keys[]) {
 	else serverPort = g_server_conf_all._conf_server.port;
 
 
-    int sListen, sAccept;
+    int sListen;
     struct sockaddr_in ser, cli;
-
-
     sListen = socket(AF_INET, SOCK_STREAM, 0);
-
     ser.sin_family = AF_INET; 
     ser.sin_port = htons(serverPort);
 	ser.sin_addr.s_addr = htonl(INADDR_ANY);
-     
-    bind(sListen, (struct sockaddr*)&ser, sizeof(ser) );
+    bind(sListen, (struct sockaddr*)&ser, sizeof( struct sockaddr_in ) );
     listen(sListen,5);
     
-	int iLen = sizeof(cli);
-	
+
+	int iLen = sizeof( struct sockaddr_in );
+    int sAccept;
+    struct sockaddr_in cli;
 	printf("Simple Server is running! \n");
 	while(1){
 		sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-		Handler( sAccept, cf, keys);
+		req_res_handler( sAccept, cf, keys);
 	}
 	
     close(sListen); //关闭 socket
 
 }
 
+*/
 
-int createSocket() 
+static int createSocket() 
 {
 	int i_listenfd;
 	struct sockaddr_in st_sersock;
@@ -322,13 +453,34 @@ int createSocket()
 }
 
 
-typedef struct thread_arg {
-	ContFunMap cmp;
-	long fd;
-} thread_arg;
+static int create_socket_reuse()
+{
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    assert(fd > 0 && "socket error");
+
+    struct sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    // addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
+	addr.sin_addr.s_addr = htonl(INADDR_ANY); 
+    addr.sin_port = htons(443);
+
+    int flag = 1;
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
+
+    int code = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
+    assert(code == 0 && "bind error");
+
+    code = listen(fd, 1024);
+    assert(code == 0 && "listen error");
+
+    struct timeval tv = {0, 500 * 1000};
+    setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(struct timeval));
+    return fd;
+}
 
 
-void* threadingServerMake(void* p)
+static void* epoll_handle_io(void* p)
 {	
 	thread_arg* arg = (thread_arg*)p;
 	long i_listenfd = arg->fd;
@@ -372,7 +524,7 @@ void* threadingServerMake(void* p)
 				
 				memset(time, 0, 30);
 				
-				Rou_iocp_handle(arg->cmp, tmp_epoll_recv_fd, &req1);
+				router_handle(tmp_epoll_recv_fd, &req1);
 				
 				freeReq(&req1);
 				//send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
@@ -389,244 +541,36 @@ void* threadingServerMake(void* p)
 }
 
 
-int threadingServerRunning() {
+extern int epoll_server_make() {
 
-	//long fd = createSocket();
 	long fd = 1;
-	thread_arg* ta = malloc(sizeof(thread_arg));
-	ta->cmp = g_cmp;
-	ta->fd = fd;
-	
-	if(fd == 0) {return 1;}
+	thread_arg* arg = malloc(sizeof(thread_arg));
+	arg->cmp = g_cmp;
+	arg->fd = fd;
 
 	for (int i = 0; i < 18; ++i) {
 		pthread_t roundCheck;
-		pthread_create(&roundCheck, NULL, threadingServerMake, (void*)ta);
+		pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
 		pthread_join(roundCheck, NULL);
 	}
 	
-	
-	return 0;
-}
-
-#endif // linux
-
-
-
-
-
-
-#ifdef __WIN32__  // WIN32 windows 启动IOCP服务器
-
-SOCKET BindServerOverlapped(int nPort)
-{
-
-	SOCKET sServer = WSASocket(AF_INET,SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
-
-
-	struct sockaddr_in servAddr;
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_port = htons(nPort);
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	if(bind(sServer, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
-	{
-		OutErr("bind Failed!");
-		return 1;
-	}
-	if(listen(sServer, 200) != 0)
-	{
-		OutErr("listen Failed!");
-		return 1;
-	}
-	return sServer;
-}
-
-
-DWORD WINAPI ProcessIO(LPVOID lpParam)
-{
-	
-    HANDLE CompletionPort = (HANDLE)lpParam;
-    DWORD BytesTransferred;
-    LPPER_HANDLE_DATA PerHandleData;
-    LPPER_IO_OPERATION_DATA PerIoData;
- 	Request req1;
- 	char time [30] = {'\0'};
-
-	while(1){
-
-		if(0 == GetQueuedCompletionStatus(CompletionPort,&BytesTransferred, (LPDWORD)&PerHandleData,(LPOVERLAPPED*)&PerIoData, INFINITE)){
-			if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
-				printf("closingsocket %d\n", PerHandleData->Socket); 
-				closesocket(PerHandleData->Socket);
-
-				free( PerIoData);
-				free( PerHandleData);
-				continue;
-			}else{
-				OutErr("GetQueuedCompletionStatus failed!");
-			}
-		return 0;
-		}
-
-		// 说明客户端已经退出
-		if(BytesTransferred == 0)
-		{
-			printf("closingsocket %d\n", PerHandleData->Socket);
-			closesocket(PerHandleData->Socket);
-			free( PerIoData);
-			free( PerHandleData);
-			continue;
-		}
-		
-		ParseHttp(&req1, PerIoData->Buffer);
-		serverTime(time);
-		
-		log_info("SERVER", 447, "[%s][Server: Info] %s %d id: %d ",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
-		
-		memset(time, 0, 30);
-		
-		Rou_iocp_handle(PerIoData->cmp, PerHandleData->Socket, &req1);
-		
-		freeReq(&req1);
-		
-		free(PerIoData);
-		free(PerHandleData);
-
-		/*
-		// 继续向 socket 投递WSARecv操作
-		DWORD Flags = 0;
-		DWORD dwRecv = 0;
-		ZeroMemory(PerIoData,sizeof(PER_IO_OPERATION_DATA));
-		PerIoData->DataBuf.buf =PerIoData->Buffer;
-		PerIoData->DataBuf.len = DATA_BUFSIZE;
-		WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
-		*/
-	}
-
- 
 	return 0;
 }
 
 
-int iocpServerMake(ContFunMap cmp) 
+extern int epoll_ssl_server()
 {
+    /*初始化socket*/
+    int srvFd = create_socket_reuse();
 
-	int serverPort;
-	WSADATA wsd;
-	if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)
-	{
-		OutErr("WSAStartup()");
-	}
-	
-	HANDLE CompletionPort =CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+    /*创建ssl上下文*/
+    SSL_CTX *ctx = get_ssl_ctx();
+    if(ctx == NULL){
+        return 1;
+    }
 
-	SYSTEM_INFO SystemInfo;
-	GetSystemInfo(&SystemInfo);
-
-	for(int i = 0; i <SystemInfo.dwNumberOfProcessors * 2; i++){
-	// for(int i=0; i<30; i++){
-		
-		   HANDLE hProcessIO = CreateThread(NULL, 0, ProcessIO, CompletionPort, 0, NULL);
-		   if(hProcessIO)
-		   {
-				  CloseHandle(hProcessIO);
-		   }
-	}
-
-	
-	// if configure not define port then use SERVER_PORT
-	if(g_server_conf_all._conf_server.port == 0)
-	serverPort = SERVER_PORT;
-	else serverPort = g_server_conf_all._conf_server.port;
-	// Listening socket
-	SOCKET sListen = BindServerOverlapped(serverPort);
-
-	SOCKET sClient;
-	LPPER_HANDLE_DATA PerHandleData;
-	LPPER_IO_OPERATION_DATA PerIoData;
-
-
-	
-	while(is_running) {
-		
-		// wait for client
-		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
-		//sClient = accept(sListen, 0, 0);
-
-		PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
-		PerHandleData->Socket = sClient;
-		// 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
-		PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
-
-		// 将接入的客户端和完成端口联系起来
-		CreateIoCompletionPort((HANDLE)sClient, CompletionPort,(DWORD)PerHandleData, 0);
-
-		ZeroMemory(PerIoData, sizeof(PER_IO_OPERATION_DATA));
-		PerIoData->DataBuf.buf = PerIoData->Buffer;
-		PerIoData->DataBuf.len = DATA_BUFSIZE;
-		PerIoData->cmp = cmp;
-
-		// 投递一个WSARecv操作
-		DWORD Flags = 0;
-		DWORD dwRecv = 0;
-		WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
-	}
-
-	
-
-	DWORD dwByteTrans;
-	//将一个已经完成的IO通知添加到IO完成端口的队列中.
-	//提供了与线程池中的所有线程通信的方式.
-	PostQueuedCompletionStatus(CompletionPort,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
-
-	closesocket(sListen);
-
-	printf("[MAIN: %d] exit\n", GetCurrentThreadId());
-	
-	return 0;
-}
-
-#endif   // WIN32
-
-
-#ifdef __linux__
-
-int CreateSocket()
-{
-    int fd = socket(AF_INET, SOCK_STREAM, 0);
-    assert(fd > 0 && "socket error");
-
-    struct sockaddr_in addr;
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    // addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
-	addr.sin_addr.s_addr = htonl(INADDR_ANY); 
-    addr.sin_port = htons(443);
-
-    int flag = 1;
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
-
-    int code = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
-    assert(code == 0 && "bind error");
-
-    code = listen(fd, 1024);
-    assert(code == 0 && "listen error");
-
-    struct timeval tv = {0, 500 * 1000};
-    setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(struct timeval));
-    return fd;
-}
-
-
-
-int epool_ssl_server()
-{
-    int srvFd = CreateSocket();
-    SSL_library_init();
-    SSL_load_error_strings();
-    OpenSSL_add_all_algorithms();
-
+    printf("ssl load ok\n");
+    
     int efd = epoll_create(1024);
     assert(efd > 0);
     printf("epoll fd %d\n", efd);
@@ -641,21 +585,13 @@ int epool_ssl_server()
     fd_ssl_map* fsm_head = (fd_ssl_map*)malloc(sizeof(fd_ssl_map));
     fsm_head->next = NULL;
 
-    SSL_CTX *ctx = NULL;
-
-    ctx = SSL_CTX_new(SSLv23_server_method());
-    SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, NULL); 
-    SSL_CTX_use_certificate_file(ctx, g_server_conf_all._conf_server.cert_public, SSL_FILETYPE_PEM);
-    SSL_CTX_use_PrivateKey_file(ctx, g_server_conf_all._conf_server.cert_private, SSL_FILETYPE_PEM);
-    SSL_CTX_check_private_key(ctx);
-	
-    printf("load ok\n");
+    
     printf("server is listening...\n");
     static const char *https_response = 
         "HTTP/1.1 200 OK\r\nServer: httpd\r\nContent-Length: %d\r\nConnection: keep-alive\r\n\r\n";
 
     while (true) {
-        printf("epoll wait...\n");
+        // printf("epoll wait...\n");
         int nev = epoll_wait(efd, events, sizeof(events) / sizeof(struct epoll_event), -1);
         if (nev < 0) {
             printf("epoll_wait error. [%d,%s]", errno, strerror(errno));

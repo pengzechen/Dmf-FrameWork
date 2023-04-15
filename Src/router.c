@@ -73,49 +73,16 @@ void router_init()
 }
 
 
-void Rou_handle(ContFun cf[], char* keys[], int acceptFd, Request *req) 
+void router_handle(int acceptFd, Request *req) 
 {
 	int flag = 0;
+	ContFun func_view;
 	
 	// 先在control回调函数列表中寻找
-	for(int i=0; cf[i] != NULL; i++){
-		if( strcmp(req->path, keys[i]) == 0){
-			ContFun p;
-			p = cf[i];
-			p(acceptFd, req);
-			flag = 1;	// 回调函数找到了
-		}
-	}
-	if(flag == 0) {
-	
-		for(int i=0; i <= g_num_files; i++){
-
-			if( strcmp(req->path, g_file_list[i].url) == 0){
-				
-				Res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
-
-				flag = 1;	// 静态资源找到了
-			}
-		}
-		
-		if(flag == 0){
-			
-			Res_NotFound(acceptFd);
-		}
-	}
-}
-
-
-void Rou_iocp_handle(ContFunMap cmp, int acceptFd, Request *req) 
-{
-	int flag = 0;
-	
-	// 先在control回调函数列表中寻找
-	for(int i=0; cmp.keys[i] != NULL; i++) {
-		if( strcmp(req->path, cmp.keys[i]) == 0){
-			ContFun p;
-			p = cmp.cf[i];
-			p(acceptFd, req);
+	for(int i=0; g_cmp.keys[i] != NULL; i++) {
+		if( strcmp(req->path, g_cmp.keys[i]) == 0){
+			func_view = g_cmp.cf[i];
+			func_view(acceptFd, req);
 			flag = 1;	// 回调函数找到了
 		}
 	}
