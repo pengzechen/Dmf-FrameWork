@@ -33,7 +33,7 @@ limitations under the License.
 
 #define MAX_PATH_LENGTH 1024
 #define MAX_FILES 500
-#define ContFunNUM 60
+#define ContFunNUM 512
 
 #define RED "\033[0;32;31m"
 #define NONE "\033[m"

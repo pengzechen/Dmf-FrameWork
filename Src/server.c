@@ -103,7 +103,7 @@ static int create_socket()
     struct sockaddr_in ser;
     sListen = socket(AF_INET, SOCK_STREAM, 0);
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(80); 
+    ser.sin_port = htons(443); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
     if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
     {
@@ -355,86 +355,6 @@ int iocp_server_make()
 
 #elif __linux__  // linux 由于socket库不同 要重写三个函数
 
-/*
-void SSLservermake(){
-
-	SSL_CTX* ctx = get_ssl_ctx();
-
-	int sListen = create_socket();
-
-	struct sockaddr_in cli;
-	int iLen = sizeof( struct sockaddr_in );
-    char buf[MAXBUF + 1]; 
-    int sAccept;
-    while (1) {
-        SSL *ssl;
-
-        sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-
-        ssl = SSL_new(ctx);
-        SSL_set_fd(ssl, sAccept);
-        
-        int ret = SSL_accept(ssl);
-       
-        printf("error code: %d %d\n", SSL_get_error(ssl, ret), ret);
-
-        memset(buf, 0, MAXBUF + 1);
-        int len = SSL_read(ssl, buf, MAXBUF);
-        // printf("%s\n", buf);
-        
-
-        char res[128] = "HTTP/1.1 200 OK\r\n"
-                        "Content-Type:text/html\r\n"
-                        "Server:Dmfserver\r\n"
-                        "\r\n OK OK";
-						
-        len = SSL_write(ssl, res, strlen(res));
-        
-
-        SSL_shutdown(ssl);
-        SSL_free(ssl);
-        close(sAccept);
-    }
-
-    close(sListen);
-    SSL_CTX_free(ctx);
-
-}
-
-
-void SimpleServerMake(ContFun cf[], char* keys[]) {
-	
-	int serverPort;
-	// if configure not define port then use SERVER_PORT
-	if(g_server_conf_all._conf_server.port == 0)
-	serverPort = SERVER_PORT;
-	else serverPort = g_server_conf_all._conf_server.port;
-
-
-    int sListen;
-    struct sockaddr_in ser, cli;
-    sListen = socket(AF_INET, SOCK_STREAM, 0);
-    ser.sin_family = AF_INET; 
-    ser.sin_port = htons(serverPort);
-	ser.sin_addr.s_addr = htonl(INADDR_ANY);
-    bind(sListen, (struct sockaddr*)&ser, sizeof( struct sockaddr_in ) );
-    listen(sListen,5);
-    
-
-	int iLen = sizeof( struct sockaddr_in );
-    int sAccept;
-    struct sockaddr_in cli;
-	printf("Simple Server is running! \n");
-	while(1){
-		sAccept = accept(sListen, (struct sockaddr *)&cli, &iLen);
-		req_res_handler( sAccept, cf, keys);
-	}
-	
-    close(sListen); //关闭 socket
-
-}
-
-*/
 
 static int createSocket() 
 {

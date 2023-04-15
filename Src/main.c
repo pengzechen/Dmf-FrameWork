@@ -161,6 +161,9 @@ int main(int argc, char* argv[])
 
 #elif __linux__ 	// linux
 
+	// simple_server_make();
+	
+	// simple_ssl_server_make();
 	// epoll_server_make();
 	epoll_ssl_server();
 
