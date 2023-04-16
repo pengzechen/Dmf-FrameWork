@@ -144,13 +144,6 @@ int main(int argc, char* argv[])
 	other();
 	session();
 	apptemp();
-
-	ContFun cf[] = {&getsession, &template, &setsession, &sessiondebug, 
-					&mysqltest, &datamodeltest, &elrtest, &sessionadd, 
-					&updatesession, &mysqltest1, NULL};
-	char* keys[] = {"/getsession", "/template", "/setsession", "/sessiondebug", 
-					"/mysqltest", "/datamodeltest", "/elrtest", "/sessionadd",
-					"/updatesession", "mysqltest1", NULL};
 	
 
 #ifdef __WIN32__	// Win32
