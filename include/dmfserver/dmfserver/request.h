@@ -90,8 +90,6 @@ extern "C" {
 
 	static void MultiParse (Request *request, char *boundary );
 
-	void ParseHttp(Request *request, char *data);
-
 	void ParseHttp(Request *request, char *data, Perfd pfd);
 
 	void freeReq(Request *req);
