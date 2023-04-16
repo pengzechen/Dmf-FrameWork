@@ -77,7 +77,7 @@ static void req_res_handler(int acceptFd )
 	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
 
     Perfd pfd;
-    pfd.fd = (int)accept;
+    pfd.fd = (int)acceptFd;
     pfd.ssl = NULL;
 	ParseHttp(&req1, res_str, pfd);
 	
