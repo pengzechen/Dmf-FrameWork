@@ -25,9 +25,10 @@ limitations under the License.
 #define MULTI_PART_MAX 1024*1024		// multipart 数据大小
 #define MULTI_PART_MAX_NUM 20			// 最大multipart 数量
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/ssl.h>
 
 
 struct Multi_kv {
@@ -58,6 +59,11 @@ struct Body {
 	int length;
 };
 
+typedef struct Perfd {
+	SSL* ssl;
+	int fd;
+}Perfd;
+
 struct req {
 	char method[5];
 	char path[512];
@@ -71,6 +77,7 @@ struct req {
 	struct Query query[10];
 	struct Params params[20];
 	struct Body body;
+	Perfd pfd;
 	
 	struct Multipart *multi[MULTI_PART_MAX_NUM];
 };
@@ -83,7 +90,7 @@ extern "C" {
 
 	static void MultiParse (Request *request, char *boundary );
 
-	void ParseHttp(Request *request, char *data);
+	void ParseHttp(Request *request, char *data, Perfd pfd);
 
 	void freeReq(Request *req);
 

@@ -220,7 +220,7 @@ void MultiParse (Request *request, char *boundary )
 }
 
 
-void ParseHttp(Request *request, char *data) 
+void ParseHttp(Request *request, char *data, Perfd pfd)
 {
 	
 	//p 指向 data 首地址
@@ -248,7 +248,7 @@ void ParseHttp(Request *request, char *data)
 	for(int t=0; t < MULTI_PART_MAX_NUM; t++)
 		request->multi[t] = NULL;
 	
-
+	request->pfd = pfd;
 	
 	while(*p != '\0') {
 				

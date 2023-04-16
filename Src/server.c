@@ -76,7 +76,10 @@ static void req_res_handler(int acceptFd )
 	int receive_bytes;
 	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
 
-	ParseHttp(&req1, res_str);
+    Perfd pfd;
+    pfd.fd = (int)accept;
+    pfd.ssl = NULL;
+	ParseHttp(&req1, res_str, pfd);
 	
 	char time [30] = {'\0'};
 	serverTime(time);
@@ -103,7 +106,7 @@ static int create_socket()
     struct sockaddr_in ser;
     sListen = socket(AF_INET, SOCK_STREAM, 0);
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(443); 
+    ser.sin_port = htons(80); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
     if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
     {
@@ -248,8 +251,11 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 			free( PerHandleData);
 			continue;
 		}
+        Perfd pfd;
+        pfd.fd = PerHandleData->Socket;
+        pfd.ssl = NULL;
 		
-		ParseHttp(&req1, PerIoData->Buffer);
+		ParseHttp(&req1, PerIoData->Buffer, pfd);
 		serverTime(time);
 		
 		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
@@ -436,8 +442,11 @@ static void* epoll_handle_io(void* p)
 				
 				
 				receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
+                Perfd pfd;
+                pfd.fd = tmp_epoll_recv_fd;
+                pfd.ssl = NULL;
 				
-				ParseHttp(&req1, res_str);
+				ParseHttp(&req1, res_str, pfd);
 				serverTime(time);
 
 				log_info("SERVER", 365, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
