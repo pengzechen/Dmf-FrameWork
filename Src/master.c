@@ -1,3 +1,5 @@
+#ifdef __linux__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -148,3 +150,4 @@ void myworker()
 int main() {
     multi_process_init(&myworker);
 }
+#endif // __linux__
