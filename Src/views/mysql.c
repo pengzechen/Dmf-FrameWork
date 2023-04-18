@@ -1,7 +1,7 @@
 #include <dmfserver/model/model.h>
 
 
-void mysqltest(int a, const Request* req) 
+void mysqltest(int a, const Request* req)
 {
 	
 	mysql_conn* conn1 = get_mysql_connection_block();

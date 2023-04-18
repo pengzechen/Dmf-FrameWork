@@ -3,6 +3,7 @@ aux_source_directory(./model model_SRC)
 aux_source_directory(./elr_mpl elr_mpl_SRC)
 aux_source_directory(./conf conf_SRC)
 aux_source_directory(./views views_SRC)
+aux_source_directory(./utility utility_SRC)
 
 include_directories(${PROJECT_SOURCE_DIR}/include/dmfserver)
 
@@ -25,7 +26,7 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     add_definitions("-DHAVE_STRUCT_TIMESPEC")
 
     #指定生成目标
-    add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} )
+    add_executable(server ${main_SRC} ${model_SRC} ${elr_mpl_SRC} ${conf_SRC} ${utility_SRC})
 
 elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
 

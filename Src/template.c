@@ -27,7 +27,7 @@ char * local_template(char * template_path)
 {
 	FILE *fp;
 	fp = fopen( template_path, "r" );
-	if(fp == NULL){ 
+	if(fp == NULL) { 
 		printf("[Template: ]open Failed \n");
 		char* res = (char*)malloc(sizeof(char)*1);
 		strcpy(res, ""); 
