@@ -28,14 +28,6 @@ limitations under the License.
 #include <unistd.h>
 #endif
 
-// 类似于 usleep 的函数
-void sleep_microseconds(int microseconds) {
-#ifdef _WIN32
-    Sleep(microseconds / 1000);
-#else
-    usleep(microseconds);
-#endif
-}
 
 // 以下是定时器的示例代码
 typedef struct Event {

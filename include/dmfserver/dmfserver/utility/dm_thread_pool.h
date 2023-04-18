@@ -75,7 +75,7 @@ typedef struct thread_pool_t {
 extern "C" {
 #endif
 
-	void				sleep_microseconds(int microseconds);
+	static void				sleep_microseconds(int microseconds);
 	void* 				thread_func(void *arg);
 	void 				thread_pool_destroy(thread_pool_t *pool);
 	thread_pool_t*		thread_pool_create(int thread_count);

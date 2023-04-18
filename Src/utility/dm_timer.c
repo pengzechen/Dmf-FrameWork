@@ -17,6 +17,15 @@ limitations under the License.
 
 #include <dmfserver/utility/dm_timer.h>
 
+// 类似于 usleep 的函数
+void sleep_microseconds(int microseconds) {
+#ifdef _WIN32
+    Sleep(microseconds / 1000);
+#else
+    usleep(microseconds);
+#endif
+}
+
 static void min_heap_push(MinHeap *heap, Event *event) {
     int i = heap->size++;
     while (i > 0) {

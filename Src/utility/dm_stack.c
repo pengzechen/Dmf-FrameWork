@@ -96,7 +96,7 @@ void stack_destroy(Stack *stack) {
 }
 
 // 测试代码
-void *producer(void *arg) {
+void *producer1(void *arg) {
     Stack *stack = (Stack*)arg;
     for (int i = 1; i <= 10; i++) {
         Data data = {i};
@@ -106,7 +106,7 @@ void *producer(void *arg) {
     return NULL;
 }
 
-void *consumer(void *arg) {
+void *consumer1(void *arg) {
     Stack *stack = (Stack*)arg;
     for (int i = 1; i <= 10; i++) {
         Data data = stack_pop(stack);
@@ -120,8 +120,8 @@ int test_stack() {
 	Stack *stack = stack_create(10);
 
 	pthread_t producer_thread, consumer_thread;
-	pthread_create(&producer_thread, NULL, producer, stack);
-	pthread_create(&consumer_thread, NULL, consumer, stack);
+	pthread_create(&producer_thread, NULL, producer1, stack);
+	pthread_create(&consumer_thread, NULL, consumer1, stack);
 
 	pthread_join(producer_thread, NULL);
 	pthread_join(consumer_thread, NULL);

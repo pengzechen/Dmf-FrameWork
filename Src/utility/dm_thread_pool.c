@@ -36,7 +36,7 @@ thread_pool_t *thread_pool_create(int thread_count) {
 
     pool->task_list = NULL;
     pool->thread_list = NULL;
-    pool->timer_list = NULL;
+    // pool->timer_list = NULL;
 	
     pool->thread_count = 0;
     pool->shutdown = false;
@@ -65,6 +65,17 @@ thread_pool_t *thread_pool_create(int thread_count) {
 }
 
 
+int dm_gettimeofday(struct timeval *tv, struct timezone *tz) {
+    struct timespec ts;
+    if (clock_gettime(CLOCK_REALTIME, &ts) != 0) {
+        return -1;
+    }
+    tv->tv_sec = ts.tv_sec;
+    tv->tv_usec = ts.tv_nsec / 1000;
+    return 0;
+}
+
+
 void *thread_func(void *arg) {
 	
 	thread_t* thread = (thread_t*) arg;
@@ -86,7 +97,7 @@ void *thread_func(void *arg) {
 			task_t *task = pool->task_list;
 			pool->task_list = task->next;
 
-			gettimeofday(&(thread->end_time), NULL);
+			dm_gettimeofday(&(thread->end_time), NULL);
 
 		pthread_mutex_unlock(&(pool->lock));
 
@@ -187,7 +198,7 @@ int thread_pool_add_task(thread_pool_t *pool, void (*func)(void*), void *arg) {
 }
 
 
-void sleep_microseconds(int microseconds) {
+static void sleep_microseconds(int microseconds) {
 #ifdef _WIN32
     Sleep(microseconds / 1000);
 #else
@@ -217,12 +228,12 @@ void thread_pool_destroy(thread_pool_t *pool) {
 		free(tmp);
 	}
 
-	timer_t *timer = pool->timer_list;
-	while (timer != NULL) {
-		timer_t *tmp = timer;
-		timer = timer->next;
-		free(tmp);
-	}
+	// timer_t *timer = pool->timer_list;
+	// while (timer != NULL) {
+	// 	timer_t *tmp = timer;
+	// 	timer = timer->next;
+	// 	free(tmp);
+	// }
 
 	pthread_mutex_destroy(&(pool->lock));
 	pthread_cond_destroy(&(pool->notify));
