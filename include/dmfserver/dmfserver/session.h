@@ -24,7 +24,7 @@ limitations under the License.
 #include <unistd.h>
 #include <pthread.h>
 #include <dmfserver/request.h>
-#include <dmfserver/utility.h>
+#include <dmfserver/utility/utility.h>
 #include <time.h>
 // #include <windows.h>
 

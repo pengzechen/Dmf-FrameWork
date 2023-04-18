@@ -21,7 +21,7 @@ limitations under the License.
 
 #include <dmfserver/conf/conf.h>
 #include <dmfserver/template.h>		// 以模板作为响应
-#include <dmfserver/utility.h>        // 引入时间
+#include <dmfserver/utility/utility.h>        // 引入时间
 #include <string.h>
 #include <stdio.h>
 

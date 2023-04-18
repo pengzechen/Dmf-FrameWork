@@ -24,7 +24,7 @@ limitations under the License.
 
 
 #include <dmfserver/conf/conf.h>			// 初始化 全局配置
-#include <dmfserver/utility.h>	
+#include <dmfserver/utility/utility.h>	
 #include <dmfserver/router.h>				// router 中已经有 server 需要的 request 和 response
 #include <dmfserver/log.h>
 
