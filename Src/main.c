@@ -33,7 +33,7 @@ limitations under the License.
 
 
 #ifdef __WIN32__
-	void linkload()
+	void linkload1()
 	{
 		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 		Sleep(500);
