@@ -1,1 +1,1 @@
-mingw32 && cd build && cmake ../CMakeLists.txt -G "MinGW Makefiles" && make
+cd build && cmake ../CMakeLists.txt -G "MinGW Makefiles" && make

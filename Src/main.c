@@ -148,8 +148,8 @@ int main(int argc, char* argv[])
 
 #ifdef __WIN32__	// Win32
 
-	// iocp_server_make();
-	simple_server_make();
+	iocp_server_make();
+	// simple_server_make();
 	// simple_ssl_server_make();
 
 #elif __linux__ 	// linux
@@ -157,8 +157,8 @@ int main(int argc, char* argv[])
 	// simple_server_make();
 	
 	// simple_ssl_server_make();
-	// epoll_server_make();
-	epoll_ssl_server();
+	epoll_server_make();
+	// epoll_ssl_server();
 
 #endif 				// linux
 
