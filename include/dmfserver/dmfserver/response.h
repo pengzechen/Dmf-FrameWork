@@ -24,8 +24,6 @@ limitations under the License.
 #include <dmfserver/utility/utility.h>        // 引入时间
 #include <string.h>
 #include <stdio.h>
-#include <dmfserver/request.h>
-#include <openssl/ssl.h>
 
 #ifdef __WIN32__
 #include <WinSock2.h>		// 为了使用 send
@@ -79,8 +77,6 @@ extern void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 
 static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size);
-
-extern void Res_row_ssl(const Request* req , char* res_str);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

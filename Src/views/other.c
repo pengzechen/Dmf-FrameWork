@@ -49,13 +49,9 @@ void elrtest(int a, const Request* req)
 	Res_row(a, "test ok");
 }
 
-void ssl_test(int a, const Request* req)
-{
-	Res_row_ssl(req, "hello this is ssl!");
-}
 
 RouterAdd(other){
-	ContFun cf[] = {&datamodeltest, &elrtest, &ssl_test, NULL};
-	char* keys[] = {"/datamodeltest", "/elrtest", "ssltest", NULL};
+	ContFun cf[] = {&datamodeltest, &elrtest, NULL};
+	char* keys[] = {"/datamodeltest", "/elrtest", NULL};
 	router_add_app(cf, keys, __func__);
 }
