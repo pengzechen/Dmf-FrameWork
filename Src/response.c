@@ -66,7 +66,14 @@ extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num)
 }
 
 
+extern void Res_row_ssl(const Request* req , char* res_str)
+{
+	int writeSize = SSL_write(req->pfd.ssl, res_str, strlen(res_str)); 
 
+	if (writeSize <= 0) {
+		printf("SSL_write error. %d\n", SSL_get_error(req->pfd.ssl, writeSize));
+	}
+}
 
 
 

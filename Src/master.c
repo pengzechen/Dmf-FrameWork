@@ -16,7 +16,7 @@ static pid_t worker[DEFAULT_WORKER_NUM];
 // define function pointer
 typedef void (*worker_function)();
 
-volatile bool is_running = true;
+volatile bool is_running2 = true;
 
 static worker_function wf;
 
@@ -77,7 +77,7 @@ static void daemonize()
 void signal_handle(int signum){
 
     if(signum == SIGUSR1) {
-        is_running = false;
+        is_running2 = false;
         for(int i=0; i<DEFAULT_WORKER_NUM; i++)
             kill(worker[i], SIGTERM);
     }
@@ -89,7 +89,7 @@ void check_and_restart()
     int i, status;
     pid_t pid;
 
-    while(is_running) {
+    while(is_running2) {
 
         for(i=0; i<DEFAULT_WORKER_NUM; i++){
 
@@ -147,7 +147,7 @@ void myworker()
 }
 
 
-int main() {
+int main2() {
     multi_process_init(&myworker);
 }
 #endif // __linux__
