@@ -76,9 +76,8 @@ static void req_res_handler(int acceptFd )
 	int receive_bytes;
 	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
 
-    Perfd pfd;
-    pfd.fd = (int)acceptFd;
-    pfd.ssl = NULL;
+    Perfd pfd = {.fd = acceptFd, .ssl = NULL};
+
 	ParseHttp(&req1, res_str, pfd);
 	
 	char time [30] = {'\0'};

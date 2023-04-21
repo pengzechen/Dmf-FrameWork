@@ -31,7 +31,7 @@ static void ResHandel( int acceptFd, char* res_str, unsigned int size)
 
 }
 
-
+ 
 // 以纯的字符串返回
 extern void Res_row(int acceptFd, char* res_str) 
 {
@@ -67,6 +67,12 @@ extern void Res_render(int acceptFd, char* path, struct Kvmap *kv, int num)
 
 
 
+
+
+
+// 响应初始化 
+// *************************************************************************
+// 设置时间和服务器名称
 extern void Res_init(int fd, Response* res)
 {
 	memset(res->Server, 0, 32);
@@ -90,7 +96,6 @@ extern void Res_init(int fd, Response* res)
 	
 	res->fd = fd;
 }
-
 
 // 设置 响应代码（首行）
 extern void SetHead(Response* res, char* code)
@@ -153,6 +158,11 @@ extern void ResParseSend(Response* res)
 	free(final_str);
 }
 
+
+
+
+// 以下是静态文件响应函数
+// *************************************************************************
 
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type) 
 {

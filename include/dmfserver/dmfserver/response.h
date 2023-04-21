@@ -25,6 +25,8 @@ limitations under the License.
 #include <string.h>
 #include <stdio.h>
 
+#include <openssl/ssl.h>
+
 #ifdef __WIN32__
 #include <WinSock2.h>		// 为了使用 send
 #elif __linux__
