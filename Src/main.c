@@ -137,7 +137,6 @@ int main(int argc, char* argv[])
 	router_init();
 	mysql_pool_init();
 	elr_mpl_init();
-	
 	pool_init(32, 512);
 
 	model();
@@ -147,19 +146,14 @@ int main(int argc, char* argv[])
 	
 
 #ifdef __WIN32__	// Win32
-
 	iocp_server_make();
 	// simple_server_make();
 	// simple_ssl_server_make();
-
 #elif __linux__ 	// linux
-
 	// simple_server_make();
-	
 	// simple_ssl_server_make();
 	epoll_server_make();
 	// epoll_ssl_server();
-
 #endif 				// linux
 
 	pool_destroy();
