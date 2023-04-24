@@ -27,7 +27,13 @@ void ModelInit(ModelPtr mPtr)
 // 返回值非零 连接成功
 int ModelConnection(ModelPtr mPtr) 
 {
-	if(mysql_real_connect(mPtr->my_connection, HOST, USERNAME, PASSWORD, DATABASE, 0,NULL, CLIENT_FOUND_ROWS)){
+	if(mysql_real_connect(mPtr->my_connection, 
+						g_server_conf_all._conf_model.host, 
+						g_server_conf_all._conf_model.username, 
+						g_server_conf_all._conf_model.password, 
+						g_server_conf_all._conf_model.database, 
+						0, NULL, CLIENT_FOUND_ROWS))
+	{
 		return 1;
 	}else{
 		free(mPtr->my_connection);

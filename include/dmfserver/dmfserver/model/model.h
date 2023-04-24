@@ -21,13 +21,8 @@ limitations under the License.
 #include <string.h>
 #include <stdlib.h>
 #include <mysql/mysql.h>
+#include <dmfserver/conf/conf.h>
 
-
-
-#define HOST "192.168.2.74" 
-#define USERNAME "pzc"
-#define PASSWORD "pzc123" 
-#define DATABASE "pzc"	
 
 typedef struct _Model {
 	MYSQL* my_connection;
