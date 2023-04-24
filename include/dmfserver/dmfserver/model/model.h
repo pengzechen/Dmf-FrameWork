@@ -43,17 +43,17 @@ extern "C" {
 
 	extern void exeSql(char* sql);
 
-	void ModelInit(ModelPtr mPtr);
+	extern void ModelInit(ModelPtr mPtr);
 
-	int ModelConnection(ModelPtr mPtr);
+	extern int ModelConnection(ModelPtr mPtr);
 
-	int ModelQuery(ModelPtr mPtr, char* sql);
+	extern int ModelQuery(ModelPtr mPtr, char* sql);
 
 	static void GetModelResultInfo(ModelPtr mPtr);
 
-	int GetModelResult(ModelPtr mPtr);
+	extern int GetModelResult(ModelPtr mPtr);
 
-	void ModelClose(ModelPtr mPtr);
+	extern void ModelClose(ModelPtr mPtr);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
