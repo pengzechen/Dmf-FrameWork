@@ -18,12 +18,20 @@ limitations under the License.
 
 #include <dmfserver/template.h>
 
-void template_init(){
+static template_dec g_template_dec;
 
+// load all template to memery
+void template_init() 
+{
+	g_template_dec.size = 2;
+	strcpy(g_template_dec.template_np[0].name, "test.html");
+	strcpy(g_template_dec.template_np[1].name, "test2.html");
+	g_template_dec.template_np[0].template_data = local_template("./templates/test.html");
+	g_template_dec.template_np[1].template_data = local_template("./templates/test2.html");
+	printf("[Template Info] template init ok!\n");
 }
 
-
-char * local_template(char * template_path) 
+char* local_template(char * template_path)
 {
 	FILE *fp;
 	fp = fopen( template_path, "r" );
@@ -47,6 +55,14 @@ char * local_template(char * template_path)
 	return _context;
 }
 
+char* get_template(char* template_name) 
+{
+	for(int i=0; i< g_template_dec.size; i++) {
+		if( strcmp(template_name, g_template_dec.template_np[i].name) == 0 )
+			return g_template_dec.template_np[i].template_data; 
+	}
+	return "";
+}
 
 void parse_dec(char* tt, char* dec[], char* inner) 
 {
@@ -64,7 +80,6 @@ void parse_dec(char* tt, char* dec[], char* inner)
 		strcat(tt, other);
 	}
 }
-
 
 char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 {
@@ -191,3 +206,9 @@ char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 	return result;
 }
 
+void template_free() 
+{
+	for(int i=0; i<=g_template_dec.size; i++) {
+		free(g_template_dec.template_np[i].template_data);
+	}
+}

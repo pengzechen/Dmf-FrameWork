@@ -129,9 +129,6 @@ int main(int argc, char* argv[])
         linkload();
 	#endif // WIN32
 
-    
-
-	
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
 
@@ -139,6 +136,8 @@ int main(int argc, char* argv[])
 	log_init();
 	session_init();
 	router_init();
+    template_init();
+
 	mysql_pool_init();
 	elr_mpl_init();
 	pool_init(32, 512);
@@ -161,5 +160,6 @@ int main(int argc, char* argv[])
 #endif 				// linux
 
 	pool_destroy();
+    template_free();
 	return 0;
 }

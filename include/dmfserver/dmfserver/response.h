@@ -20,8 +20,8 @@ limitations under the License.
 #define FINAL_STR_SIZE 1024*1024
 
 #include <dmfserver/conf/conf.h>
-#include <dmfserver/template.h>		// 以模板作为响应
-#include <dmfserver/utility/utility.h>        // 引入时间
+#include <dmfserver/template.h>					// 以模板作为响应
+#include <dmfserver/utility/utility.h>        	// 引入时间
 #include <string.h>
 #include <stdio.h>
 
@@ -72,7 +72,7 @@ extern void Res_NotFound(int acceptFd);
 
 extern void Res_row( int acceptFd, char* res_str);
 
-extern void Res_render( int acceptFd, char* path, struct Kvmap *kv, int num);
+extern void Res_render(int acceptFd, char* template_name, struct Kvmap *kv, int num);
 
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 

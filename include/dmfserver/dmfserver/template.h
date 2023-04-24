@@ -18,7 +18,8 @@ limitations under the License.
 #define TEMPLATE
 
 
-#define TEMPLATE_RESULT_SIZE 4096 
+#define TEMPLATE_RESULT_SIZE 4096
+#define TEMPLATE_DEC_SIZE 20
 #define DEC_NUM 20
 
 #include <stdio.h>
@@ -35,9 +36,25 @@ struct Kvmap {
 	void (*Func)(char*, char *);			// 
 };
 
+typedef struct template_name_path {
+	char  name[64];
+	char* template_data;
+} template_name_path;
+
+typedef struct template_dec {
+	int size;
+	template_name_path template_np[ TEMPLATE_DEC_SIZE ];
+} template_dec;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+	void template_init();
+
+	void template_free();
+
+	char* get_template(char* template_name);
 
 	char * local_template(char * template_path);
 
