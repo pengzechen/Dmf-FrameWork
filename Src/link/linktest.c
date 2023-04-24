@@ -18,7 +18,7 @@ limitations under the License.
 
 #ifdef __WIN32__
 
-void if_win() {
+void winLoad() {
     HMODULE handle = LoadLibrary("./link/liblink.dll");
     
     Get link_get = (Get)GetProcAddress(handle, "get");
@@ -32,10 +32,11 @@ void if_win() {
     char data[] = "this is a shm test data";
     dll_write_shm(data);
 
-
-    while(1){
+    int i = 0 ;
+    while( i != 10){
         dll_read_shm();
         Sleep(2000);
+        i++;
     }
     FreeLibrary(handle);
 }
@@ -44,7 +45,8 @@ void if_win() {
 
 
 int main() {
-    //winLoad();
-
+#ifdef __WIN32__
+    winLoad();
+#endif // __win32__
     return 0;
 }

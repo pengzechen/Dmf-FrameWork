@@ -33,7 +33,7 @@ limitations under the License.
 
 
 #ifdef __WIN32__
-	void linkload1()
+	void linkload()
 	{
 		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
 		Sleep(500);
@@ -125,7 +125,11 @@ int main(int argc, char* argv[])
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
+
+        linkload();
 	#endif // WIN32
+
+    
 
 	
 	signal(SIGINT, handle_signal);

@@ -8,20 +8,14 @@ void mfunction(char *out, char *in)
 
 void template(int a, const Request *req) 
 {
+	struct Kvmap kv0 = {.key = "name", .value="Dmfserver", .type=1};
+	struct Kvmap kv1 = {.key = "date", .value="2023/4/14", .type=1};
+	struct Kvmap kv2 = {.key = "date", .Func=&mfunction, .type=2};
+
 	struct Kvmap kv[4];
-	kv[0].key = "name";
-	kv[0].value = "Dmfserver";
-	kv[0].type = 1;
-	
-	kv[1].key = "date";
-	kv[1].value = "2023/4/14";
-	kv[1].type = 1;
-
-
-	kv[2].key = "myfunction";
-	kv[2].Func = &mfunction;
-	kv[2].type = 2;
-
+	kv[0] = kv0;
+	kv[1] = kv1;
+	kv[2] = kv2;
 
 	kv[3].key = "dec1";
 	kv[3].dec[0] = "Apache";
