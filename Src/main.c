@@ -163,6 +163,7 @@ int main(int argc, char* argv[])
 #endif 				// linux
 
 	pool_destroy();
+    pool_destroy2();
     template_free();
 	return 0;
 }
