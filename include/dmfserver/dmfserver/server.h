@@ -27,6 +27,7 @@ limitations under the License.
 #include <dmfserver/utility/utility.h>	
 #include <dmfserver/router.h>				// router 中已经有 server 需要的 request 和 response
 #include <dmfserver/log.h>
+#include <dmfserver/mpool.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -76,7 +77,7 @@ limitations under the License.
 		OVERLAPPED Overlapped;
 		WSABUF DataBuf;
 		CHAR Buffer[DATA_BUFSIZE];
-		ContFunMap cmp;
+		// ContFunMap cmp;
 		
 	}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
 	typedef struct {

@@ -141,8 +141,10 @@ int main(int argc, char* argv[])
 
 	mysql_pool_init();
 	elr_mpl_init();
-	pool_init(32, 512);
 
+	pool_init(8220, 8220*50);
+    pool_init2(4, 4*50);
+    
 	model();
 	other();
 	session();

@@ -17,8 +17,8 @@ limitations under the License.
 
 #include <dmfserver/mpool.h>
 
-pool_t pool;
-
+static pool_t pool;
+static pool_t pool2;
 
 void pool_init(int block_size, int total_size) 
 {
@@ -44,6 +44,30 @@ void pool_init(int block_size, int total_size)
     }
 }
 
+void pool_init2(int block_size, int total_size) 
+{
+    pool2.block_size = block_size;
+    pool2.total_size = total_size;
+    pool2.mem_pool = malloc(total_size);
+    
+    pool2.head = NULL;
+    pthread_mutex_init(&pool2.lock, NULL);
+    pthread_cond_init(&pool2.cond, NULL);
+    pool2.count = 0;
+
+    char *ptr = pool2.mem_pool;
+    int num_blocks = total_size / block_size;
+    for (int i = 0; i < num_blocks; i++) {
+        node_t *node = malloc(sizeof(node_t));
+        node->data = ptr;
+        node->used = 0; // Set the used flag to 0
+        node->next = pool2.head;
+        pool2.head = node;
+        ptr += block_size;
+        pool2.count++;
+    }
+}
+
 void pool_destroy()
 {
     node_t *current = pool.head;
@@ -55,6 +79,19 @@ void pool_destroy()
     free(pool.mem_pool);
     pthread_mutex_destroy(&pool.lock);
     pthread_cond_destroy(&pool.cond);
+}
+
+void pool_destroy2()
+{
+    node_t *current = pool2.head;
+    while (current != NULL) {
+        node_t *temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(pool2.mem_pool);
+    pthread_mutex_destroy(&pool2.lock);
+    pthread_cond_destroy(&pool2.cond);
 }
 
 void *pool_alloc() 
@@ -87,6 +124,36 @@ void *pool_alloc()
     return current->data;
 }
 
+void *pool_alloc2() 
+{
+    pthread_mutex_lock(&pool2.lock);
+
+    if ( pool2.count == 0 ) {
+        printf("可用为0\n");
+        pthread_cond_wait(&pool2.cond, &pool2.lock);
+    }
+    // printf("%d\n", pool2.count);
+
+    node_t *current = pool2.head;
+    
+    while (current != NULL) {
+        if(current->used == 0)
+        break;
+        current = current->next;
+    }
+
+    if (current == NULL) {
+        printf(" No free block found (should not happen) \n");
+        pthread_mutex_unlock(&pool2.lock);
+        return NULL;
+    }
+
+    current->used = 1;
+    pool2.count--;
+    pthread_mutex_unlock(&pool2.lock);
+    return current->data;
+}
+
 void pool_free(void *data) 
 {
     pthread_mutex_lock(&pool.lock);
@@ -110,4 +177,29 @@ void pool_free(void *data)
 
     pthread_cond_signal(&pool.cond);
     pthread_mutex_unlock(&pool.lock);
+}
+
+void pool_free2(void *data) 
+{
+    pthread_mutex_lock(&pool2.lock);
+
+    node_t *current = pool2.head;
+
+    while (current != NULL) {
+        if(current->data == data)
+        break;
+        current = current->next;
+    }
+
+    if (current == NULL) {
+        printf("Invalid data pointer\n");
+        pthread_mutex_unlock(&pool2.lock);
+        return;
+    }
+
+    current->used = 0;
+    pool2.count++;
+
+    pthread_cond_signal(&pool2.cond);
+    pthread_mutex_unlock(&pool2.lock);
 }

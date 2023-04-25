@@ -43,7 +43,6 @@ typedef struct {
     char                *mem_pool;
 } pool_t;
 
-extern pool_t pool;
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,7 +52,11 @@ extern "C" {
     void pool_destroy();
     void *pool_alloc();
     void pool_free(void *data);
-
+    
+    void pool_init2(int block_size, int total_size);
+    void pool_destroy2();
+    void *pool_alloc2();
+    void pool_free2(void *data);
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
 #endif

@@ -232,8 +232,8 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 				printf("closingsocket %d\n", PerHandleData->Socket); 
 				closesocket(PerHandleData->Socket);
 
-				free( PerIoData);
-				free( PerHandleData);
+				pool_free( PerIoData);
+				pool_free2( PerHandleData);
 				continue;
 			}else{
 				OutErr("GetQueuedCompletionStatus failed!");
@@ -246,8 +246,8 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 		{
 			printf("closingsocket %d\n", PerHandleData->Socket);
 			closesocket(PerHandleData->Socket);
-			free( PerIoData);
-			free( PerHandleData);
+			pool_free( PerIoData );
+			pool_free2( PerHandleData );
 			continue;
 		}
         Perfd pfd;
@@ -265,8 +265,8 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 		
 		freeReq(&req1);
 		
-		free(PerIoData);
-		free(PerHandleData);
+		pool_free(PerIoData);
+		pool_free2(PerHandleData);
 
 		/*
 		// 继续向 socket 投递WSARecv操作
@@ -312,6 +312,8 @@ int iocp_server_make()
 	SOCKET sListen = iocp_bind_socket(serverPort);
 
 	SOCKET sClient;
+
+    // PER_HANDLE_DATA 指针
 	LPPER_HANDLE_DATA PerHandleData;
 	LPPER_IO_OPERATION_DATA PerIoData;
 
@@ -323,10 +325,16 @@ int iocp_server_make()
 		sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
 		//sClient = accept(sListen, 0, 0);
 
-		PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
+		PerHandleData =  (PER_HANDLE_DATA*)pool_alloc2();
+        
 		PerHandleData->Socket = sClient;
 		// 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
-		PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
+		// PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
+        PerIoData = (PER_IO_OPERATION_DATA*)pool_alloc();
+
+        //printf("PER_HANDLE_DATA size: %d\n", sizeof(PER_HANDLE_DATA));
+        //printf("PER_IO_OPERATION_DATA size: %d\n", sizeof(PER_IO_OPERATION_DATA));
+
 
 		// 将接入的客户端和完成端口联系起来
 		CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
