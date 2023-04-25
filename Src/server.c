@@ -267,6 +267,7 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
         pfd.fd = PerHandleData->Socket;
         pfd.ssl = NULL;
 		
+        
 		ParseHttp(&req1, PerIoData->Buffer, pfd);
 		serverTime(time);
 		
@@ -277,6 +278,11 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 		router_handle(PerHandleData->Socket, &req1);
 		
 		freeReq(&req1);
+
+        
+    //    char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
+    //    send(PerHandleData->Socket, res_str, strlen(res_str), 0);
+    //    closesocket(PerHandleData->Socket);
 		
 		#ifdef __SERVER_MPOOL__
 				pool_free( PerIoData);
