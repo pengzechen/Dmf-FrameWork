@@ -99,7 +99,7 @@ void *pool_alloc()
     pthread_mutex_lock(&pool.lock);
 
     if ( pool.count == 0 ) {
-        printf("可用为0\n");
+        printf("[Mpool: Warn] no more memory to allocate \n");
         pthread_cond_wait(&pool.cond, &pool.lock);
     }
     // printf("%d\n", pool.count);
