@@ -86,7 +86,7 @@ limitations under the License.
 		
 	}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
 
-	// #define __SERVER_MPOOL__
+	#define __SERVER_MPOOL__
 
 #endif  		// Windows
 

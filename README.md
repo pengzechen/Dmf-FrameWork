@@ -2,6 +2,8 @@
 
 git config --global http.proxy 'socks5://127.0.0.1:1080'
 
+netsh int ipv4 set dynamicport tcp start=1025 num=64500
+
 ## To run this server:
 
 #### 1.Install MySql
