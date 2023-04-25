@@ -135,8 +135,9 @@ int main(int argc, char* argv[])
 	conf_init();
 	log_init();
 	session_init();
-	router_init();
-    template_init();
+	template_init();
+    router_init();
+    
 
 	mysql_pool_init();
 	elr_mpl_init();

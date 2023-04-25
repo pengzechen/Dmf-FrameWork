@@ -26,12 +26,12 @@ typedef struct objectNode objectNode;
 typedef objectNode* objPtr;
 
 struct objectNode {
-	char NodeName[64];
-	void* data;
-	int size;
+	char   NodeName[64];
+	void*  data;
+	int    size;
 	objPtr mnChild;
 	objPtr mnBro;
-	int type;
+	int    type;
 };
 
 
