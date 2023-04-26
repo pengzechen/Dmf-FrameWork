@@ -65,5 +65,5 @@ endif()
 
 
 #添加子目录
-add_subdirectory(${PROJECT_SOURCE_DIR}/Src/link) 
+add_subdirectory(${PROJECT_SOURCE_DIR}/Src/mdb) 
 

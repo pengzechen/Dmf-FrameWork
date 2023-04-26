@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <dmfserver/link.h>
+#include <dmfserver/mdb/mdb.h>
 
 
 // 多进程实现数据共享的方法
@@ -22,7 +22,7 @@ limitations under the License.
 int itestlink = 0;
 char string[1024*1024] = {0};
 #pragma data_seg()
-#pragma comment(linker,"/SECTION:flag_data,RWS")
+#pragma comment(mdb,"/SECTION:flag_data,RWS")
 
 #ifdef __WIN32__
 

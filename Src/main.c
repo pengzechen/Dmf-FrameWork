@@ -29,15 +29,15 @@ limitations under the License.
 #include "./views/mysql.c"
 #include "./views/other.c"
 
-#include <dmfserver/link.h>
+#include <dmfserver/mdb/mdb.h>
 
 
 #ifdef __WIN32__
 	void linkload()
 	{
-		ShellExecute(NULL, "open", "linktest.exe", NULL, NULL, SW_SHOW);
+		ShellExecute(NULL, "open", "mdb1.exe", NULL, NULL, SW_SHOW);
 		Sleep(500);
-		HMODULE handle = LoadLibrary("./link/liblink.dll");
+		HMODULE handle = LoadLibrary("./mdb/libmdb.dll");
 		Get link_get = (Get)GetProcAddress(handle, "get");
 		Set link_set = (Set)GetProcAddress(handle, "set");
 		Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");

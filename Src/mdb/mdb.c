@@ -14,12 +14,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <dmfserver/link.h>
+#include <dmfserver/mdb/mdb.h>
 
 #ifdef __WIN32__
 
 void winLoad() {
-    HMODULE handle = LoadLibrary("./link/liblink.dll");
+    HMODULE handle = LoadLibrary("./mdb/libmdb.dll");
     
     Get link_get = (Get)GetProcAddress(handle, "get");
 	Set link_set = (Set)GetProcAddress(handle, "set");
