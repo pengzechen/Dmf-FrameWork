@@ -32,7 +32,8 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     ${model_SRC} 
     ${elr_mpl_SRC} 
     ${conf_SRC} 
-    ${utility_SRC})
+    ${utility_SRC}
+    "./mdb/mdb_operate.c" )
 
 elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
 
@@ -59,7 +60,7 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     ${elr_mpl_SRC} 
     ${conf_SRC} 
     ${utility_SRC}
-    "mdb/mdb_operate.c" )
+    "./mdb/mdb_operate.c" )
 
 endif()
 

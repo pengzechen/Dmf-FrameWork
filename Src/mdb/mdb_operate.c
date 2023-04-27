@@ -1,6 +1,6 @@
 #include <dmfserver/mdb/mdb.h>
 
-void mdb_find(char* key)
+void mdb_find(char* key2)
 {
     HANDLE file_mapping = CreateFileMapping(
         INVALID_HANDLE_VALUE,
@@ -13,7 +13,7 @@ void mdb_find(char* key)
 
     if (file_mapping == NULL) {
         printf("Failed to create file mapping object. Error code: %d\n", GetLastError());
-        return 1;
+        return ;
     }
 
     entry_t *shared_data = (entry_t *)MapViewOfFile(
@@ -27,7 +27,7 @@ void mdb_find(char* key)
     if (shared_data == NULL) {
         printf("Failed to map view of file. Error code: %d\n", GetLastError());
         CloseHandle(file_mapping);
-        return 1;
+        return ;
     }
 
     HANDLE mutex = CreateMutex(NULL, FALSE, SHARED_MUTEX);
@@ -35,10 +35,16 @@ void mdb_find(char* key)
         printf("Failed to create mutex. Error code: %d\n", GetLastError());
         UnmapViewOfFile(shared_data);
         CloseHandle(file_mapping);
-        return 1;
+        return ;
+    }
+
+    char key[MAX_KEY_LEN];
+    printf("Enter key to retrieve value (or q to quit): ");
+    if (fgets(key, MAX_KEY_LEN, stdin) == NULL) {
+    }
+    if (strcmp(key, "q\n") == 0) {
     }
     WaitForSingleObject(mutex, INFINITE);
-
     int found = 0;
     for (int i = 0; i < MAX_ENTRIES; i++) {
         if (strcmp(shared_data[i].key, key) == 0) {
@@ -47,10 +53,8 @@ void mdb_find(char* key)
             break;
         }
     }
-
     if (!found) {
         printf("No entry found for key %s\n", key);
     }
-
     ReleaseMutex(mutex);
 }

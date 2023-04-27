@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 	pcre_test();
 	jannson_test();
 
-    mdb_find("123");
+   
 
 	#ifdef __WIN32__
 		system("cls");
@@ -112,6 +112,8 @@ int main(int argc, char* argv[])
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
 	#endif // WIN32
+
+    mdb_find("123");
 
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
