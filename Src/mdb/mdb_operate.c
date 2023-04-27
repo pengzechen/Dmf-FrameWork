@@ -54,7 +54,7 @@ char* mdb_find(char* key)
             return shared_data[i].value ;
         }
     }
-
+    ReleaseMutex(mutex);
     return "";
     
 }
