@@ -29,7 +29,7 @@ limitations under the License.
 #include "./views/mysql.c"
 #include "./views/other.c"
 
-#include <dmfserver/mdb/share.h>
+#include <dmfserver/mdb/mdb.h>
 
 #ifdef __linux__
 #include <jansson.h>
@@ -103,6 +103,8 @@ int main(int argc, char* argv[])
 {
 	pcre_test();
 	jannson_test();
+
+    mdb_find("123");
 
 	#ifdef __WIN32__
 		system("cls");
