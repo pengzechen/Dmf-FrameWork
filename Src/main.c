@@ -128,8 +128,8 @@ int main(int argc, char* argv[])
 	mysql_pool_init();
 	elr_mpl_init();
 
-	pool_init(8220, 8220*3096);
-    pool_init2(4, 4*3096);
+	pool_init(8220, 8220*4096);
+    pool_init2(4, 4*4096);
     
 	model();
 	other();

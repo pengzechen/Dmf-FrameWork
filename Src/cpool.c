@@ -89,7 +89,7 @@ void mysql_pool_init()
 	pool_mysql.free_connections = 0;
 	pool_mysql.mysql_list = NULL;			// 初始化连接池为空
 	pool_mysql.is_idle_block = 0;
-	pool_mysql.min_connections = 20;
+	pool_mysql.min_connections = 70;
 
 	pthread_mutex_init(&pool_mysql.lock,NULL);
 	pthread_cond_init(&pool_mysql.idle_signal,NULL);

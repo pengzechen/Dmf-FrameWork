@@ -124,7 +124,7 @@ void *pool_alloc()
     return current->data;
 }
 
-void *pool_alloc2() 
+void *pool_alloc2()
 {
     pthread_mutex_lock(&pool2.lock);
 
