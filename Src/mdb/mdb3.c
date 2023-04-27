@@ -1,16 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <windows.h>
+#include <dmfserver/mdb/mdb.h>
 
-#define MAX_KEY_LEN 512
-#define MAX_VALUE_LEN 2048
-#define MAX_ENTRIES 1024
-
-typedef struct {
-    char key[MAX_KEY_LEN];
-    char value[MAX_VALUE_LEN];
-} entry_t;
 
 int main() {
     HANDLE file_mapping = CreateFileMapping(
@@ -19,7 +8,7 @@ int main() {
         PAGE_READWRITE,
         0,
         MAX_ENTRIES * sizeof(entry_t),
-        "SharedMemory"
+        SHARED_STR
     );
 
     if (file_mapping == NULL) {
@@ -41,7 +30,7 @@ int main() {
         return 1;
     }
 
-    HANDLE mutex = CreateMutex(NULL, FALSE, "SharedMemoryMutex");
+    HANDLE mutex = CreateMutex(NULL, FALSE, SHARED_MUTEX);
     if (mutex == NULL) {
         printf("Failed to create mutex. Error code: %d\n", GetLastError());
         UnmapViewOfFile(shared_data);

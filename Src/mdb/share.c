@@ -36,22 +36,18 @@ void share_test() {
     FreeLibrary(handle);
 }
 
-#endif  // WIN32
-
-
-#ifdef __WIN32__
-	void share_test2()
-	{
-		ShellExecute(NULL, "open", "D:\\C\\request\\bin\\mdb\\mdb1.exe", NULL, NULL, SW_SHOW);
-		Sleep(1000);
-		HMODULE handle = LoadLibrary("./mdb/libmdb.dll");
-		Get link_get = (Get)GetProcAddress(handle, "get");
-		Set link_set = (Set)GetProcAddress(handle, "set");
-		Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
-		dll_read_shm();
-		Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
-		dll_write_shm("rewrite shm data");
-	}
+void share_test2()
+{
+    ShellExecute(NULL, "open", "D:\\C\\request\\bin\\mdb\\mdb1.exe", NULL, NULL, SW_SHOW);
+    Sleep(1000);
+    HMODULE handle = LoadLibrary("./mdb/libmdb.dll");
+    Get link_get = (Get)GetProcAddress(handle, "get");
+    Set link_set = (Set)GetProcAddress(handle, "set");
+    Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
+    dll_read_shm();
+    Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
+    dll_write_shm("rewrite shm data");
+}
 #endif //WIN32
 
 

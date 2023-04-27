@@ -1,10 +1,10 @@
 
 file( GLOB main_SRC "*.h" "*.c" )
-aux_source_directory(./model model_SRC)
-aux_source_directory(./elr_mpl elr_mpl_SRC)
-aux_source_directory(./conf conf_SRC)
-aux_source_directory(./views views_SRC)
-aux_source_directory(./utility utility_SRC)
+aux_source_directory(./model     model_SRC)
+aux_source_directory(./elr_mpl   elr_mpl_SRC)
+aux_source_directory(./conf      conf_SRC)
+aux_source_directory(./views     views_SRC)
+aux_source_directory(./utility   utility_SRC)
 include_directories(${PROJECT_SOURCE_DIR}/include/dmfserver)
 
 
