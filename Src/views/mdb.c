@@ -4,8 +4,7 @@
 
 void mdbtest(int a, const Request* req)
 {
-	mdb_find("123");
-	Res_row(a, "test ok");
+	Res_row(a, mdb_find("123"));
 }
 
 

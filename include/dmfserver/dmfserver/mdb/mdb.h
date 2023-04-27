@@ -39,7 +39,8 @@ extern "C" {          // we need to export the C interface
 #endif
 
 #ifdef __WIN32__
-	extern void mdb_find(char* key);
+    extern void mdb_operate_init();
+	extern char* mdb_find(char* key);
 #elif __linux__			// WIN32
 	
 #endif // linux

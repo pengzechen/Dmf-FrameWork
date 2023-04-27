@@ -127,6 +127,8 @@ int main(int argc, char* argv[])
 
 	pool_init(8220, 8220*4096);
     pool_init2(4, 4*4096);
+
+    mdb_operate_init();
     
 	model();
 	other();

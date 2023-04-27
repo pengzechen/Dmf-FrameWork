@@ -38,7 +38,10 @@ int main() {
         return 1;
     }
 
-    int count = 0;
+    strcpy(shared_data[0].key, "123");
+    strcpy(shared_data[0].value, "test mdb");
+
+    int count = 1;
     while (1) {
         char key[MAX_KEY_LEN];
         char value[MAX_VALUE_LEN];
