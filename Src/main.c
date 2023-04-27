@@ -29,23 +29,7 @@ limitations under the License.
 #include "./views/mysql.c"
 #include "./views/other.c"
 
-#include <dmfserver/mdb/mdb.h>
-
-
-#ifdef __WIN32__
-	void linkload()
-	{
-		ShellExecute(NULL, "open", "mdb1.exe", NULL, NULL, SW_SHOW);
-		Sleep(500);
-		HMODULE handle = LoadLibrary("./mdb/libmdb.dll");
-		Get link_get = (Get)GetProcAddress(handle, "get");
-		Set link_set = (Set)GetProcAddress(handle, "set");
-		Dll_read_shm dll_read_shm = (Dll_read_shm)GetProcAddress(handle, "dll_read_shm");
-		dll_read_shm();
-		Dll_write_shm dll_write_shm = (Dll_write_shm)GetProcAddress(handle, "dll_write_shm");
-		dll_write_shm("rewrite shm data");
-	}
-#endif //WIN32
+#include <dmfserver/mdb/share.h>
 
 #ifdef __linux__
 #include <jansson.h>
@@ -125,8 +109,6 @@ int main(int argc, char* argv[])
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
-
-        linkload();
 	#endif // WIN32
 
 	signal(SIGINT, handle_signal);

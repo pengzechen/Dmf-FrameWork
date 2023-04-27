@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-#include <dmfserver/mdb/mdb.h>
+#include <dmfserver/mdb/share.h>
 
 
 // 多进程实现数据共享的方法
