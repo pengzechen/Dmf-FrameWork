@@ -13,4 +13,4 @@ add_executable(sharetest "share.c")
 
 add_executable(mdb3 "mdb3.c")
 
-add_executable(rw3 "rw3.c")
+add_executable(rw3 "mdbrw3.c")
