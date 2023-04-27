@@ -28,8 +28,7 @@ limitations under the License.
 #include "./views/template.c"
 #include "./views/mysql.c"
 #include "./views/other.c"
-
-#include <dmfserver/mdb/mdb.h>
+#include "./views/mdb.c"
 
 #ifdef __linux__
 #include <jansson.h>
@@ -113,8 +112,6 @@ int main(int argc, char* argv[])
 		// FreeConsole();
 	#endif // WIN32
 
-    mdb_find("123");
-
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
 
@@ -135,6 +132,7 @@ int main(int argc, char* argv[])
 	other();
 	session();
 	apptemp();
+    mdb();
 	
 
 #ifdef __WIN32__	// Win32
