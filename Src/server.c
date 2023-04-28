@@ -273,10 +273,12 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 		
         
 		ParseHttp(&req1, PerIoData->Buffer, pfd);
-		serverTime(time);
+
+        middleware_handle(&req1);
 		
-		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ",time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
-		
+        serverTime(time);
+		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
+            time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
 		memset(time, 0, 30);
 		
 		router_handle(PerHandleData->Socket, &req1);
