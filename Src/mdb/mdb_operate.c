@@ -3,7 +3,7 @@
 
 static HANDLE file_mapping;
 static HANDLE mutex;
-entry_t *shared_data;
+
 
 void mdb_operate_init() 
 {
@@ -23,7 +23,7 @@ void mdb_operate_init()
     mutex = CreateMutex(NULL, FALSE, SHARED_MUTEX);
     if (mutex == NULL) {
         printf("Failed to create mutex. Error code: %d\n", GetLastError());
-        UnmapViewOfFile(shared_data);
+        // UnmapViewOfFile(shared_data);
         CloseHandle(file_mapping);
         return ;
     }
@@ -31,6 +31,12 @@ void mdb_operate_init()
 
 char* mdb_find(char* key)
 {
+
+    entry_t *shared_data;
+    int flag = 0;
+    char* res;
+    int i = 0;
+
 
     shared_data = (entry_t *)MapViewOfFile(
         file_mapping,
@@ -42,19 +48,27 @@ char* mdb_find(char* key)
 
     if (shared_data == NULL) {
         printf("Failed to map view of file. Error code: %d\n", GetLastError());
-        CloseHandle(file_mapping);
-        return NULL;
+        //CloseHandle(file_mapping);
+        return "";
     }
 
-
     WaitForSingleObject(mutex, INFINITE);
-    for (int i = 0; i < MAX_ENTRIES; i++) {
+    for (; i < MAX_ENTRIES; i++) {
         if (strcmp(shared_data[i].key, key) == 0) {
-            ReleaseMutex(mutex);
-            return shared_data[i].value ;
+            flag = 1;
+            break;
         }
     }
     ReleaseMutex(mutex);
+
+    if(flag) {
+        res =  (char*)malloc(sizeof(char)*MAX_VALUE_LEN) ;
+        strcpy(res, shared_data[i].value);
+        UnmapViewOfFile(shared_data);
+        return res;
+    }
+    
+    UnmapViewOfFile(shared_data);
     return "";
     
 }

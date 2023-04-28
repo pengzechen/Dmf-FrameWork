@@ -4,7 +4,10 @@
 
 void mdbtest(int a, const Request* req)
 {
-	Res_row(a, mdb_find("123"));
+	char* str_from_mdb;
+	str_from_mdb = mdb_find("123");
+	Res_row(a, str_from_mdb);
+	free(str_from_mdb);
 }
 
 

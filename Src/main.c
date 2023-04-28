@@ -103,8 +103,6 @@ int main(int argc, char* argv[])
 	pcre_test();
 	jannson_test();
 
-   
-
 	#ifdef __WIN32__
 		system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
@@ -112,24 +110,28 @@ int main(int argc, char* argv[])
 		// FreeConsole();
 	#endif // WIN32
 
+    // 安装信号
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
 
-	conf_init();
-	log_init();
-	session_init();
-	template_init();
-    router_init();
+	conf_init();        // 服务框架参数初始化
+	log_init();         // 日志记录模块初始化
+	session_init();     // session 模块初始化
+	template_init();    // 模板模块初始化
+    router_init();      // 路由模块初始化
     
+	mysql_pool_init();  // mysql 连接池初始化
 
-	mysql_pool_init();
-	elr_mpl_init();
+	elr_mpl_init();     // 内存池初始化
+	pool_init(8220, 8220*4096);  // server 模块内存池初始化
+    pool_init2(4, 4*4096);       // server 模块内存池初始化
 
-	pool_init(8220, 8220*4096);
-    pool_init2(4, 4*4096);
-
-    mdb_operate_init();
+    mdb_operate_init();   // mdb 模块初始化
     
+    /*
+        *以下载入 views 的函数，
+        *载入以后，router 将根据载入的函数调用相对应的 view
+        */
 	model();
 	other();
 	session();
@@ -137,6 +139,7 @@ int main(int argc, char* argv[])
     mdb();
 	
 
+    // 根据使用的平台启动服务器
 #ifdef __WIN32__	// Win32
 	iocp_server_make();
 	// simple_server_make();
@@ -148,6 +151,8 @@ int main(int argc, char* argv[])
 	// epoll_ssl_server();
 #endif 				// linux
 
+
+    // 平滑退出时做相应的清理工作
 	pool_destroy();
     pool_destroy2();
     template_free();

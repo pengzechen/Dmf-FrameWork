@@ -142,7 +142,7 @@ static unsigned int BKDRHash(char *str)
 }
 
 
-void* FroundCheck() {
+void* session_write_file() {
     // while(1){
     //     SessionAll();
     // }
@@ -159,7 +159,7 @@ extern void session_init()
     printf("[Session: Info] session init successfully...\n");
 
     pthread_t roundCheck;
-	pthread_create(&roundCheck, NULL, FroundCheck, NULL);
+	pthread_create(&roundCheck, NULL, session_write_file, NULL);
 
     // pthread_join(roundCheck, NULL);
 }
