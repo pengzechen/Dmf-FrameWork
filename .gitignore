@@ -5,10 +5,7 @@
 bin/*.exe
 
 
-build/
-
-bin/link/
-bin/static/
+build/*
+bin/*.*
 bin/server
-bin/linktest
 bin/server.log
