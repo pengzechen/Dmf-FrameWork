@@ -24,9 +24,10 @@
 #include <string.h>
 #include <windows.h>
 
-#define MAX_KEY_LEN 512
-#define MAX_VALUE_LEN 2048
-#define MAX_ENTRIES 1024
+#define MAX_KEY_LEN 256
+#define MAX_VALUE_LEN 1024
+#define MAX_ENTRIES 65535
+
 #define SHARED_STR "SharedMemory"
 #define SHARED_MUTEX "SharedMemoryMutex"
 

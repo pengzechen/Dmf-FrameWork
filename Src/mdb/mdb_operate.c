@@ -123,3 +123,36 @@ char* mdb_find(char* key)
     return "";
     
 }
+
+void mdb_insert(char* key, char* value)
+{
+    entry_t *shared_data;
+
+    shared_data = (entry_t *)MapViewOfFile(
+        file_mapping,
+        FILE_MAP_ALL_ACCESS,
+        0,
+        0,
+        MAX_ENTRIES * sizeof(entry_t)
+    );
+
+    if (shared_data == NULL) {
+        printf("Failed to map view of file. Error code: %d\n", GetLastError());
+        //CloseHandle(file_mapping);
+        return ;
+    }
+
+    WaitForSingleObject(mutex, INFINITE);
+
+    for (int i = 0; i < MAX_ENTRIES; i++) {
+        if (strlen(shared_data[i].key) == 0) {
+            strncpy(shared_data[i].key, key, MAX_KEY_LEN);
+            strncpy(shared_data[i].value, value, MAX_VALUE_LEN);
+        }
+    }
+
+    ReleaseMutex(mutex);
+
+    UnmapViewOfFile(shared_data);
+
+}
