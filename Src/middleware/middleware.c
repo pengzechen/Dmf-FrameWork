@@ -24,6 +24,7 @@
 extern void middleware_init()
 {
     printf("[Middleware: Info] middleware init successfully!\n");
+    printf("\n");
 }
 
 extern void middleware_handle(const Request* req)

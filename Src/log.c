@@ -79,6 +79,7 @@ void log_init()
 	pthread_detach(tid);
 
     printf("[Log: Info] log start \n");
+	printf("\n");
 }
 
 // 定义日志记录函数

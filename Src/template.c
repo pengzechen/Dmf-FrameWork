@@ -30,6 +30,7 @@ void template_init()
 	g_template_dec.template_np[0].template_data = local_template("./templates/test.html");
 	g_template_dec.template_np[1].template_data = local_template("./templates/test2.html");
 	printf("[Template Info] template init ok!\n");
+	printf("\n");
 }
 
 char* local_template(char * template_path)

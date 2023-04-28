@@ -94,4 +94,5 @@ void conf_init()
     strcpy(g_server_conf_all._conf_router.static_dir, "static");
 
     printf("[Conf: Info] conf init successfully...\n");
+    printf("\n");
 }

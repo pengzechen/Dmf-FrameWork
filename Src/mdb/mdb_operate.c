@@ -24,6 +24,35 @@ static HANDLE file_mapping;
 static HANDLE mutex;
 
 
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
+	switch(ul_reason_for_call){
+		case DLL_PROCESS_ATTACH:
+			// printf("dll_process_attach\n");
+			break;
+		case DLL_PROCESS_DETACH:
+			// printf("dll_process_detach\n");
+			break;
+		case DLL_THREAD_ATTACH:
+			// printf("dll_thread_attach\n");
+			break;
+		case DLL_THREAD_DETACH:
+			// printf("dll_thread_detach\n");
+			break;
+		default:
+			break;
+	}
+
+	return TRUE;
+}
+
+/*
+    #define DLL_EXPORT __declspec(dllexport)
+    typedef int(*Get)();
+    HMODULE handle = LoadLibrary("./libshare.dll");
+    Get link_get = (Get)GetProcAddress(handle, "get");
+    Set link_set = (Set)GetProcAddress(handle, "set");
+*/
+
 void mdb_operate_init() 
 {
     file_mapping = CreateFileMapping(
@@ -46,6 +75,9 @@ void mdb_operate_init()
         CloseHandle(file_mapping);
         return ;
     }
+
+    printf("[Mdb: Info]: mdb init successfully! \n");
+    printf("\n");
 }
 
 char* mdb_find(char* key)

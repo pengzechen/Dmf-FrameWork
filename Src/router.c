@@ -72,6 +72,7 @@ void router_init()
 	
 
 	printf("[Router: Info] Router init successfully...\n");
+	printf("\n");
 }
 
 
