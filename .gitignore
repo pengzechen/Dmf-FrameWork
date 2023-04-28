@@ -9,3 +9,5 @@ build/*
 bin/*.*
 bin/server
 bin/server.log
+
+bin/mdb/*
