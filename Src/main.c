@@ -120,6 +120,10 @@ int main(int argc, char* argv[])
 		// FreeConsole();
 	#endif // WIN32
 
+    #ifdef __SERVER_MPOOL__
+        printf("server mpool start !\n");
+    #endif // __SERVER_MPOOL__
+
     // 安装信号
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);

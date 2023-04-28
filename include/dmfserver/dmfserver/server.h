@@ -89,7 +89,9 @@
 		
 	}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
 
-	#define __SERVER_MPOOL__
+	// #define __SERVER_MPOOL__		// 启用server内存池
+	
+	// #define __SERVER_IOCO_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
 
 #endif  		// Windows
 

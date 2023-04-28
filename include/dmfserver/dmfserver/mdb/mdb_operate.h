@@ -16,25 +16,36 @@
     *
     */
 
-#ifndef __MDB_INCLUDE__
-#define __MDB_INCLUDE__
+#ifndef __MDB_OPERATE_INCLUDE__
+#define __MDB_OPERATE_INCLUDE__
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+#ifdef __WIN32__
+	#define DLL_EXPORT __declspec(dllexport)
+	#include <windows.h>
+#endif  // WIN32
 
-#define MAX_KEY_LEN 512
-#define MAX_VALUE_LEN 2048
-#define MAX_ENTRIES 1024
-#define SHARED_STR "SharedMemory"
-#define SHARED_MUTEX "SharedMemoryMutex"
-
-typedef struct {
-    char key[MAX_KEY_LEN];
-    char value[MAX_VALUE_LEN];
-} entry_t;
+#include "mdb.h"
 
 
+#ifdef __cplusplus    // If used by C++ code, 
+extern "C" {          // we need to export the C interface
+#endif
 
-#endif // __MDB_INCLUDE__
+    #ifdef __WIN32__
+        extern void mdb_operate_init();
+
+        extern char* mdb_find(char* key);
+        
+    #elif __linux__			// WIN32
+        
+    #endif // linux
+
+
+#ifdef __cplusplus
+}    /* end of the 'extern "C"' block */
+#endif
+
+#endif // __MDB_OPERATE_INCLUDE__

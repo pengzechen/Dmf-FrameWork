@@ -23,6 +23,14 @@
 	*	a important struct througout the whole http handle.
 	*/
 
+/*	
+	*						REQUEST MODEL
+	*
+	*	This model parse http, and save relevant infomation in a const Request struct
+	*	this model doesn't do well, I will imporove it in the future. (Ajax 2023/4/28)
+	*   It Reduces server performance by 16 percent.
+	*/
+
 #include <dmfserver/request.h>
 
 void MultiParse (Request *request, char *boundary ) 

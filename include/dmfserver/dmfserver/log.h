@@ -42,7 +42,7 @@
 #define LOG_FILE_SIZE (1024 * 1024 * 10)  // 10MB
 
 // 定义日志缓冲区大小
-#define LOG_BUFFER_SIZE 1024
+#define LOG_BUFFER_SIZE 2048
 
 // 定义日志记录
 typedef struct {

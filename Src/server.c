@@ -228,6 +228,7 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
     LPPER_IO_OPERATION_DATA PerIoData;
  	Request req1;
  	char time [30] = {'\0'};
+    Perfd pfd;
 
 	while(1){
 
@@ -237,11 +238,11 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 				closesocket(PerHandleData->Socket);
 
             #ifdef __SERVER_MPOOL__
-				pool_free( PerIoData);
-				pool_free2( PerHandleData);
+                pool_free( PerIoData);
+                pool_free2( PerHandleData);
             #else 
                 free( PerIoData);
-				free( PerHandleData);
+                free( PerHandleData);
             #endif // __SERVER_MPOOL__
 
 				continue;
@@ -257,46 +258,52 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 			printf("closingsocket %d\n", PerHandleData->Socket);
 			closesocket(PerHandleData->Socket);
 
-			#ifdef __SERVER_MPOOL__
-				pool_free( PerIoData);
-				pool_free2( PerHandleData);
-            #else 
-                free( PerIoData);
-				free( PerHandleData);
-            #endif // __SERVER_MPOOL__
-
-			continue;
-		}
-        Perfd pfd;
-        pfd.fd = PerHandleData->Socket;
-        pfd.ssl = NULL;
-		
-        
-		ParseHttp(&req1, PerIoData->Buffer, pfd);
-
-        middleware_handle(&req1);
-		
-        serverTime(time);
-		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
-            time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
-		memset(time, 0, 30);
-		
-		router_handle(PerHandleData->Socket, &req1);
-		
-		freeReq(&req1);
-
-        
-    //    char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
-    //    send(PerHandleData->Socket, res_str, strlen(res_str), 0);
-    //    closesocket(PerHandleData->Socket);
-		
-		#ifdef __SERVER_MPOOL__
-				pool_free( PerIoData);
-				pool_free2( PerHandleData);
+        #ifdef __SERVER_MPOOL__
+            pool_free( PerIoData);
+            pool_free2( PerHandleData);
         #else 
             free( PerIoData);
             free( PerHandleData);
         #endif // __SERVER_MPOOL__
+
+			continue;
+		}
+        
+    #ifdef __SERVER_IOCO_DEBUG__
+        char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
+        send(PerHandleData->Socket, res_str, strlen(res_str), 0);
+        closesocket(PerHandleData->Socket);
+    #else
+        pfd.fd = PerHandleData->Socket;
+        pfd.ssl = NULL;
+        // 解析 http 请求
+		ParseHttp(&req1, PerIoData->Buffer, pfd);
+        // 根据解析出来的结果运行中间件
+        middleware_handle(&req1);
+		// 进行必要日志记录
+        
+        serverTime(time);
+		log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
+           time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+		memset(time, 0, 30);
+		
+        /*   
+            *req 对象进入路由模块
+            *路由模块调用用户的view函数
+            *在view函数中必须调用response模块进行返回
+            */
+		router_handle(PerHandleData->Socket, &req1);
+		freeReq(&req1);
+    #endif // __SERVER_IOCO_DEBUG__
+        
+		
+    #ifdef __SERVER_MPOOL__
+        pool_free( PerIoData);
+        pool_free2( PerHandleData);
+    #else 
+        free( PerIoData);
+        free( PerHandleData);
+    #endif // __SERVER_MPOOL__
 
 		/*
 		// 继续向 socket 投递WSARecv操作
@@ -331,10 +338,6 @@ int iocp_server_make()
         if(hProcessIO) CloseHandle(hProcessIO);
         
 	}
-
-    #ifdef __SERVER_MPOOL__
-    printf("server mpool start !\n");
-    #endif // __SERVER_MPOOL__
 
 	
 	// if configure not define port then use SERVER_PORT

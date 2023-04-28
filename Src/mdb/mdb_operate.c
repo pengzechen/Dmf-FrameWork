@@ -17,7 +17,7 @@
     *
     */
 
-#include <dmfserver/mdb/mdb.h>
+#include <dmfserver/mdb/mdb_operate.h>
 
 
 static HANDLE file_mapping;

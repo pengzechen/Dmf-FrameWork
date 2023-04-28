@@ -11,6 +11,6 @@ add_library(share SHARED ${mdb_SRC} )
 # 指定生成目标
 add_executable(sharetest "share.c")
 
-add_executable(mdb3 "mdb3.c")
+add_executable(mdbserver "mdbserver.c")
 
 add_executable(rw3 "mdbrw3.c")
