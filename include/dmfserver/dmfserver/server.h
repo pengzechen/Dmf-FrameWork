@@ -30,6 +30,7 @@
 #include <dmfserver/router.h>				// router 中已经有 server 需要的 request 和 response
 #include <dmfserver/log.h>
 #include <dmfserver/mpool.h>
+#include <dmfserver/middleware/middleware.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -5,6 +5,7 @@ aux_source_directory(./elr_mpl   elr_mpl_SRC)
 aux_source_directory(./conf      conf_SRC)
 aux_source_directory(./views     views_SRC)
 aux_source_directory(./utility   utility_SRC)
+aux_source_directory(./middleware middleware_SRC)
 include_directories(${PROJECT_SOURCE_DIR}/include/dmfserver)
 
 
@@ -33,6 +34,7 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     ${elr_mpl_SRC} 
     ${conf_SRC} 
     ${utility_SRC}
+    ${middleware_SRC}
     "./mdb/mdb_operate.c" )
 
 elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )

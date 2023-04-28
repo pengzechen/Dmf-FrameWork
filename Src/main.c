@@ -126,9 +126,11 @@ int main(int argc, char* argv[])
 
 	conf_init();        // 服务框架参数初始化
 	log_init();         // 日志记录模块初始化
+    middleware_init();  // 中间件初始化
 	session_init();     // session 模块初始化
 	template_init();    // 模板模块初始化
     router_init();      // 路由模块初始化
+
     
 	mysql_pool_init();  // mysql 连接池初始化
 
