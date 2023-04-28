@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.10.0)
 #指定项目名称
 project(DmfServer)
 
+#  cmake:reset cmake tools for extension state
+
 #可以输出中文
 if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     add_definitions("-fexec-charset=gbk")
