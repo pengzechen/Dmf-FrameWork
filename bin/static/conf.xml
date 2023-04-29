@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="gbk"?>
+<dmfserver>
+
+  <server>
+	  <listen>80</listen>
+    <host>localhsot</host>
+    <mode>SSLSimpleServer</mode>
+    <cert>
+      <private>./cert/localhost-key.pem</private>
+      <public>./cert/localhost.pem</public>
+    </cert>
+  </server>
+
+  <model>
+    <host>localhost</host>
+    <port>3306</port>
+    <username>pzc</username>
+    <password>pzc123</password>
+    <database>pzc</database>
+  </model>
+
+  <template>
+	  <dir>./template</dir>
+  </template>
+
+  <response>
+    <static>
+	    <dir>./static</dir>
+    </static>
+  </response>
+
+</dmfserver>
