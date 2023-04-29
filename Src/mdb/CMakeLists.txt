@@ -5,9 +5,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/mdb)
 
 
 
-# file( GLOB mdb_SRC "test.c")
+file( GLOB libmdb_SRC "mdb_operate.c")
 # 添加动态链接库
-# add_library(share SHARED ${mdb_SRC} )
+add_library(mdb_operate SHARED ${libmdb_SRC} )
 
 
 add_executable(mdbserver "mdbserver.c")

@@ -28,8 +28,8 @@
 #define MAX_VALUE_LEN 1024
 #define MAX_ENTRIES 65535
 
-#define SHARED_STR "SharedMemory"
-#define SHARED_MUTEX "SharedMemoryMutex"
+#define SHARED_STR      "SharedMemory"
+#define SHARED_MUTEX    "SharedMemoryMutex"
 
 typedef struct {
     char key[MAX_KEY_LEN];

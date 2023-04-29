@@ -20,7 +20,15 @@
 #include <dmfserver/mdb/mdb.h>
 
 
+void mdb_lib_test()
+{
+    HMODULE handle = LoadLibrary("./libmdb_operate.dll");
+}
+
 int main(int argc, char **argv) {
+    
+    mdb_lib_test();
+
     HANDLE file_mapping = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
