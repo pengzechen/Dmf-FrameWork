@@ -66,8 +66,6 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
 
 endif()
 
-
-
-#添加子目录
-add_subdirectory(${PROJECT_SOURCE_DIR}/Src/mdb) 
+# 构建mdb子目录
+add_subdirectory("${PROJECT_SOURCE_DIR}/Src/mdb") 
 

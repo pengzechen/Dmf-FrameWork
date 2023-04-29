@@ -22,10 +22,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef __WIN32__
 	#define DLL_EXPORT __declspec(dllexport)
 	#include <windows.h>
-#endif  // WIN32
+#endif // WIN32
 
 #include "mdb.h"
 
