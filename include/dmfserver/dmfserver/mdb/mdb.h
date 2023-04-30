@@ -22,7 +22,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+
+#ifdef __WIN32__
+    #include <windows.h>
+#endif // __WIN32__
 
 #define MAX_KEY_LEN 256
 #define MAX_VALUE_LEN 1024

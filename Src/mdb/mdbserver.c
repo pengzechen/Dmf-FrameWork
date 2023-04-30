@@ -20,6 +20,7 @@
 
 
 int main() {
+    
     HANDLE file_mapping = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
