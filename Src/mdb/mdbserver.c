@@ -20,7 +20,8 @@
 
 
 int main() {
-    
+
+#ifdef __WIN32__
     HANDLE file_mapping = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
@@ -99,6 +100,7 @@ int main() {
     CloseHandle(mutex);
     UnmapViewOfFile(shared_data);
     CloseHandle(file_mapping);
+#endif // WIN32
 
     return 0;
 }

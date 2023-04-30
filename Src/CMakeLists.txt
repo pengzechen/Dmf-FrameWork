@@ -62,6 +62,7 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     ${elr_mpl_SRC} 
     ${conf_SRC} 
     ${utility_SRC}
+    ${middleware_SRC}
     "./mdb/mdb_operate.c" )
 
 endif()

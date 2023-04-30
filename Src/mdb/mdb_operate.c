@@ -163,6 +163,20 @@
 
 #elif __linux__
 
+    void mdb_operate_init()
+    {
+
+    }
+
+    char* mdb_find(char* key)
+    {
+        return "";
+    }
+
+    void mdb_insert(char* key, char* value)
+    {
+        
+    }
 
 
 #endif // __linux__
