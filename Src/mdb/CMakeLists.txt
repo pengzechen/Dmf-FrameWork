@@ -8,11 +8,19 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/mdb")
 file( GLOB libmdb_SRC "mdb_operate.c")
 add_library(mdb_operate SHARED ${libmdb_SRC} )
 
+# 编译 mdbserver
+add_executable(mdbserver "mdbserver.c")
+
 
 # 编译 mdbrw
 link_directories("${PROJECT_SOURCE_DIR}/bin/mdb/")
-link_libraries("libmdb_operate")
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    link_libraries("mdb_operate")
+else(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    link_libraries("libmdb_operate")
+endif()
+
 add_executable(rw3 "mdbrw3.c")
 
-# 编译 mdbserver
-add_executable(mdbserver "mdbserver.c")
+
