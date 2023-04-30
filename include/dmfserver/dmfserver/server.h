@@ -127,7 +127,7 @@ extern "C" {
 	#endif  		   // Windows
 	
 	#ifdef __linux__   // linux epool Model
-		extern int epoll_server_make();
+		extern void epoll_server_make();
 		extern int epoll_ssl_server();
 	#endif  		   // linux
 

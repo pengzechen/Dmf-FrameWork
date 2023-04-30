@@ -54,6 +54,9 @@
 #define EBUFLEN 128
 #define BUFLEN 1024
 
+typedef void (*worker_function)();
+void multi_process_init(worker_function _wf);
+
 int pcre_test() 
 {
 	pcre  *re;
@@ -176,6 +179,7 @@ int main(int argc, char* argv[])
 	// simple_server_make();
 	// simple_ssl_server_make();
 	epoll_server_make();
+    // multi_process_init(&epoll_server_make);
 	// epoll_ssl_server();
 #endif 				// linux
 
