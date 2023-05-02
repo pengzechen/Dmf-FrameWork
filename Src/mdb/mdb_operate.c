@@ -163,6 +163,21 @@
 
 #elif __linux__
 
+    void mdb_operate_init()
+    {
+        printf("[Mdb: Info]: mdb init successfully! \n");
+        printf("\n");
+    }
+
+    char* mdb_find(char* key)
+    {
+        return "linux";
+    }
+
+    void mdb_insert(char* key, char* value)
+    {
+        
+    }
 
 
 #endif // __linux__

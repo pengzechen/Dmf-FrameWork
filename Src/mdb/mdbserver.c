@@ -19,8 +19,9 @@
 #include <dmfserver/mdb/mdb.h>
 
 
-int main() {
-    
+#ifdef __WIN32__
+int server_start()
+{
     HANDLE file_mapping = CreateFileMapping(
         INVALID_HANDLE_VALUE,
         NULL,
@@ -99,6 +100,15 @@ int main() {
     CloseHandle(mutex);
     UnmapViewOfFile(shared_data);
     CloseHandle(file_mapping);
+}
+#endif // WIN32
+
+int main() {
+
+#ifdef __WIN32__
+    
+#endif // WIN32
+
 
     return 0;
 }

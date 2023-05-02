@@ -13,13 +13,13 @@ void mdbfind(int a, const Request* req)
 
 	str_from_mdb = mdb_find(pdata);
 	Res_row(a, str_from_mdb);
-	free(str_from_mdb);
+	//free(str_from_mdb);
 }
 
 void mdbinsert(int a, const Request* req)
 {
 	char ckey[64] = {0};
-	char cdata[64] = {0};
+	char cdata[512] = {0};
 	strcpy(ckey, req->query[0].key);
 	strcpy(cdata, req->query[0].data);
 	char* key = ckey;

@@ -44,7 +44,11 @@ extern "C" {          // we need to export the C interface
         DLL_EXPORT extern void mdb_insert(char* key, char* value);
         
     #elif __linux__			// WIN32
-        
+        extern void mdb_operate_init();
+
+        extern char* mdb_find(char* key);
+
+        extern void mdb_insert(char* key, char* value);
     #endif // linux
 
 

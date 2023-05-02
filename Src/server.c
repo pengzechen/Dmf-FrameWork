@@ -503,7 +503,7 @@ void simple_ssl_server_make()
                     ParseHttp(&req1, res_str, pfd);
                     serverTime(time);
 
-                    log_info("SERVER", 365, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
+                    log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
                     
                     memset(time, 0, 30);
                     
@@ -524,20 +524,20 @@ void simple_ssl_server_make()
     }
 
 
-    extern int epoll_server_make() {
+    extern void epoll_server_make() {
 
         long fd = 1;
         thread_arg* arg = malloc(sizeof(thread_arg));
         arg->cmp = g_cmp;
         arg->fd = fd;
 
-        for (int i = 0; i < 18; ++i) {
+        for (int i = 0; i < 10; ++i) {
             pthread_t roundCheck;
             pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
             pthread_join(roundCheck, NULL);
         }
         
-        return 0;
+        return;
     }
 
 

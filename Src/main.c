@@ -54,6 +54,9 @@
 #define EBUFLEN 128
 #define BUFLEN 1024
 
+typedef void (*worker_function)();
+void multi_process_init(worker_function _wf);
+
 int pcre_test() 
 {
 	pcre  *re;
@@ -131,30 +134,30 @@ int main(int argc, char* argv[])
 	signal(SIGTERM, handle_signal);
 
 	conf_init();        // 服务框架参数初始化
-    Sleep(500);
+    //Sleep(500);
 	log_init();         // 日志记录模块初始化
-    Sleep(500);
+    //Sleep(500);
     middleware_init();  // 中间件初始化
-    Sleep(500);
+    //Sleep(500);
 	session_init();     // session 模块初始化
-    Sleep(500);
+    //Sleep(500);
 	template_init();    // 模板模块初始化
-    Sleep(500);
+    //Sleep(500);
     router_init();      // 路由模块初始化
-    Sleep(500);
+    //Sleep(500);
 
     
 	mysql_pool_init();  // mysql 连接池初始化
-    Sleep(500);
+    //Sleep(500);
 
 	elr_mpl_init();     // 内存池初始化
-    Sleep(500);
+    //Sleep(500);
 
 	pool_init(8220, 8220*4096);  // server 模块内存池初始化
     pool_init2(4, 4*4096);       // server 模块内存池初始化
 
     mdb_operate_init();   // mdb 模块初始化
-    Sleep(500);
+    //Sleep(500);
     
     /*
         *以下载入 views 的函数，
@@ -176,6 +179,7 @@ int main(int argc, char* argv[])
 	// simple_server_make();
 	// simple_ssl_server_make();
 	epoll_server_make();
+    // multi_process_init(&epoll_server_make);
 	// epoll_ssl_server();
 #endif 				// linux
 
