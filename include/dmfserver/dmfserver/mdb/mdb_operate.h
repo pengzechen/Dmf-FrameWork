@@ -28,6 +28,11 @@
 	#include <windows.h>
 #endif // WIN32
 
+#ifdef __linux__
+    #include <sys/ipc.h>
+    #include <sys/shm.h>
+#endif // LINUX
+
 #include "mdb.h"
 
 

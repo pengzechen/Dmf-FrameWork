@@ -163,6 +163,8 @@
 
 #elif __linux__
 
+    static int shmid;
+
     void mdb_operate_init()
     {
         printf("[Mdb: Info]: mdb init successfully! \n");
