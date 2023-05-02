@@ -18,6 +18,7 @@
     */
    
 #include <dmfserver/middleware/middleware.h>
+#include <dmfserver/request.h>
 
 
 
