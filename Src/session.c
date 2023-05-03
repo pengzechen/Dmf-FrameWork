@@ -133,18 +133,6 @@ static int get_random_str(char* random_str, const int random_len)
 }
 
 
-// BKDR Hash Function
-static unsigned int BKDRHash(char *str)
-{
-    unsigned int seed = 131;   // 31 131 1313 13131 131313 etc..
-    unsigned int hash = 0;
-    while (*str){
-        hash = hash * seed + (*str++);
-    }
-    return (hash & 0x7FFFFFFF);
-}
-
-
 void* session_write_file() {
     // while(1){
     //     SessionAll();

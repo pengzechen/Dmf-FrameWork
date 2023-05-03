@@ -27,6 +27,7 @@
 #include <pthread.h>
 #include <dmfserver/request.h>
 #include <dmfserver/utility/utility.h>
+#include <dmfserver/utility/dm_hash.h>
 #include <time.h>
 // #include <windows.h>
 
