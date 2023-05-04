@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-    extern static unsigned int BKDRHash(char *str);
+    extern unsigned int BKDRHash(char *str);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
