@@ -9,3 +9,7 @@ build/*
 bin/*.*
 bin/server
 bin/server.log
+bin/mdb/libmdb_operate.dll
+bin/mdb/libmdb_operate.dll.a
+bin/mdb/mdbserver.exe
+bin/mdb/rw3.exe
