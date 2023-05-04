@@ -95,6 +95,12 @@ extern "C" {
 
 	void ParseHttp(Request *request, char *data, Perfd pfd);
 
+	void GetSessionStr(const Request* req, char session_str[]) ;
+
+	void GetParamData(const Request *req, char* key, char data[]);
+
+	void GetQueryData(const Request *req, char* key, char data[]);
+
 	void freeReq(Request *req);
 
 

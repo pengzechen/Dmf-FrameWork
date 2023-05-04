@@ -504,6 +504,41 @@ void ParseHttp(Request *request, char *data, Perfd pfd)
 	
 }
 
+void GetSessionStr(const Request* req, 
+					char session_str[]) // OUT 
+{
+    char* temp;
+	for(int i=0; i<=req->p_int; i++) {
+		if( strcmp(req->params[i].key, "Cookie") == 0 ) {
+			temp = strstr(req->params[i].data, "dmfsession=");
+			if( temp != NULL && strlen(temp) >= 21 ){  //
+				*(temp + 21) = '\0';
+				strcpy(session_str, temp + 11);
+			}
+		}
+	}
+}
+
+
+void GetParamData(const Request *req, char* key, char data[])
+{
+	for(int i=0; i<=req->q_int; i++) {
+		if( strcmp(req->params[i].key, key) == 0 ) {
+			strcpy(data, req->params[i].data);
+		}
+	}
+}
+
+
+void GetQueryData(const Request *req, char* key, char data[])
+{
+	for(int i=0; i<=req->q_int; i++) {
+		if( strcmp(req->query[i].key, key) == 0 ) {
+			strcpy(data, req->query[i].data);
+		}
+	}
+}
+
 
 void freeReq(Request *req) 
 {

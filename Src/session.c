@@ -262,21 +262,13 @@ extern void SessionCreate(char* random_str, char* key, char* value)
     \param 传入 req   */
 extern char* getSessionR(const Request* req, char* key) 
 {
-    char *str1;
-    char* session_res = NULL;
+   	char req_session[32] = {0};
+	GetSessionStr(req, req_session);
 
-	for(int i=0; i<=req->p_int; i++) {
-		if(strcmp(req->params[i].key, "Cookie")==0) {
-			str1 = strstr(req->params[i].data, "dmfsession=");
-            *(str1 + 21) = '\0';
-			if(str1 != NULL){
-				session_res = getSession(str1+11, key);
-                return session_res == NULL ? NULL : session_res;
-			}
-		}
-	}
-
-    return NULL;
+    
+    char* session_res;
+    session_res = getSession(req_session, key);
+    return session_res;
 }
 
 
@@ -392,9 +384,9 @@ extern int UpdateSessionDataR(const Request* req, char* key, char* newdata)
 		if(strcmp(req->params[i].key, "Cookie")==0) {
 			str1 = strstr(req->params[i].data, "dmfsession=");
             *(str1 + 21) = '\0';
-			if(str1 != NULL){
+			if(str1 != NULL) {
                 return UpdateSessionData( str1+11, key, newdata);
-			}else{
+			} else {
                 return 0;   // Cookie 没有 session
             }
 		}

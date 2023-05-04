@@ -30,5 +30,7 @@ extern void middleware_init()
 
 extern void middleware_handle(const Request* req)
 {
-
+    char res[64] = {0};
+    GetParamData(req, "Host", res);
+    printf("%s\n", res);
 }
