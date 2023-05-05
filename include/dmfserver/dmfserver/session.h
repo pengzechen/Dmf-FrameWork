@@ -31,7 +31,7 @@
 #include <time.h>
 // #include <windows.h>
 
-#define HASH_DEC_LEN 50
+#define HASH_DEC_LEN 4096
 
 typedef struct _SessionData {
     char* key;
@@ -50,7 +50,7 @@ typedef struct _HashNode
 
 } HashNode ;
 
-#define SESSION_EXPIRE_DEFAULT 60 * 2
+#define SESSION_EXPIRE_DEFAULT 60 * 5
 
 // 在session模块中使用的全局变量
 static HashNode g_session_all_dec[ HASH_DEC_LEN ];

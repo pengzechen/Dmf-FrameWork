@@ -33,7 +33,7 @@
 
 #include <dmfserver/request.h>
 
-void MultiParse (Request *request, char *boundary ) 
+void req_parse_multi_part (Request *request, char *boundary ) 
 {
 	
 	char *p = NULL;
@@ -237,7 +237,7 @@ void MultiParse (Request *request, char *boundary )
 }
 
 
-void ParseHttp(Request *request, char *data, Perfd pfd)
+void req_parse_http(Request *request, char *data, Perfd pfd)
 {
 	
 	//p 指向 data 首地址
@@ -432,7 +432,7 @@ void ParseHttp(Request *request, char *data, Perfd pfd)
 							b = strstr(request->params[k].data, "boundary=");
 							memset(boundary, 0, 64);
 							memcpy(boundary, b+9, strlen(b) - 9);
-							MultiParse(request, boundary);
+							req_parse_multi_part(request, boundary);
 						}
 					}
 					break;
@@ -504,7 +504,7 @@ void ParseHttp(Request *request, char *data, Perfd pfd)
 	
 }
 
-void GetSessionStr(const Request* req, 
+void req_get_session_str(const Request* req, 
 					char session_str[]) // OUT 
 {
     char* temp;
@@ -520,7 +520,7 @@ void GetSessionStr(const Request* req,
 }
 
 
-void GetParamData(const Request *req, char* key, char data[])
+void req_get_param(const Request *req, char* key, char data[])
 {
 	for(int i=0; i<=req->q_int; i++) {
 		if( strcmp(req->params[i].key, key) == 0 ) {
@@ -530,7 +530,7 @@ void GetParamData(const Request *req, char* key, char data[])
 }
 
 
-void GetQueryData(const Request *req, char* key, char data[])
+void req_get_query(const Request *req, char* key, char data[])
 {
 	for(int i=0; i<=req->q_int; i++) {
 		if( strcmp(req->query[i].key, key) == 0 ) {
@@ -540,7 +540,7 @@ void GetQueryData(const Request *req, char* key, char data[])
 }
 
 
-void freeReq(Request *req) 
+void req_free(Request *req) 
 {
 	
 	free(req->body.body);

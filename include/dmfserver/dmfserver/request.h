@@ -91,17 +91,17 @@ typedef struct req Request;
 extern "C" {
 #endif
 
-	static void MultiParse (Request *request, char *boundary );
+	void req_parse_multi_part (Request *request, char *boundary );
 
-	void ParseHttp(Request *request, char *data, Perfd pfd);
+	void req_parse_http(Request *request, char *data, Perfd pfd);
 
-	void GetSessionStr(const Request* req, char session_str[]) ;
+	void req_get_session_str(const Request* req, 		char session_str[]) ;
 
-	void GetParamData(const Request *req, char* key, char data[]);
+	void req_get_param(const Request *req, char* key, 	char data[]);
 
-	void GetQueryData(const Request *req, char* key, char data[]);
+	void req_get_query(const Request *req, char* key, 	char data[]);
 
-	void freeReq(Request *req);
+	void req_free(Request *req);
 
 
 #ifdef __cplusplus

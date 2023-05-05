@@ -263,7 +263,7 @@ extern void SessionCreate(char* random_str, char* key, char* value)
 extern char* getSessionR(const Request* req, char* key) 
 {
    	char req_session[32] = {0};
-	GetSessionStr(req, req_session);
+	req_get_session_str(req, req_session);
 
     
     char* session_res;
@@ -319,19 +319,14 @@ extern char* getSession(char* session_str, char* key)
     \return -1: req 对象没有 session  */
 extern int SessionAddR(const Request* req, char* key, char* data) 
 {
-    char *str1;
-	for(int i=0; i<=req->p_int; i++) {
-		if(strcmp(req->params[i].key, "Cookie")==0) {
-			str1 = strstr(req->params[i].data, "dmfsession=");
-            *(str1 + 21) = '\0';
-			if(str1 != NULL){
-                return SessionAdd( str1+11, key, data);
-			}else{
-                return -1;   // req 对象没有 session
-            }
-		}
-	}
-    return -1;       // req 对象没有 session
+    char str1[32] = {0};
+    req_get_session_str(req, str1);
+    if(strlen(str1) > 0){
+        return SessionAdd( str1+11, key, data);
+    }else{
+        return -1;   // req 对象没有 session
+    }
+		
 }
 
 
@@ -379,19 +374,14 @@ extern int SessionAdd(char* session_str, char* key, char* value)
     \return 修改成功返回1  */
 extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) 
 {
-    char *str1;
-	for(int i=0; i<=req->p_int; i++) {
-		if(strcmp(req->params[i].key, "Cookie")==0) {
-			str1 = strstr(req->params[i].data, "dmfsession=");
-            *(str1 + 21) = '\0';
-			if(str1 != NULL) {
-                return UpdateSessionData( str1+11, key, newdata);
-			} else {
-                return 0;   // Cookie 没有 session
-            }
-		}
-	}
-    return 0;       // req 对象没有 session
+    char str1[32] = {0};
+    req_get_session_str(req, str1);
+    if(strlen(str1) > 0) {
+        return UpdateSessionData( str1, key, newdata);
+    } else {
+        return 0;   // Cookie 没有 session
+    }
+		
 }
 
 

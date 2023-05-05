@@ -93,7 +93,7 @@ void router_handle(int acceptFd, Request *req)
 	if(flag == 0) {
 	
 		// char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
-		// int num = searchLocalFile(local_path);
+		// int num = search_local_file(local_path);
 		for(int i=0; i <= g_num_files; i++){
 			if( strcmp(req->path, g_file_list[i].url) == 0){
 				Res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
@@ -107,7 +107,7 @@ void router_handle(int acceptFd, Request *req)
 }
 
 
-int searchLocalFile(char* local_paths[])
+int search_local_file(char* local_paths[])
 {
 	struct dirent *ptr;
 	DIR *dir;

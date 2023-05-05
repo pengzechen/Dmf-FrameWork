@@ -82,7 +82,7 @@ static void req_res_handler(int acceptFd )
 
     Perfd pfd = {.fd = acceptFd, .ssl = NULL};
 
-	ParseHttp(&req1, res_str, pfd);
+	req_parse_http(&req1, res_str, pfd);
 	
 	char time [30] = {'\0'};
 	serverTime(time);
@@ -91,7 +91,7 @@ static void req_res_handler(int acceptFd )
 	router_handle( acceptFd, &req1);
 	//通过请求的 path 掉用了对应的处理函数
 	
-	freeReq(&req1);
+	req_free(&req1);
 
 }
 
@@ -279,7 +279,7 @@ void simple_ssl_server_make()
             pfd.fd = PerHandleData->Socket;
             pfd.ssl = NULL;
             // 解析 http 请求
-            ParseHttp(&req1, PerIoData->Buffer, pfd);
+            req_parse_http(&req1, PerIoData->Buffer, pfd);
             // 根据解析出来的结果运行中间件
             middleware_handle(&req1);
             // 进行必要日志记录
@@ -295,7 +295,7 @@ void simple_ssl_server_make()
                 *在view函数中必须调用response模块进行返回
                 */
             router_handle(PerHandleData->Socket, &req1);
-            freeReq(&req1);
+            req_free(&req1);
         #endif // __SERVER_IOCO_DEBUG__
             
             
@@ -500,7 +500,7 @@ void simple_ssl_server_make()
                     pfd.fd = tmp_epoll_recv_fd;
                     pfd.ssl = NULL;
                     
-                    ParseHttp(&req1, res_str, pfd);
+                    req_parse_http(&req1, res_str, pfd);
                     serverTime(time);
 
                     log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
@@ -509,7 +509,7 @@ void simple_ssl_server_make()
                     
                     router_handle(tmp_epoll_recv_fd, &req1);
                     
-                    freeReq(&req1);
+                    req_free(&req1);
                     //send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
 

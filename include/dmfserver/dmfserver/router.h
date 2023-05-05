@@ -81,7 +81,7 @@ void router_init();
 
 void router_handle(int acceptFd, Request *req);
 
-static int searchLocalFile(char* local_paths[]);
+static int search_local_file(char* local_paths[]);
 
 void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files);
 

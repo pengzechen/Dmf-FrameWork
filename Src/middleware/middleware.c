@@ -19,7 +19,7 @@
    
 #include <dmfserver/middleware/middleware.h>
 #include <dmfserver/request.h>
-#include "jwt_token.c"
+// #include "jwt_token.c"
 
 
 extern void middleware_init()
@@ -31,6 +31,6 @@ extern void middleware_init()
 extern void middleware_handle(const Request* req)
 {
     char res[64] = {0};
-    GetParamData(req, "Host", res);
+    req_get_param(req, "Host", res);
     printf("    [MiddleWare: ] Host: %s\n", res);
 }
