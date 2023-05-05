@@ -48,7 +48,6 @@
 #elif __WIN32__
 #include <jansson/jansson.h>
 #include <pcre/pcre.h>
-#include <jwt/jwt.h>
 
 #endif
 

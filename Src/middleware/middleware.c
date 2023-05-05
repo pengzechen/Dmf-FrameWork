@@ -19,7 +19,7 @@
    
 #include <dmfserver/middleware/middleware.h>
 #include <dmfserver/request.h>
-
+#include "jwt_token.c"
 
 
 extern void middleware_init()

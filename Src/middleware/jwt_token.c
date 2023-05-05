@@ -1,4 +1,5 @@
 
+#include <jwt/jwt.h>
 
 
 void jwt_test_new(char token[])
@@ -34,22 +35,25 @@ void jwt_test_verify(char* token)
     jwt_valid_new(&jwt_valid, JWT_ALG_HS256);
     jwt_valid_set_headers(jwt_valid, 1);
 	jwt_valid_set_now(jwt_valid, time(NULL));
+    if( jwt_valid_add_grant(jwt_valid, "sub", "1234567890") == 0 )
+    printf("sub ok\n");
+    if( jwt_valid_add_grant(jwt_valid, "name", "pzc") == 0 )
+    printf("name ok\n");
 
     ret = jwt_decode(&jwt_verify, token, "123", 3);
 	if (ret != 0 || jwt_verify == NULL) {
         return;
 		fprintf(stderr, "invalid jwt\n");
 	}
+
+    
     
     if (jwt_validate(jwt_verify, jwt_valid) != 0) {
 		fprintf(stderr, "jwt failed to validate: %08x\n", jwt_valid_get_status(jwt_valid));
 		jwt_dump_fp(jwt_verify, stderr, 1);
 	}
 
-    if( jwt_valid_add_grant(jwt_valid, "sub", "1234567890") == 0 )
-    printf("sub ok\n");
-    if( jwt_valid_add_grant(jwt_valid, "name", "pzc") == 0 )
-    printf("name ok\n");
+    
 }
 
 void jwt_test()
@@ -58,5 +62,5 @@ void jwt_test()
     jwt_test_new(token);
     printf("%s\n", token);
     jwt_test_verify(token);
-
+    
 }
