@@ -5,7 +5,10 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/mdb")
 
 
 # 添加动态链接库
-file( GLOB libmdb_SRC "mdb_operate.c")
+file( GLOB libmdb_SRC 
+        "mdb_operate.c" 
+        "../utility/dm_hash.c"
+    )
 add_library(mdb_operate SHARED ${libmdb_SRC} )
 
 # 编译 mdbserver

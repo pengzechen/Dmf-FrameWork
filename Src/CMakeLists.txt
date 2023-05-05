@@ -23,6 +23,7 @@ if( CMAKE_SYSTEM_NAME STREQUAL "Windows" )
     link_libraries("libjansson")
     link_libraries("libpcre32")
     link_libraries("libpcre")
+    link_libraries("libjwt")
 
     # pthread 有冲突
     add_definitions("-DHAVE_STRUCT_TIMESPEC")

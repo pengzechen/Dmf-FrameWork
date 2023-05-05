@@ -106,7 +106,7 @@ int server_start()
 int main() {
 
 #ifdef __WIN32__
-    
+    server_start();
 #endif // WIN32
 
 

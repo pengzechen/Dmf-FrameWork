@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dmfserver/utility/dm_hash.h>
 
 #ifdef __WIN32__
 	#define DLL_EXPORT __declspec(dllexport)

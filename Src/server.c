@@ -109,7 +109,7 @@ static int create_socket()
     struct sockaddr_in ser;
     sListen = socket(AF_INET, SOCK_STREAM, 0);
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(80); 
+    ser.sin_port = htons(443); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
     if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
     {

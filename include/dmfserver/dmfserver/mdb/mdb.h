@@ -27,18 +27,19 @@
     #include <windows.h>
 #endif // __WIN32__
 
-#define MAX_KEY_LEN 256
-#define MAX_VALUE_LEN 1024
-#define MAX_ENTRIES 65535
+/*      Middleware Shared Memory       */
+    #define MAX_KEY_LEN 256
+    #define MAX_VALUE_LEN 1024
+    #define MAX_ENTRIES 65535
 
-#define SHARED_STR      "SharedMemory"
-#define SHARED_MUTEX    "SharedMemoryMutex"
+    #define SHARED_STR      "MiddleWare_SharedMemory"
+    #define SHARED_MUTEX    "MiddleWare_SharedMemoryMutex"
 
-typedef struct {
-    char key[MAX_KEY_LEN];
-    char value[MAX_VALUE_LEN];
-} entry_t;
-
+    typedef struct {
+        char key[MAX_KEY_LEN];
+        char value[MAX_VALUE_LEN];
+    } entry_t;
+/*      Middleware Shared Memory       */
 
 
 #endif // __MDB_INCLUDE__

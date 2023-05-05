@@ -20,7 +20,9 @@
 #include <dmfserver/mdb/mdb_operate.h>
 
 
-
+// 人民群众是社会物质的创造者
+// 人民群众是社会精神的创造者
+// 人民群众是社会变革的决定力量
 
 #ifdef __WIN32__
 
@@ -90,7 +92,7 @@
         entry_t *shared_data;
         int flag = 0;
         char* res;
-        int i = 0;
+        unsigned int ihash;
 
 
         shared_data = (entry_t *)MapViewOfFile(
@@ -107,18 +109,21 @@
             return "";
         }
 
+        ihash = BKDRHash(key);
+        if(ihash >= MAX_ENTRIES)
+            ihash = ihash / MAX_ENTRIES;
+
         WaitForSingleObject(mutex, INFINITE);
-        for (; i < MAX_ENTRIES; i++) {
-            if (strcmp(shared_data[i].key, key) == 0) {
-                flag = 1;
-                break;
-            }
+
+        if (strcmp(shared_data[ihash].key, key) == 0) {
+            flag = 1;
         }
+
         ReleaseMutex(mutex);
 
         if(flag) {
             res =  (char*)malloc(sizeof(char)*MAX_VALUE_LEN) ;
-            strcpy(res, shared_data[i].value);
+            strcpy(res, shared_data[ihash].value);
             UnmapViewOfFile(shared_data);
             return res;
         }
@@ -131,6 +136,7 @@
     void mdb_insert(char* key, char* value) 
     {
         entry_t *shared_data;
+        unsigned int ihash;
 
         shared_data = (entry_t *)MapViewOfFile(
             file_mapping,
@@ -146,19 +152,16 @@
             return ;
         }
 
+        ihash = BKDRHash(key);
+        if(ihash >= MAX_ENTRIES)
+            ihash = ihash / MAX_ENTRIES;
+        
         WaitForSingleObject(mutex, INFINITE);
-
-        for (int i = 0; i < MAX_ENTRIES; i++) {
-            if (strlen(shared_data[i].key) == 0) {
-                strncpy(shared_data[i].key, key, MAX_KEY_LEN);
-                strncpy(shared_data[i].value, value, MAX_VALUE_LEN);
-            }
-        }
-
+        strncpy(shared_data[ihash].key, key, MAX_KEY_LEN);
+        strncpy(shared_data[ihash].value, value, MAX_VALUE_LEN);
         ReleaseMutex(mutex);
 
         UnmapViewOfFile(shared_data);
-
     }
 
 #elif __linux__

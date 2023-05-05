@@ -48,6 +48,8 @@
 #elif __WIN32__
 #include <jansson/jansson.h>
 #include <pcre/pcre.h>
+#include <jwt/jwt.h>
+
 #endif
 
 #define OVECCOUNT 30 /* should be a multiple of 3 */
@@ -113,10 +115,61 @@ void jannson_test()
     bool Judge = json_is_object(&val);
 }
 
+
+void jwt_test()
+{
+    int ret = 0;
+	jwt_t *jwt = NULL;
+    char* jwt_token = NULL;
+    ret = jwt_new(&jwt);
+    time_t iat = time(NULL);
+
+    jwt_set_alg(jwt, JWT_ALG_HS256, "123", 3);
+
+    jwt_add_grant(jwt, "sub", "1234567890");
+    jwt_add_grant(jwt, "name", "pzc");
+    jwt_add_grant(jwt, "admin", "true");
+    jwt_add_grant_int(jwt, "iat", iat);
+    jwt_token = jwt_encode_str(jwt);
+    jwt_dump_fp(jwt, stderr, 1);
+	fprintf(stderr, "jwt algo %s!\n", jwt_alg_str(JWT_ALG_HS256));
+    printf("%s\n", jwt_token);
+    jwt_free(jwt);
+
+
+
+
+    jwt_t *jwt_verify = NULL;
+    jwt_valid_t *jwt_valid;
+    jwt_valid_new(&jwt_valid, JWT_ALG_HS256);
+
+    jwt_valid_set_headers(jwt_valid, 1);
+	jwt_valid_set_now(jwt_valid, time(NULL));
+
+    ret = jwt_decode(&jwt_verify, jwt_token, "123", 3);
+	if (ret != 0 || jwt == NULL) {
+		fprintf(stderr, "invalid jwt\n");
+	}
+
+    if( jwt_valid_add_grant(jwt_valid, "sub", "1234567890") == 0 )
+    printf("sub ok\n");
+    if( jwt_valid_add_grant(jwt_valid, "name", "pzc") == 0 )
+    printf("name ok\n");
+    
+
+    if (jwt_validate(jwt_verify, jwt_valid) != 0) {
+		fprintf(stderr, "jwt failed to validate: %08x\n", jwt_valid_get_status(jwt_valid));
+		jwt_dump_fp(jwt_verify, stderr, 1);
+	}
+
+    jwt_free_str(jwt_token);
+}
+
 int main(int argc, char* argv[]) 
 {
 	pcre_test();
 	jannson_test();
+    
 
 	#ifdef __WIN32__
 		system("cls");
@@ -124,6 +177,8 @@ int main(int argc, char* argv[])
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
 	#endif // WIN32
+
+    jwt_test();
 
     #ifdef __SERVER_MPOOL__
         printf("server mpool start !\n");
