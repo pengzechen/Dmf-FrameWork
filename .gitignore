@@ -6,7 +6,6 @@ bin/*.exe
 
 
 build/*
-bin/*.*
 bin/server
 bin/server.log
 bin/mdb/libmdb_operate.dll
