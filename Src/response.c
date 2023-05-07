@@ -68,6 +68,20 @@ extern void Res_render(int acceptFd, char* template_name, struct Kvmap *kv, int 
 }
 
 
+// 中间件调用的返回函数
+// *************************************************************************
+
+extern void Res_without_permission(int acceptFd) 
+{
+	char final_str[FINAL_STR_SIZE] = {0};
+
+	strcat( final_str, "HTTP/1.1 403 \r\n\r\nYou are without permission");
+	
+	ResHandel(acceptFd, final_str, strlen(final_str));
+}
+
+// *************************************************************************
+
 
 // 响应初始化 
 // *************************************************************************

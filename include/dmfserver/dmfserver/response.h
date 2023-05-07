@@ -56,6 +56,8 @@ void Res_init(int fd, Response* res);
 
 static void ResHandel( int acceptFd, char* res_str, unsigned int size);
 
+extern void Res_without_permission(int acceptFd);
+
 static char* loadFile(char *path);
 
 extern void SetHead(Response* res, char* code);

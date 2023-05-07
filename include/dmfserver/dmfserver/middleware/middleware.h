@@ -21,13 +21,17 @@
 #define __MIDDLEWARE_INCLUDE__
 
 #include <dmfserver/request.h>
+#include <dmfserver/response.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+    static int middleware_check_if_too_often(const Request* req);
+
     extern void middleware_init();
-    extern void middleware_handle(const Request* req);
+
+    extern int middleware_handle(const Request* req);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

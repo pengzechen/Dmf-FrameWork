@@ -280,10 +280,19 @@ void simple_ssl_server_make()
             pfd.ssl = NULL;
             // 解析 http 请求
             req_parse_http(&req1, PerIoData->Buffer, pfd);
+
             // 根据解析出来的结果运行中间件
-            middleware_handle(&req1);
+            if( middleware_handle(&req1) < 0) {
+            #ifdef __SERVER_MPOOL__
+                pool_free( PerIoData);
+                pool_free2( PerHandleData);
+            #else 
+                free( PerIoData);
+                free( PerHandleData);
+            #endif // __SERVER_MPOOL__
+                continue;
+            }
             // 进行必要日志记录
-            
             serverTime(time);
             log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
             time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());

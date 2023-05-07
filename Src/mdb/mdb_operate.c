@@ -114,12 +114,19 @@
             0,
             MAX_IP_LIMIT_HANDLE * sizeof(IpLimit)
         );
+
+
         for(int i=0; i<MAX_IP_LIMIT_HANDLE; i++)
         {
             shared_data[i].time_start = 0;
             shared_data[i].request_num = 0;
+            shared_data[i].ab_ban = 0;
+            shared_data[i].invalid_num = 0;
             memset(shared_data[i].ip, 0, 16);
         }
+
+        printf("ip_limit_shared_memory size: %d\n", MAX_IP_LIMIT_HANDLE * sizeof(IpLimit));
+        printf("mdb_mapping size: %d\n", MAX_ENTRIES * sizeof(entry_t));
 
         printf("[Mdb: Info]: mdb init successfully! \n");
         printf("\n");
@@ -241,12 +248,12 @@
                 return 3;
             }
 
-            if ( curr_time - shared_data[ihash].time_start >= 10) {
+            if ( curr_time - shared_data[ihash].time_start >= 20) {
                 shared_data[ihash].time_start = curr_time;
                 shared_data[ihash].request_num = 1;   // 超时就归零
             } else {
 
-                if( shared_data[ihash].request_num >= 10) {  // 请求次数太多
+                if( shared_data[ihash].request_num >= 100) {  // 请求次数太多
 
                     shared_data[ihash].time_start = curr_time; // 归零时间
                     shared_data[ihash].request_num = 1;    // 归零次数

@@ -1,7 +1,7 @@
 
 
 
-void mfunction(char *out, char *in) 
+void mfunction(char *out, char *in)
 {
 	strcpy(out, in);
 }

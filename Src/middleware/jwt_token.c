@@ -46,14 +46,10 @@ void jwt_test_verify(char* token)
 		fprintf(stderr, "invalid jwt\n");
 	}
 
-    
-    
     if (jwt_validate(jwt_verify, jwt_valid) != 0) {
 		fprintf(stderr, "jwt failed to validate: %08x\n", jwt_valid_get_status(jwt_valid));
 		jwt_dump_fp(jwt_verify, stderr, 1);
-	}
-
-    
+	}    
 }
 
 void jwt_test()

@@ -23,8 +23,6 @@ void setsession(int a, const Request *req)
 	SetSession(&res, Session_str);
 	SetBody(&res, res_str, strlen(res_str));
 	ResParseSend(&res);
-
-	
 }
 
 void getsession(int a, const Request *req) 
