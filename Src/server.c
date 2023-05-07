@@ -271,7 +271,7 @@ void simple_ssl_server_make()
                 continue;
             }
             
-        #ifdef __SERVER_IOCO_DEBUG__
+        #ifdef __SERVER_IOCP_DEBUG__
             char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
             send(PerHandleData->Socket, res_str, strlen(res_str), 0);
             closesocket(PerHandleData->Socket);
@@ -282,6 +282,7 @@ void simple_ssl_server_make()
             req_parse_http(&req1, PerIoData->Buffer, pfd);
 
             // 根据解析出来的结果运行中间件
+
             if( middleware_handle(&req1) < 0) {
             #ifdef __SERVER_MPOOL__
                 pool_free( PerIoData);
@@ -292,6 +293,7 @@ void simple_ssl_server_make()
             #endif // __SERVER_MPOOL__
                 continue;
             }
+
             // 进行必要日志记录
             serverTime(time);
             log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
@@ -305,7 +307,7 @@ void simple_ssl_server_make()
                 */
             router_handle(PerHandleData->Socket, &req1);
             req_free(&req1);
-        #endif // __SERVER_IOCO_DEBUG__
+        #endif // __SERVER_IOCP_DEBUG__
             
             
         #ifdef __SERVER_MPOOL__

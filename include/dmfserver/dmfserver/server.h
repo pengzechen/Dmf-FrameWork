@@ -21,7 +21,7 @@
 
 #define SERVER_PORT 80
 #define RECEIVE_MAX_BYTES 1024*512
-#define DATA_BUFSIZE 8192
+#define DATA_BUFSIZE 2048
 #define MAXBUF 4096
 
 
@@ -95,7 +95,7 @@
 
 	#define __SERVER_MPOOL__		// 启用server内存池
 	
-	// #define __SERVER_IOCO_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
+	// #define __SERVER_IOCP_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
 
 #endif  		// Windows
 

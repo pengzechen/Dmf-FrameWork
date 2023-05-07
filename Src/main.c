@@ -157,8 +157,8 @@ int main(int argc, char* argv[])
 	elr_mpl_init();     // 内存池初始化
     //Sleep(500);
 
-	pool_init(8220, 8220*4096);  // server 模块内存池初始化
-    pool_init2(4, 4*4096);       // server 模块内存池初始化
+	pool_init(2076, 2076*8192);  // server 模块内存池初始化
+    pool_init2(4, 4*8192);       // server 模块内存池初始化
 
     mdb_operate_init();   // mdb 模块初始化
     //Sleep(500);

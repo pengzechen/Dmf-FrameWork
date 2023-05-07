@@ -253,14 +253,14 @@
                 shared_data[ihash].request_num = 1;   // 超时就归零
             } else {
 
-                if( shared_data[ihash].request_num >= 100) {  // 请求次数太多
+                if( shared_data[ihash].request_num >= 100000) {  // 请求次数太多
 
                     shared_data[ihash].time_start = curr_time; // 归零时间
                     shared_data[ihash].request_num = 1;    // 归零次数
                     shared_data[ihash].invalid_num ++;      // 记录异常次数
 
                     if(shared_data[ihash].invalid_num >= 3)  // 异常数大于2自动禁止
-                        shared_data[ihash].ab_ban = 1;
+                        shared_data[ihash].ab_ban = 0;
                         
                     flag = 2;  // unnomal
                 } else {
