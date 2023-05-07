@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dmfserver/utility/dm_hash.h>
+#include <time.h>
 
 #ifdef __WIN32__
 	#define DLL_EXPORT __declspec(dllexport)
@@ -48,6 +49,8 @@ extern "C" {          // we need to export the C interface
         DLL_EXPORT extern char* mdb_find(char* key);
 
         DLL_EXPORT extern void mdb_insert(char* key, char* value);
+
+        DLL_EXPORT extern int ip_check_valid(char* ip);
         
     #elif __linux__			// WIN32
         extern void mdb_operate_init();

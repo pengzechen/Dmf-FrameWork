@@ -26,8 +26,11 @@
 
 #ifdef __WIN32__
 
-    static HANDLE file_mapping;
-    static HANDLE mutex;
+    static HANDLE mdb_mapping;
+    static HANDLE mdb_mutex;
+
+    static HANDLE ip_limit_mapping;
+    static HANDLE ip_limit_mutex;
 
     BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
         switch(ul_reason_for_call){
@@ -61,7 +64,7 @@
 
     void mdb_operate_init() 
     {
-        file_mapping = CreateFileMapping(
+        mdb_mapping = CreateFileMapping(
             INVALID_HANDLE_VALUE,
             NULL,
             PAGE_READWRITE,
@@ -69,17 +72,53 @@
             MAX_ENTRIES * sizeof(entry_t),
             SHARED_STR
         );
-        if (file_mapping == NULL) {
+        if (mdb_mapping == NULL) {
             printf("Failed to create file mapping object. Error code: %d\n", GetLastError());
             return ;
         }
 
-        mutex = CreateMutex(NULL, FALSE, SHARED_MUTEX);
-        if (mutex == NULL) {
+        mdb_mutex = CreateMutex(NULL, FALSE, SHARED_MUTEX);
+        if (mdb_mutex == NULL) {
             printf("Failed to create mutex. Error code: %d\n", GetLastError());
             // UnmapViewOfFile(shared_data);
-            CloseHandle(file_mapping);
+            CloseHandle(mdb_mapping);
             return ;
+        }
+
+// 限制ip的共享内存初始话
+        ip_limit_mapping = CreateFileMapping(
+            INVALID_HANDLE_VALUE,
+            NULL,
+            PAGE_READWRITE,
+            0,
+            MAX_IP_LIMIT_HANDLE * sizeof(IpLimit),
+            IP_LIMIT_SHARED_STR
+        );
+        if (ip_limit_mapping == NULL) {
+            printf("Failed to create file mapping object. Error code: %d\n", GetLastError());
+            return ;
+        }
+
+        ip_limit_mutex = CreateMutex(NULL, FALSE, IP_LIMIT_MUTEX);
+        if (ip_limit_mutex == NULL) {
+            printf("Failed to create mutex. Error code: %d\n", GetLastError());
+            // UnmapViewOfFile(shared_data);
+            CloseHandle(ip_limit_mapping);
+            return ;
+        }
+
+        IpLimit* shared_data = (IpLimit *)MapViewOfFile(
+            ip_limit_mapping,
+            FILE_MAP_ALL_ACCESS,
+            0,
+            0,
+            MAX_IP_LIMIT_HANDLE * sizeof(IpLimit)
+        );
+        for(int i=0; i<MAX_IP_LIMIT_HANDLE; i++)
+        {
+            shared_data[i].time_start = 0;
+            shared_data[i].request_num = 0;
+            memset(shared_data[i].ip, 0, 16);
         }
 
         printf("[Mdb: Info]: mdb init successfully! \n");
@@ -96,7 +135,7 @@
 
 
         shared_data = (entry_t *)MapViewOfFile(
-            file_mapping,
+            mdb_mapping,
             FILE_MAP_ALL_ACCESS,
             0,
             0,
@@ -105,21 +144,21 @@
 
         if (shared_data == NULL) {
             printf("Failed to map view of file. Error code: %d\n", GetLastError());
-            //CloseHandle(file_mapping);
+            //CloseHandle(mdb_mapping);
             return "";
         }
 
         ihash = BKDRHash(key);
         if(ihash >= MAX_ENTRIES)
-            ihash = ihash / MAX_ENTRIES;
+            ihash = ihash % MAX_ENTRIES;
 
-        WaitForSingleObject(mutex, INFINITE);
+        WaitForSingleObject(mdb_mutex, INFINITE);
 
         if (strcmp(shared_data[ihash].key, key) == 0) {
             flag = 1;
         }
 
-        ReleaseMutex(mutex);
+        ReleaseMutex(mdb_mutex);
 
         if(flag) {
             res =  (char*)malloc(sizeof(char)*MAX_VALUE_LEN) ;
@@ -139,7 +178,7 @@
         unsigned int ihash;
 
         shared_data = (entry_t *)MapViewOfFile(
-            file_mapping,
+            mdb_mapping,
             FILE_MAP_ALL_ACCESS,
             0,
             0,
@@ -148,20 +187,85 @@
 
         if (shared_data == NULL) {
             printf("Failed to map view of file. Error code: %d\n", GetLastError());
-            //CloseHandle(file_mapping);
+            //CloseHandle(mdb_mapping);
             return ;
         }
 
         ihash = BKDRHash(key);
         if(ihash >= MAX_ENTRIES)
-            ihash = ihash / MAX_ENTRIES;
+            ihash = ihash % MAX_ENTRIES;
         
-        WaitForSingleObject(mutex, INFINITE);
+        WaitForSingleObject(mdb_mutex, INFINITE);
         strncpy(shared_data[ihash].key, key, MAX_KEY_LEN);
         strncpy(shared_data[ihash].value, value, MAX_VALUE_LEN);
-        ReleaseMutex(mutex);
+        ReleaseMutex(mdb_mutex);
 
         UnmapViewOfFile(shared_data);
+    }
+
+
+    int ip_check_valid(char* ip) {
+        IpLimit *shared_data;
+        unsigned int ihash;
+        time_t t = time(NULL);
+        int curr_time = time(&t);
+
+        int flag = 0;
+
+        shared_data = (IpLimit *)MapViewOfFile(
+            ip_limit_mapping,
+            FILE_MAP_ALL_ACCESS,
+            0,
+            0,
+            MAX_IP_LIMIT_HANDLE * sizeof(IpLimit)
+        );
+
+        if (shared_data == NULL) {
+            printf("Failed to map view of file. Error code: %d\n", GetLastError());
+            //CloseHandle(ip_limit_mapping);
+            return -2;
+        }
+
+        ihash = BKDRHash(ip);
+        if(ihash > MAX_IP_LIMIT_HANDLE)
+            ihash = ihash % MAX_IP_LIMIT_HANDLE;
+
+        WaitForSingleObject(ip_limit_mutex, INFINITE);
+        
+        strncpy(shared_data[ihash].ip, ip, 16);
+
+            if(shared_data[ihash].ab_ban) {
+                // 被服务器自动禁止的ip
+                ReleaseMutex(ip_limit_mutex);
+                UnmapViewOfFile(shared_data);
+                return 3;
+            }
+
+            if ( curr_time - shared_data[ihash].time_start >= 10) {
+                shared_data[ihash].time_start = curr_time;
+                shared_data[ihash].request_num = 1;   // 超时就归零
+            } else {
+
+                if( shared_data[ihash].request_num >= 10) {  // 请求次数太多
+
+                    shared_data[ihash].time_start = curr_time; // 归零时间
+                    shared_data[ihash].request_num = 1;    // 归零次数
+                    shared_data[ihash].invalid_num ++;      // 记录异常次数
+
+                    if(shared_data[ihash].invalid_num >= 3)  // 异常数大于2自动禁止
+                        shared_data[ihash].ab_ban = 1;
+                        
+                    flag = 2;  // unnomal
+                } else {
+                    shared_data[ihash].request_num ++;
+                }
+            }
+
+
+        ReleaseMutex(ip_limit_mutex);
+        UnmapViewOfFile(shared_data);
+
+        return flag;
     }
 
 #elif __linux__

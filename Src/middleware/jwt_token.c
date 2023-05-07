@@ -1,6 +1,6 @@
 
 #include <jwt/jwt.h>
-
+#include <string.h>
 
 void jwt_test_new(char token[])
 {
@@ -34,7 +34,7 @@ void jwt_test_verify(char* token)
     jwt_valid_t *jwt_valid;
     jwt_valid_new(&jwt_valid, JWT_ALG_HS256);
     jwt_valid_set_headers(jwt_valid, 1);
-	jwt_valid_set_now(jwt_valid, time(NULL));
+	jwt_valid_set_now(jwt_valid, time(NULL));    
     if( jwt_valid_add_grant(jwt_valid, "sub", "1234567890") == 0 )
     printf("sub ok\n");
     if( jwt_valid_add_grant(jwt_valid, "name", "pzc") == 0 )

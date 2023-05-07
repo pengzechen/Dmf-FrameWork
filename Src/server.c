@@ -126,7 +126,7 @@ static int create_socket()
 }
 
 
-void simple_server_make() 
+void simple_server_make()
 {
 #ifdef __WIN32__
     wsa_init();
@@ -356,8 +356,6 @@ void simple_ssl_server_make()
         LPPER_HANDLE_DATA PerHandleData;
         LPPER_IO_OPERATION_DATA PerIoData;
 
-
-        
         while(is_running) {
             
             // wait for client

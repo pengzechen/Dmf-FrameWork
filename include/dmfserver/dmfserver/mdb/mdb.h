@@ -27,19 +27,34 @@
     #include <windows.h>
 #endif // __WIN32__
 
-/*      Middleware Shared Memory       */
-    #define MAX_KEY_LEN 256
-    #define MAX_VALUE_LEN 1024
+/*      cache Shared Memory       */
+    #define SHARED_STR      "cache_shared_memory"
+    #define SHARED_MUTEX    "cache_shared_memory_mutex"
     #define MAX_ENTRIES 65535
 
-    #define SHARED_STR      "MiddleWare_SharedMemory"
-    #define SHARED_MUTEX    "MiddleWare_SharedMemoryMutex"
-
+    #define MAX_KEY_LEN 256
+    #define MAX_VALUE_LEN 1024
     typedef struct {
         char key[MAX_KEY_LEN];
         char value[MAX_VALUE_LEN];
     } entry_t;
-/*      Middleware Shared Memory       */
 
+/*      cache Shared Memory       */
+
+/*      Middle1 Shared Memory       */
+#define IP_LIMIT_SHARED_STR     "ip_limit_shared_memory"
+#define IP_LIMIT_MUTEX          "ip_limit_shared_memory_mutex"
+#define MAX_IP_LIMIT_HANDLE 10240
+
+typedef struct _IpLimit {
+    char    ip[16];
+    int     time_start;
+    int     request_num;
+    int     invalid_num;
+    int     ab_ban;
+} IpLimit;
+
+
+/*      Middle1 Shared Memory       */
 
 #endif // __MDB_INCLUDE__

@@ -73,8 +73,11 @@
 
 
 #ifdef __WIN32__ // Windows
-	#include <WinSock2.h>
 
+	
+	#include <WinSock2.h>
+	#include <WS2tcpip.h>
+	
 	typedef struct {
 		
 		OVERLAPPED Overlapped;
@@ -83,6 +86,7 @@
 		// ContFunMap cmp;
 		
 	}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
+	
 	typedef struct {
 		
 		SOCKET Socket;

@@ -19,8 +19,12 @@
    
 #include <dmfserver/middleware/middleware.h>
 #include <dmfserver/request.h>
-// #include "jwt_token.c"
+#include <dmfserver/mdb/mdb_operate.h>
 
+#ifdef __WIN32__
+	#include <WinSock2.h>
+	#include <WS2tcpip.h>
+#endif // __win32__
 
 extern void middleware_init()
 {
@@ -28,9 +32,31 @@ extern void middleware_init()
     printf("\n");
 }
 
+static int middleware_check_if_too_often(const Request* req)
+{
+    // 得到客户端ip地址
+    struct sockaddr_in client_addr;
+    memset(&client_addr, 0x00, sizeof(client_addr));
+    socklen_t nl=sizeof(client_addr);
+    getpeername(req->pfd.fd, (struct sockaddr*)&client_addr, &nl);
+    char* addr=inet_ntoa(client_addr.sin_addr);  
+
+    switch ( ip_check_valid(addr) ) {
+        case 0:
+            return 0;
+        case 2:
+            // printf("[Warn]%s request too often! \n", addr);
+            return -2;
+        case 3:
+            // printf("[Warn]%s has been ban! \n", addr);
+            return -3;
+        default: return 0;
+    }
+}
+
 extern void middleware_handle(const Request* req)
 {
-    char res[64] = {0};
-    req_get_param(req, "Host", res);
-    printf("    [MiddleWare: ] Host: %s\n", res);
+
+    middleware_check_if_too_often(req);
+
 }
