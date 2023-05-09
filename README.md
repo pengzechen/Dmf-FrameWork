@@ -1,8 +1,32 @@
-# Dmfserver
+# dmfserver
 
-git config --global http.proxy 'socks5://127.0.0.1:1080'
+This project is a cross-platform web server framework implemented in C language,  
+supporting Linux and Windows operating systems, with the following features:
 
-netsh int ipv4 set dynamicport tcp start=1025 num=64500
+- Adopts the traditional MVC pattern 
+- Implements HTTP template functionality 
+- Implements session functionality 
+- Can be extended through middleware 
+- Implements IP restriction functionality, adding the same IP to a blacklist if it frequently initiates requests 
+- Supports asynchronous logging and IP monitoring middleware 
+- Achieves a simple template HTTP request concurrency of up to 5600/min
+
+## Technology Stack
+
+- Multi-threading
+- IO multiplexing
+- Thread pool
+- Connection pool
+- Shared memory
+- Integrated SSL and MySQL
+
+## Middleware
+This framework supports extension through middleware. Currently, we have implemented the following middleware:
+
+- IP restriction middleware
+- Asynchronous logging middleware
+- IP monitoring middleware
+
 
 ## To run this server:
 
@@ -68,3 +92,16 @@ cd ../bin
 apt-get install -y libmysqlclient-dev libssl-dev libxml2-dev
 
 ```
+
+## Contribution
+Contributions to this project are welcome. If you wish to contribute code, please email to me.
+
+## License
+This project is licensed under the Apache license.
+
+
+## Some useful command lines
+
+git config --global http.proxy 'socks5://127.0.0.1:1080'
+
+netsh int ipv4 set dynamicport tcp start=1025 num=64500
