@@ -9,7 +9,7 @@ supporting Linux and Windows operating systems, with the following features:
 - Can be extended through middleware 
 - Implements IP restriction functionality, adding the same IP to a blacklist if it frequently initiates requests 
 - Supports asynchronous logging and IP monitoring middleware 
-- Achieves a simple template HTTP request concurrency of up to 5600/min
+- Achieves a simple template HTTP request concurrency of up to 5600/sec
 
 ## Technology Stack
 
