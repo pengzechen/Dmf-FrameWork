@@ -37,6 +37,7 @@
     #define MAX_KEY_LEN 64
     #define MAX_VALUE_LEN 512
     typedef struct {
+        int op;
         char key[MAX_KEY_LEN];
         char value[MAX_VALUE_LEN];
     } entry_t;
