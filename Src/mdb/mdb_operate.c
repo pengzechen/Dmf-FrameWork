@@ -115,7 +115,6 @@
             MAX_IP_LIMIT_HANDLE * sizeof(IpLimit)
         );
 
-
         for(int i=0; i<MAX_IP_LIMIT_HANDLE; i++)
         {
             shared_data[i].time_start = 0;
