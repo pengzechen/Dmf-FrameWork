@@ -9,7 +9,7 @@ supporting Linux and Windows operating systems, with the following features:
 - Can be extended through middleware 
 - Implements IP restriction functionality, adding the same IP to a blacklist if it frequently initiates requests 
 - Supports asynchronous logging and IP monitoring middleware 
-- Achieves a simple template HTTP request concurrency of up to 5600/sec
+- Achieves a simple template HTTP request concurrency of up to 5600/sec(2023/5/8)
 
 ## Technology Stack
 
@@ -27,6 +27,9 @@ This framework supports extension through middleware. Currently, we have impleme
 - Asynchronous logging middleware
 - IP monitoring middleware
 
+## Stress test results
+![test1](https://github.com/pengzechen/request/blob/master/doc/test1.png "test1")
+![result1](https://github.com/pengzechen/request/blob/master/doc/test1_result.png "res1")
 
 ## To run this server:
 
