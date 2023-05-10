@@ -18,8 +18,80 @@
 
 #include <dmfserver/mdb/mdb_operate.h>
 
-int main(int argc, char **argv) {
-    
+
+#ifdef __WIN32__
+
+void c_close(SOCKET hSocket)
+{
+	closesocket(hSocket);
+	WSACleanup();
+}
+
+void ErrorHandling(const char* message)
+{
+	fputs(message, stderr);
+	fputc('\n', stderr);
+	exit(1);
+}
+ 
+int sock_main(int argc, char* argv[])
+{
+	
+	SOCKET hSocket;
+	struct sockaddr_in servAddr;
+
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) ErrorHandling("WSAStartup() error!");
+
+	hSocket = socket(PF_INET, SOCK_STREAM, 0);
+	if (hSocket == INVALID_SOCKET) ErrorHandling("socket() error");
+	memset(&servAddr, 0, sizeof(servAddr));
+	servAddr.sin_family = AF_INET;
+	servAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	servAddr.sin_port = htons(5555);
+
+	if(connect(hSocket, (SOCKADDR*) &servAddr, sizeof(servAddr)) == SOCKET_ERROR) ErrorHandling("connect() error!");
+	
+	char message[512] = {0};
+	int recv_len;
+	int send_len;
+
+printf("-------------login\n");
+	send_len = send(hSocket, "123", 3, 0);
+	recv_len = recv(hSocket, message, sizeof(message) - 1, 0);
+	printf("| Message from server: %s \n", message);
+	memset(message, 0, 30);
+printf("-------------login----------------\n\n");
+
+
+printf("-------------insert\n");
+entry_t et;
+et.op = 1;
+strcpy(et.key, "name");
+strcpy(et.value, "pengzechen");
+	send_len = send(hSocket, (char*)&et, sizeof(entry_t), 0);
+	recv_len = recv(hSocket, message, sizeof(message) - 1, 0);
+	printf("| Message from server: %s \n", message);
+	memset(message, 0, 30);
+printf("-------------insert----------------\n");
+
+
+printf("-------------find\n");
+memset(&et, 0, sizeof(entry_t));
+et.op = 2;
+strcpy(et.key, "name");
+	send_len = send(hSocket, (char*)&et, sizeof(entry_t), 0);
+	recv_len = recv(hSocket, message, sizeof(message) - 1, 0);
+	printf("| Message from server: %s \n", message);
+	memset(message, 0, 30);
+printf("-------------find----------------\n");
+
+	Sleep(500000);
+	return 0;
+}
+
+void shm_main() 
+{
     while (1) {
         printf("Enter 0 to retrieve value, 1 to insert value (or q to quit): ");
         char input[MAX_VALUE_LEN];
@@ -67,6 +139,16 @@ int main(int argc, char **argv) {
 			printf("Invalid input\n");
 		}
 	}
+}
+
+#endif // __WIN32__
+
+int main(int argc, char **argv) {
+    
+    #ifdef __WIN32__
+
+    sock_main();
+    #endif // __WIN32__
 
 	return 0;
 }
