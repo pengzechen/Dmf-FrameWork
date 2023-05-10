@@ -24,6 +24,6 @@ else(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     link_libraries("libmdb_operate")
 endif()
 
-add_executable(rw3 "mdbrw3.c")
+add_executable(mdbclient "mdbclient.c")
 
 

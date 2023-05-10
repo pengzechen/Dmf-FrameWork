@@ -33,7 +33,7 @@ void ErrorHandling(const char* message)
 	fputc('\n', stderr);
 	exit(1);
 }
- 
+
 int sock_main()
 {
 	
@@ -86,7 +86,6 @@ strcpy(et.key, "name");
 	memset(message, 0, 30);
 printf("-------------find----------------\n");
 
-	Sleep(500000);
 	return 0;
 }
 
@@ -143,11 +142,17 @@ void shm_main()
 
 #endif // __WIN32__
 
-int main(int argc, char **argv) {
+int main(int argc, char* args[]) {
     
     #ifdef __WIN32__
 
+    if(argc != 2)
+        exit(1);
+    if(strcmp(args[1], "-s") ==0 )
     sock_main();
+    if(strcmp(args[1], "-m") ==0 )
+    shm_main();
+    
     #endif // __WIN32__
 
 	return 0;
