@@ -34,7 +34,7 @@ void ErrorHandling(const char* message)
 	exit(1);
 }
  
-int sock_main(int argc, char* argv[])
+int sock_main()
 {
 	
 	SOCKET hSocket;
