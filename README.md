@@ -28,8 +28,10 @@ This framework supports extension through middleware. Currently, we have impleme
 - IP monitoring middleware
 
 ## Stress test results
-![test1](https://github.com/pengzechen/request/blob/master/doc/test1.png "test1")
-![result1](https://github.com/pengzechen/request/blob/master/doc/test1_result.png "res1")
+
+![result1](https://github.com/pengzechen/request/blob/master/doc/2023-05-12%20(2).png "res1")
+![result3](https://github.com/pengzechen/request/blob/master/doc/2023-05-12%20(1).png "res3")
+
 
 ## To run this server:
 
