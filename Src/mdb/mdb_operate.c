@@ -32,7 +32,8 @@
     static HANDLE ip_limit_mapping;
     static HANDLE ip_limit_mutex;
 
-    BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved){
+    BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpRserved)
+    {
         switch(ul_reason_for_call){
             case DLL_PROCESS_ATTACH:
                 // printf("dll_process_attach\n");
@@ -209,8 +210,8 @@
         UnmapViewOfFile(shared_data);
     }
 
-
-    int ip_check_valid(char* ip) {
+    int ip_check_valid(char* ip) 
+    {
         IpLimit *shared_data;
         unsigned int ihash;
         time_t t = time(NULL);
@@ -247,19 +248,19 @@
                 return 3;
             }
 
-            if ( curr_time - shared_data[ihash].time_start >= 20) {
+            if ( curr_time - shared_data[ihash].time_start >= 60) {
                 shared_data[ihash].time_start = curr_time;
                 shared_data[ihash].request_num = 1;   // 超时就归零
             } else {
 
-                if( shared_data[ihash].request_num >= 100) {  // 请求次数太多
+                if( shared_data[ihash].request_num >= 1000) {  // 请求次数太多
 
                     shared_data[ihash].time_start = curr_time; // 归零时间
                     shared_data[ihash].request_num = 1;    // 归零次数
                     shared_data[ihash].invalid_num ++;      // 记录异常次数
 
-                    if(shared_data[ihash].invalid_num >= 10)  // 异常数大于2自动禁止
-                        shared_data[ihash].ab_ban = 0;
+                    if(shared_data[ihash].invalid_num >= 5)  // 异常数大于2自动禁止
+                        shared_data[ihash].ab_ban = 0;      // 不启用限制
                         
                     flag = 2;  // unnomal
                 } else {
