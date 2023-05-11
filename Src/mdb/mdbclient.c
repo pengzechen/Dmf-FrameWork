@@ -146,8 +146,12 @@ int main(int argc, char* args[]) {
     
     #ifdef __WIN32__
 
-    if(argc != 2)
+    if(argc != 2){
+        printf("mdbclient -s\nmdbclient -m\n");
+        getchar();
         exit(1);
+    }
+        
     if(strcmp(args[1], "-s") ==0 )
     sock_main();
     if(strcmp(args[1], "-m") ==0 )
