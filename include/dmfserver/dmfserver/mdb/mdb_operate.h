@@ -25,7 +25,7 @@
 #include <time.h>
 #include <dmfserver/utility/dm_hash.h>
 
-#include <mdb.h>
+#include "mdb.h"
 
 #ifdef __WIN32__
 	#define DLL_EXPORT __declspec(dllexport)

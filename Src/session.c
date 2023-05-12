@@ -178,7 +178,7 @@ extern void SessionAll()
     SessionData* dtemp;
     char buff[10] = {0};
     time_t t = time(NULL);
-    char str_res[1024] = {0};
+    char str_res[1024*512] = {0};
     
 
     for(int i=0; i< HASH_DEC_LEN; i++){
@@ -322,7 +322,7 @@ extern int SessionAddR(const Request* req, char* key, char* data)
     char str1[32] = {0};
     req_get_session_str(req, str1);
     if(strlen(str1) > 0){
-        return SessionAdd( str1+11, key, data);
+        return SessionAdd( str1, key, data);
     }else{
         return -1;   // req 对象没有 session
     }

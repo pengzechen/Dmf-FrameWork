@@ -31,7 +31,7 @@
 #include <time.h>
 // #include <windows.h>
 
-#define HASH_DEC_LEN 4096
+#define HASH_DEC_LEN 512
 
 typedef struct _SessionData {
     char* key;
