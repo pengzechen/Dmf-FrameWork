@@ -295,5 +295,10 @@
         
     }
 
+    int ip_check_valid(char* ip)
+    {
+        
+    }
+
 
 #endif // __linux__

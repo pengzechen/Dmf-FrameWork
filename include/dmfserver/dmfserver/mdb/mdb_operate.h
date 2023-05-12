@@ -22,8 +22,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dmfserver/utility/dm_hash.h>
 #include <time.h>
+#include <dmfserver/utility/dm_hash.h>
+
+#include <mdb.h>
 
 #ifdef __WIN32__
 	#define DLL_EXPORT __declspec(dllexport)
@@ -35,7 +37,7 @@
     #include <sys/shm.h>
 #endif // LINUX
 
-#include "mdb.h"
+
 
 
 #ifdef __cplusplus    // If used by C++ code, 
@@ -58,6 +60,8 @@ extern "C" {          // we need to export the C interface
         extern char* mdb_find(char* key);
 
         extern void mdb_insert(char* key, char* value);
+        
+        extern int ip_check_valid(char* ip);
     #endif // linux
 
 
