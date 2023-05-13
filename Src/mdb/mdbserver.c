@@ -17,6 +17,9 @@
     */
 
 #include <dmfserver/mdb/mdb.h>
+
+
+#ifdef __WIN32__
 #include <winerror.h>
 #include <Winsock2.h>
 #include <windows.h>
@@ -45,7 +48,7 @@ typedef struct{
 static HANDLE mdb_mapping;
 static HANDLE mdb_mutex;
 
-#ifdef __WIN32__
+
 
 void mdb_init()
 {
