@@ -26,6 +26,12 @@
 	#include <WS2tcpip.h>
 #endif // __win32__
 
+#ifdef __linux__
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h> // for close
+#endif // __LINUX__
+
 extern void middleware_init()
 {
     printf("[Middleware: Info] middleware init successfully!\n");
