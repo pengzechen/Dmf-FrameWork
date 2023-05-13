@@ -46,15 +46,17 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     find_package(OpenSSL REQUIRED)
     find_package(LibXml2 REQUIRED)
     find_package(jansson REQUIRED)
-    #find_package(pcre REQUIRED)
+    # find_package(pcre REQUIRED)
+    find_package(libjwt REQUIRED)
 
-    link_libraries(pthread mysqlclient ssl crypto xml2 jansson pcre)
+    link_libraries(pthread mysqlclient ssl crypto xml2 jansson pcre jwt)
     include_directories(
     ${MYSQL_INCLUDE_DIRS} 
     ${OPENSSL_INCLUDE_DIRS} 
     ${LIBXML2_INCLUDE_DIRS} 
     ${JANNSON_INCLUDE_DIRS} 
-    ${PCRE_INCLUDE_DIRS})
+    ${PCRE_INCLUDE_DIRS}
+    ${JWT_INCLUDE_DIRS})
 
     #指定生成目标
     add_executable(server 
