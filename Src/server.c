@@ -452,7 +452,7 @@ void simple_ssl_server_make()
         addr.sin_family = AF_INET;
         // addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
         addr.sin_addr.s_addr = htonl(INADDR_ANY); 
-        addr.sin_port = htons(443);
+        addr.sin_port = htons(80);
 
         int flag = 1;
         setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
@@ -475,13 +475,13 @@ void simple_ssl_server_make()
         long i_listenfd = arg->fd;
         i_listenfd = createSocket();
 
-        struct epoll_event ev, events[1024];
+        struct epoll_event ev, events[100];
         int epfd, nCounts;
         int i_connfd;
-        epfd = epoll_create(1024);
+        epfd = epoll_create(100);
 
-        ev.events = EPOLLIN | EPOLLEXCLUSIVE;
-        //ev.events = EPOLLIN | EPOLLET;
+        // ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+        ev.events = EPOLLIN | EPOLLET;
         ev.data.fd = i_listenfd;
         epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
 
@@ -490,9 +490,9 @@ void simple_ssl_server_make()
         char res_str[RECEIVE_MAX_BYTES] = {'\0'};
         int receive_bytes;
 
-        while(1)
+        for(;;)
         {
-            nCounts = epoll_wait(epfd, events, 1024, -1);
+            nCounts = epoll_wait(epfd, events, 100, -1);
             for(int i = 0; i < nCounts; i++)
             {
                 int tmp_epoll_recv_fd = events[i].data.fd;
@@ -519,7 +519,7 @@ void simple_ssl_server_make()
                     router_handle(tmp_epoll_recv_fd, &req1);
                     
                     req_free(&req1);
-                    //send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
+                    // send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
 
                     //printf("[dmfServer Thread]\n");
@@ -540,7 +540,7 @@ void simple_ssl_server_make()
         arg->cmp = g_cmp;
         arg->fd = fd;
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 16; ++i) {
             pthread_t roundCheck;
             pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
             pthread_join(roundCheck, NULL);
@@ -563,11 +563,11 @@ void simple_ssl_server_make()
 
         printf("ssl load ok\n");
         
-        int efd = epoll_create(1024);
+        int efd = epoll_create(100);
         assert(efd > 0);
         printf("epoll fd %d\n", efd);
 
-        struct epoll_event events[1024];
+        struct epoll_event events[100];
         struct epoll_event ev;
         ev.data.fd = srvFd;
         ev.events = EPOLLET | EPOLLIN;
@@ -674,7 +674,7 @@ void simple_ssl_server_make()
                 }
 
                 if (event.events & EPOLLIN) {
-                    char buf[1024] = {0};
+                    char buf[100] = {0};
                     int readSize = SSL_read(it->ssl, buf, sizeof(buf));
                     if (readSize <= 0) {
                         printf("SSL_read error. %d\n", SSL_get_error(it->ssl, readSize));
