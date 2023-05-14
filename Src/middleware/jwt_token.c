@@ -1,7 +1,10 @@
-#include <jansson.h>
+#ifdef __linux__
 #include <jwt.h>
+#else  // linux 
+#include <jwt/jwt.h>
+#endif // windows 
 #include <string.h>
-/*
+
 void jwt_test_new(char token[])
 {
     int ret = 0;
@@ -60,4 +63,3 @@ void jwt_test()
     jwt_test_verify(token);
     
 }
-*/
