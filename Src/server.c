@@ -20,14 +20,14 @@
    
 #include <dmfserver/server.h>
 
-volatile bool is_running = true;
+// volatile bool is_running = true;
 
 
-extern void handle_signal(int sig_num)
-{
-	if(sig_num == SIGINT || sig_num == SIGTERM)
-		is_running = false;
-}
+// extern void handle_signal(int sig_num)
+// {
+// 	if(sig_num == SIGINT || sig_num == SIGTERM)
+// 		is_running = false;
+// }
 
 
 static SSL_CTX* get_ssl_ctx()
@@ -367,7 +367,7 @@ void simple_ssl_server_make()
         LPPER_HANDLE_DATA PerHandleData;
         LPPER_IO_OPERATION_DATA PerIoData;
 
-        while(is_running) {
+        while(1) {
             
             // wait for client
             sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);

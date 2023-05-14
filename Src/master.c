@@ -37,7 +37,7 @@
 #include <stdbool.h>
 
 // define default workers num
-#define DEFAULT_WORKER_NUM 4
+#define DEFAULT_WORKER_NUM 2
 // save workers pid
 static pid_t worker[DEFAULT_WORKER_NUM];
 // define function pointer

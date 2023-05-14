@@ -134,8 +134,8 @@ int main(int argc, char* argv[])
     #endif // __SERVER_MPOOL__
 
     // 安装信号
-	signal(SIGINT, handle_signal);
-	signal(SIGTERM, handle_signal);
+	// signal(SIGINT, handle_signal);
+	// signal(SIGTERM, handle_signal);
 
 	conf_init();        // 服务框架参数初始化
     //Sleep(500);
@@ -182,8 +182,8 @@ int main(int argc, char* argv[])
 #elif __linux__ 	// linux
 	// simple_server_make();
 	// simple_ssl_server_make();
-	epoll_server_make();
-    // multi_process_init(&epoll_server_make);
+	// epoll_server_make();
+    multi_process_init(&epoll_server_make);
 	// epoll_ssl_server();
 #endif 				// linux
 
