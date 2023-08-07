@@ -18,49 +18,34 @@
 #include <dmfserver/model.h>
 
 
-void ModelInit(ModelPtr mPtr) 
+
+void model_init(model_ptr_t mPtr) 
 {
-	mPtr->my_connection = (MYSQL*)malloc(sizeof(MYSQL));
+	mPtr->cc = get_mysql_connection_block();
 	mPtr->res_ptr = NULL;
-	mysql_init(mPtr->my_connection);
 }
 
-// 返回值非零 连接成功
-int ModelConnection(ModelPtr mPtr) 
-{
-	if(mysql_real_connect(mPtr->my_connection, 
-						g_server_conf_all._conf_model.host, 
-						g_server_conf_all._conf_model.username, 
-						g_server_conf_all._conf_model.password, 
-						g_server_conf_all._conf_model.database, 
-						0, NULL, CLIENT_FOUND_ROWS))
-	{
-		return 1;
-	}else{
-		free(mPtr->my_connection);
-		return 0;
-	}
-}
 
 // 返回值为0执行成功
-int ModelQuery(ModelPtr mPtr, char* sql) 
+int model_query(model_ptr_t mPtr, char* sql) 
 {
-	return mysql_query(mPtr->my_connection, sql);
+	return mysql_query(&mPtr->cc->conn, sql);
 }
 
 
-static void GetModelResultInfo(ModelPtr mPtr) 
+static void get_model_result_info(model_ptr_t mPtr) 
 {
 	mPtr->row = mysql_num_rows(mPtr->res_ptr);
 	mPtr->column = mysql_num_fields(mPtr->res_ptr);
 }
 
+
 // 保存查询到的信息 行数 列数
-int GetModelResult(ModelPtr mPtr) 
+int get_model_result(model_ptr_t mPtr) 
 {
-	mPtr->res_ptr = mysql_store_result(mPtr->my_connection);
+	mPtr->res_ptr = mysql_store_result(&mPtr->cc->conn);
 	if(mPtr->res_ptr){
-		GetModelResultInfo(mPtr);
+		get_model_result_info(mPtr);
 		return 1;
 	}else{
 		return 0;
@@ -68,37 +53,26 @@ int GetModelResult(ModelPtr mPtr)
 }
 
 
-void ModelClose(ModelPtr mPtr) 
-{
-	mysql_close(mPtr->my_connection);
-	free(mPtr->my_connection);
-}
 
 
-void exeSql(char* sql) 
+void exe_sql(char* sql) 
 {
 
 	Model modeltest;
-	ModelPtr mPtr= &modeltest;
-	ModelInit(mPtr);
-	
-	if( !ModelConnection(mPtr) ) {
-		printf("Connection Error \n");
-		return;
-	}
+	model_ptr_t mPtr= &modeltest;
+	model_init(mPtr);
 
-	ModelQuery(mPtr, "set names utf8");
+	model_query(mPtr, "set names utf8");
 
-	if ( ModelQuery(mPtr, sql) ) {
+	if ( model_query(mPtr, sql) ) {
 		printf("Query Error \n");
-		ModelClose(mPtr);
 		return;
 	} 
 	
 
     MYSQL_ROW result_row;	/* 按行返回查询信息 */
 	// 存在则输出
-	if (GetModelResult(mPtr)) {
+	if (get_model_result(mPtr)) {
 
 		for (int i = 0; i < mPtr->row; i++) {
 			// 一行数据
@@ -112,7 +86,32 @@ void exeSql(char* sql)
 		}
 	}
 	mysql_free_result(mPtr->res_ptr);
+	free(mPtr->res_ptr);
 
-	ModelClose(mPtr);
+	release_mysql_connection(mPtr->cc);
+}
 
+
+// 返回值非零 连接成功
+// 不启用连接池时，使用此函数连接MySQL
+int model_connection(model_ptr_t mPtr) 
+{
+	if( !mysql_real_connect(&mPtr->cc->conn, 
+						g_server_conf_all._conf_model.host, 
+						g_server_conf_all._conf_model.username, 
+						g_server_conf_all._conf_model.password, 
+						g_server_conf_all._conf_model.database, 
+						0, NULL, CLIENT_FOUND_ROWS))
+	{
+		free(&mPtr->cc->conn);
+		printf("connection failed! \n");
+		return 0;
+	}
+}
+
+// 注意，此函数必须在不启用连接池时使用
+void model_close(model_ptr_t mPtr) 
+{
+	mysql_close(&mPtr->cc->conn);
+	free(&mPtr->cc->conn);
 }

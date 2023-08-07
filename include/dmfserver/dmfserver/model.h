@@ -25,17 +25,17 @@
 #include <stdlib.h>
 #include <mysql/mysql.h>
 #include <dmfserver/conf/conf.h>
+#include <dmfserver/cpool.h>
 
 
 typedef struct _Model {
-	MYSQL* my_connection;
-	MYSQL_RES* res_ptr;
-	int row;
-	int column;
-	
+    mysql_conn      *       cc;
+	MYSQL_RES       *       res_ptr;
+	int                     row;
+	int                     column;
 } Model;
 
-typedef Model* ModelPtr;
+typedef Model* model_ptr_t;
 
 
 #ifdef __cplusplus
@@ -44,19 +44,19 @@ extern "C" {
 
 	//  mysql_affected_rows(&my_connection)  返回int
 
-	extern void exeSql(char* sql);
+	extern void exe_sql(char* sql);
 
-	extern void ModelInit(ModelPtr mPtr);
+	extern void model_init(model_ptr_t mPtr);
 
-	extern int ModelConnection(ModelPtr mPtr);
+	extern int model_connection(model_ptr_t mPtr);
 
-	extern int ModelQuery(ModelPtr mPtr, char* sql);
+	extern int model_query(model_ptr_t mPtr, char* sql);
 
-	static void GetModelResultInfo(ModelPtr mPtr);
+	static void get_model_result_info(model_ptr_t mPtr);
 
-	extern int GetModelResult(ModelPtr mPtr);
+	extern int get_model_result(model_ptr_t mPtr);
 
-	extern void ModelClose(ModelPtr mPtr);
+	extern void model_close(model_ptr_t mPtr);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
