@@ -15,7 +15,7 @@
     *  limitations under the License. 
     *
     */
-#include <dmfserver/model/model.h>
+#include <dmfserver/model.h>
 
 
 void ModelInit(ModelPtr mPtr) 

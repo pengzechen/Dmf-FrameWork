@@ -20,10 +20,6 @@
 #include <dmfserver/mdb/mdb_operate.h>
 
 
-// 人民群众是社会物质的创造者
-// 人民群众是社会精神的创造者
-// 人民群众是社会变革的决定力量
-
 #ifdef __WIN32__
 
     static HANDLE mdb_mapping;
@@ -86,7 +82,7 @@
             return ;
         }
 
-// 限制ip的共享内存初始话
+        // 限制ip的共享内存初始话
         ip_limit_mapping = CreateFileMapping(
             INVALID_HANDLE_VALUE,
             NULL,

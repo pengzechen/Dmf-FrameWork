@@ -1,29 +1,6 @@
-#include <dmfserver/model/data.h>
+
 #include <dmfserver/request.h>
 
-void datamodeltest(int a, const Request* req) 
-{
-	int i = 0;
-	objPtr root = CreateObjectNode("root", "hhh");
-	objPtr mn1 = CreateObjectNode("Bro0", "ppp");
-	objPtr mn2 = CreateObjectNode("Bro1","sss");
-	objPtr mn3 = CreateObjectNode("Bro2","sss1");
-	objPtr mn4 = CreateObjectNode("Bro3","sss2");
-	
-	
-	AppendChild(root, mn1);
-	AppendBro(mn1, mn2);
-	AppendBro(mn1, mn3);
-	AppendBro(mn1, mn4);
-
-
-	ShowNodeData(root);
-	printf("\n");
-	ShowNodeData(mn1);
-	printf("\n");
-
-	Res_row(a, "This is a test str");
-}
 
 #ifdef __WIN32__
 
@@ -51,7 +28,7 @@ void string(int a, const Request* req)
 
 
 RouterAdd(other){
-	ContFun cf[] = {&datamodeltest, &string, NULL};
-	char* keys[] = {"/datamodeltest", "/string", NULL};
+	ContFun cf[] = { &string, NULL};
+	char* keys[] = { "/string", NULL};
 	router_add_app(cf, keys, __func__);
 }
