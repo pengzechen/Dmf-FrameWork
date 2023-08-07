@@ -22,6 +22,7 @@ void mdbinsert(int a, const Request* req)
 	char cdata[512] = {0};
 	strcpy(ckey, req->query[0].key);
 	strcpy(cdata, req->query[0].data);
+	
 	char* key = ckey;
 	char* data = cdata;
 	mdb_insert(key, data);

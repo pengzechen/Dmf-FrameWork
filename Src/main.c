@@ -144,14 +144,11 @@ int main(int argc, char* argv[])
 	template_init();    // 模板模块初始化
     router_init();      // 路由模块初始化
 
-
 	mysql_pool_init();  // mysql 连接池初始化
-
 	elr_mpl_init();     // 内存池初始化
 
 	pool_init(2076, 2076*8192);  // server 模块内存池初始化
     pool_init2(4, 4*8192);       // server 模块内存池初始化
-
     mdb_operate_init();   // mdb 模块初始化
     
 

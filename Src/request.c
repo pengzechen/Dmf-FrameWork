@@ -504,6 +504,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	
 }
 
+
 void req_get_session_str(const Request* req, 
 					char session_str[]) // OUT 
 {

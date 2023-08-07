@@ -7,12 +7,16 @@ void mysqltest(int a, const Request* req)
 	mysql_conn* conn1 = get_mysql_connection_block();
 	mysql_query(&conn1->conn, "select Count(*) from test;");
 	MYSQL_RES* res_ptr = mysql_store_result(&conn1->conn);
-	//printf("   query result %d\n", mysql_num_rows(res_ptr));
+	// printf("   query result %d\n", mysql_num_rows(res_ptr));
 	MYSQL_ROW result_row = mysql_fetch_row(res_ptr);
-	char res[100] = {0};
-	sprintf(res, "insert into test(id, test_string) value (%d, 'test string');", atoi(result_row[0]));
-	// printf("%s", res);
-	mysql_query(&conn1->conn, res);
+
+	char sql[100] = {0};
+	sprintf(sql, "insert into test(id, test_string) value "
+				"(%d, 'test string');", atoi(result_row[0]) );
+
+	mysql_query(&conn1->conn, sql);
+
+
 	mysql_free_result(res_ptr);
 	free(res_ptr);
 
@@ -23,7 +27,7 @@ void mysqltest(int a, const Request* req)
 void mysqltest1(int a, const Request* req) 
 {
 	
-	// exeSql("select * from test;");
+	exe_sql("select * from test where id=3;");
 
 	Res_row(a, "ok");
 }

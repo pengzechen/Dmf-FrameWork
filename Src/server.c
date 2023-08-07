@@ -89,7 +89,7 @@ static void req_res_handler(int acceptFd )
 	printf("[%s][Server: Info] %s\n",time , req1.path);
 	
 	router_handle( acceptFd, &req1);
-	//通过请求的 path 掉用了对应的处理函数
+	//通过请求的 path 调用了对应的处理函数
 	
 	req_free(&req1);
 

@@ -34,7 +34,7 @@ static void ResHandel( int acceptFd, char* res_str, unsigned int size)
 
 }
 
- 
+
 // 以纯的字符串返回
 extern void Res_row(int acceptFd, char* res_str) 
 {
@@ -57,7 +57,8 @@ extern void Res_NotFound(int acceptFd)
 }
 
 // 以模板返回
-extern void Res_render(int acceptFd, char* template_name, struct Kvmap *kv, int num) 
+extern void Res_render(int acceptFd, char* template_name, 
+						struct Kvmap *kv, int num) 
 {
 	char* context = get_template(template_name);				// 需要释放内存
 	char* res = parse_context(context, kv, num-1);		// 模板返回值  需要释放内存
@@ -177,9 +178,10 @@ extern void ResParseSend(Response* res)
 // 以下是静态文件响应函数
 // *************************************************************************
 
-extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type) 
+extern void Res_static(int acceptFd, char* path, unsigned int size, 
+						char* ext, char* content_type) 
 {
-	if(size > 1024*1024*1) {				//  文件大于 1Mb 调用文件handle
+	if(size > 1024*1024*1) {			//  文件大于 1Mb 调用文件handle
 		ResFileHandel(acceptFd, path, content_type, size);
 		return;
 	}
@@ -219,7 +221,8 @@ static char* loadFile(char *path)
 }
 
 // 大文件调用此模块进行返回 
-static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size) 
+static void ResFileHandel(int acceptFd, char* path, char* content_type, 
+							unsigned int size) 
 {
 	char head[512] = {0};
 	strcat(head, "HTTP/1.1 200 OK\r\n");
