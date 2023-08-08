@@ -26,6 +26,10 @@
 #include <dmfserver/utility/utility.h>        	// 引入时间
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
+
+#include <openssl/sha.h>
+#include <dmfserver/utility/base64.h>  
 
 #ifdef __WIN32__
 #include <WinSock2.h>		// 为了使用 send
@@ -81,6 +85,8 @@ extern void Res_render(int acceptFd, char* template_name, struct Kvmap *kv, int 
 extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 
 static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size);
+
+extern void upto_ws_prot(int a, char key[]) ;
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

@@ -41,6 +41,7 @@
 #include "./views/mysql.c"
 #include "./views/other.c"
 #include "./views/mdb.c"
+#include "./views/ws.c"
 
 #ifdef __linux__
 #include <jansson.h>
@@ -160,7 +161,7 @@ int main(int argc, char* argv[])
 	session();
 	apptemp();
     mdb();
-	
+    ws();
 
     // 根据使用的平台启动服务器
 #ifdef __WIN32__	// Win32

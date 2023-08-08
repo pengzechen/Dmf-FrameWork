@@ -100,6 +100,8 @@ extern "C" {
 	void req_get_param(const Request *req, char* key, 	char data[]);
 
 	void req_get_query(const Request *req, char* key, 	char data[]);
+	
+	void req_get_ws_key(const Request* req,  char ws_key[]);
 
 	void req_free(Request *req);
 

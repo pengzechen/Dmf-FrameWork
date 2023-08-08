@@ -20,15 +20,6 @@
    
 #include <dmfserver/server.h>
 
-// volatile bool is_running = true;
-
-
-// extern void handle_signal(int sig_num)
-// {
-// 	if(sig_num == SIGINT || sig_num == SIGTERM)
-// 		is_running = false;
-// }
-
 
 static SSL_CTX* get_ssl_ctx()
 {
@@ -56,6 +47,7 @@ static SSL_CTX* get_ssl_ctx()
     return ctx;
 }
 
+
 #ifdef __WIN32__
 
     static void wsa_init()
@@ -74,21 +66,20 @@ static SSL_CTX* get_ssl_ctx()
 static void req_res_handler(int acceptFd ) 
 {
 	
-	char res_str[RECEIVE_MAX_BYTES] = {'\0'};
+	char res_str[ RECEIVE_MAX_BYTES ] = {'\0'};
 
 	Request req1;
-	int receive_bytes;
-	receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
+	int receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
+    printf("recv: \n%s\n", res_str);
 
     Perfd pfd = {.fd = acceptFd, .ssl = NULL};
-
 	req_parse_http(&req1, res_str, pfd);
 	
 	char time [30] = {'\0'};
 	serverTime(time);
-	printf("[%s][Server: Info] %s\n",time , req1.path);
+	printf("[%s][Server: Info] %s\n", time, req1.path);
 	
-	router_handle( acceptFd, &req1);
+	router_handle(acceptFd, &req1);
 	//通过请求的 path 调用了对应的处理函数
 	
 	req_free(&req1);
@@ -109,7 +100,7 @@ static int create_socket()
     struct sockaddr_in ser;
     sListen = socket(AF_INET, SOCK_STREAM, 0);
     ser.sin_family = AF_INET; 
-    ser.sin_port = htons(443); 
+    ser.sin_port = htons(80); 
     ser.sin_addr.s_addr = htonl(INADDR_ANY); 
     if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
     {
@@ -297,7 +288,7 @@ void simple_ssl_server_make()
             // 进行必要日志记录
             serverTime(time);
             log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
-            time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+                    time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
             memset(time, 0, 30);
             
             /*   
@@ -318,7 +309,7 @@ void simple_ssl_server_make()
             free( PerHandleData);
         #endif // __SERVER_MPOOL__
 
-            /*
+            
             // 继续向 socket 投递WSARecv操作
             DWORD Flags = 0;
             DWORD dwRecv = 0;
@@ -326,7 +317,7 @@ void simple_ssl_server_make()
             PerIoData->DataBuf.buf =PerIoData->Buffer;
             PerIoData->DataBuf.len = DATA_BUFSIZE;
             WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
-            */
+            
         }
 
     
@@ -339,7 +330,7 @@ void simple_ssl_server_make()
 
         wsa_init();
         
-        HANDLE completion_port =CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+        HANDLE completion_port = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 
         SYSTEM_INFO _system_info;
         GetSystemInfo(&_system_info);

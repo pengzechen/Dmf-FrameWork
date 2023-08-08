@@ -29,8 +29,8 @@
 
 
 // 定义日志缓冲区
-static log_record_t log_buffer[LOG_BUFFER_SIZE];
-static int log_buffer_count = 0;
+static 			log_record_t 	log_buffer[LOG_BUFFER_SIZE];
+static int 		log_buffer_count = 0;
 
 // 定义日志写入锁和条件变量
 static pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;

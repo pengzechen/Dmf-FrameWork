@@ -521,6 +521,17 @@ void req_get_session_str(const Request* req,
 }
 
 
+void req_get_ws_key(const Request* req, 
+					char ws_key[]) // OUT 
+{
+    char* temp;
+	for(int i=0; i<=req->p_int; i++) {
+		if( strcmp(req->params[i].key, "Sec-WebSocket-Key") == 0 ) {
+			strcpy(ws_key,req->params[i].data);
+		}
+	}
+}
+
 void req_get_param(const Request *req, char* key, char data[])
 {
 	for(int i=0; i<=req->q_int; i++) {

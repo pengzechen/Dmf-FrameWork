@@ -109,8 +109,6 @@ typedef struct thread_arg {
 extern "C" {
 #endif
 
-	extern void handle_signal(int sig_num);
-
 	static SSL_CTX* get_ssl_ctx();
 #ifdef __WIN32__
 
