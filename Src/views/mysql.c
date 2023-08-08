@@ -12,7 +12,7 @@ void mysqltest(int a, const Request* req)
 
 	char sql[100] = {0};
 	sprintf(sql, "insert into test(id, test_string) value "
-				"(%d, 'test string');", atoi(result_row[0]) );
+				"(%s, 'test string');", result_row[0] );
 
 	mysql_query(&conn1->conn, sql);
 
@@ -27,7 +27,7 @@ void mysqltest(int a, const Request* req)
 void mysqltest1(int a, const Request* req) 
 {
 	
-	exe_sql("select * from test where id=3;");
+	exe_sql("select id from test where id=3;");
 
 	Res_row(a, "ok");
 }

@@ -30,12 +30,12 @@
 
 
 struct Kvmap {
-	int type;
-	char* key;
-	char* value;					// #	1
+	int             type;
+	char    *       key;
+	char    *       value;					// #	1
 	
-	char* dec[ DEC_NUM ];
-	void (*Func)(char*, char *);			// 
+	char    *       dec[ DEC_NUM ];
+	void   (*Func)  (char*, char *);			// 
 };
 
 typedef struct template_name_path {
@@ -52,17 +52,17 @@ typedef struct template_dec {
 extern "C" {
 #endif
 
-	extern void template_init();
+	extern void         template_init();
 
-	extern void template_free();
+	extern void         template_free();
 
-	extern char* get_template(char* template_name);
+	extern char     *   get_template(char* template_name);
 
-	extern char* local_template(char * template_path);
+	extern char     *   local_template(char * template_path);
 
-	static void parse_dec(char* tt, char* dec[], char* inner);
+	static void         parse_dec(char* tt, char* dec[], char* inner);
 
-	extern char* parse_context(char *context, struct Kvmap *kv, int kv_num);
+	extern char     *   parse_context(char *context, struct Kvmap *kv, int kv_num);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

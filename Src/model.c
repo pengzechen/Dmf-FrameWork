@@ -54,7 +54,6 @@ int get_model_result(model_ptr_t mPtr)
 
 
 
-
 void exe_sql(char* sql) 
 {
 

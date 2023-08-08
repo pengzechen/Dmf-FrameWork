@@ -112,7 +112,7 @@ void mysql_pool_init()
 	}
 	pthread_mutex_unlock(&pool_mysql.lock);
 
-	printf("[Cpool: Info] mysqlpool init successfully... %d connections is ok! \n", pool_mysql.free_connections);
+	printf("[Cpool: Info] %d connections mysqlpool init successfully... \n", pool_mysql.free_connections);
 	printf("\n");
 }
 
