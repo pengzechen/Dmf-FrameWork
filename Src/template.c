@@ -68,9 +68,8 @@ char* get_template(char* template_name)
 
 void parse_dec(char* tt, char* dec[], char* inner) 
 {
-	
-	char *start = strstr(inner, "{{item}}");
 	char other[1024] = {'\0'};
+	char *start = strstr(inner, "{{item}}");
 	*start = '\0';
 	strcpy(other, start + 8);
 		

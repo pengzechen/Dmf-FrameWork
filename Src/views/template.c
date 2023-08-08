@@ -1,6 +1,5 @@
 
 
-
 void mfunction(char *out, char *in)
 {
 	strcpy(out, in);
@@ -8,9 +7,9 @@ void mfunction(char *out, char *in)
 
 void template(int a, const Request *req) 
 {
-	struct Kvmap kv0 = {.key = "name", .value="Dmfserver", .type=1};
-	struct Kvmap kv1 = {.key = "date", .value="2023/4/14", .type=1};
-	struct Kvmap kv2 = {.key = "date", .Func=&mfunction, .type=2};
+	struct Kvmap kv0 = {.key = "name", .value = "Dmfserver", .type = 1};
+	struct Kvmap kv1 = {.key = "date", .value = "2023/4/14", .type = 1};
+	struct Kvmap kv2 = {.key = "myfunction", .Func = &mfunction, .type = 2};
 
 	struct Kvmap kv[4];
 	kv[0] = kv0;

@@ -18,7 +18,6 @@
 #include <dmfserver/model.h>
 
 
-
 void model_init(model_ptr_t mPtr) 
 {
 	mPtr->cc = get_mysql_connection_block();
@@ -51,7 +50,6 @@ int get_model_result(model_ptr_t mPtr)
 		return 0;
 	}
 }
-
 
 
 void exe_sql(char* sql) 
