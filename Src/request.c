@@ -505,8 +505,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 }
 
 
-void req_get_session_str(const Request* req, 
-					char session_str[]) // OUT 
+void req_get_session_str(const Request* req, char session_str[]) // OUT 
 {
     char* temp;
 	for(int i=0; i<=req->p_int; i++) {
@@ -521,8 +520,7 @@ void req_get_session_str(const Request* req,
 }
 
 
-void req_get_ws_key(const Request* req, 
-					char ws_key[]) // OUT 
+void req_get_ws_key(const Request* req, char ws_key[]) // OUT 
 {
     char* temp;
 	for(int i=0; i<=req->p_int; i++) {
@@ -532,7 +530,8 @@ void req_get_ws_key(const Request* req,
 	}
 }
 
-void req_get_param(const Request *req, char* key, char data[])
+
+void req_get_param(const Request *req, char* key, char data[]) // OUT
 {
 	for(int i=0; i<=req->q_int; i++) {
 		if( strcmp(req->params[i].key, key) == 0 ) {
@@ -542,7 +541,7 @@ void req_get_param(const Request *req, char* key, char data[])
 }
 
 
-void req_get_query(const Request *req, char* key, char data[])
+void req_get_query(const Request *req, char* key, char data[]) // OUT
 {
 	for(int i=0; i<=req->q_int; i++) {
 		if( strcmp(req->query[i].key, key) == 0 ) {

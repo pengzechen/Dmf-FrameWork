@@ -107,7 +107,7 @@ void router_handle(int acceptFd, Request *req)
 }
 
 
-int search_local_file(char* local_paths[])
+int search_local_file(char* local_paths[]) 
 {
 	struct dirent *ptr;
 	DIR *dir;

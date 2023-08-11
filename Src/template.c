@@ -33,6 +33,7 @@ void template_init()
 	printf("\n");
 }
 
+
 char* local_template(char * template_path)
 {
 	FILE *fp;
@@ -57,6 +58,7 @@ char* local_template(char * template_path)
 	return _context;
 }
 
+
 char* get_template(char* template_name) 
 {
 	for(int i=0; i< g_template_dec.size; i++) {
@@ -65,6 +67,7 @@ char* get_template(char* template_name)
 	}
 	return "";
 }
+
 
 void parse_dec(char* tt, char* dec[], char* inner) 
 {
@@ -81,6 +84,7 @@ void parse_dec(char* tt, char* dec[], char* inner)
 		strcat(tt, other);
 	}
 }
+
 
 char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 {
@@ -159,13 +163,17 @@ char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 					
 					for(int num=0; num<= kv_num; num++) {
 						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 2) {
+							
 							kv[num].Func(parsed_str, block_str);
+							
 							strcat(result, parsed_str);
 							res_pos = res_pos + strlen(parsed_str);
 							memset(block_str, 0, 1024);
 						}
 						if( strcmp(kv[num].key, temp) == 0 && kv[num].type == 3) {
+							
 							parse_dec(parsed_str, kv[num].dec, block_str);
+							
 							strcat(result, parsed_str);
 							res_pos = res_pos + strlen(parsed_str);
 							memset(block_str, 0, 1024);
@@ -206,6 +214,7 @@ char* parse_context(char *context, struct Kvmap *kv, int kv_num)
 	// printf("res_pos: %s\n", result);
 	return result;
 }
+
 
 void template_free() 
 {

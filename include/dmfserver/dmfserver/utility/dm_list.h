@@ -25,14 +25,14 @@
 #include <stdbool.h>
 
 // 定义一个包含数据内容的结构体
-typedef struct Data {
+typedef struct Data_t {
     int value;
-} Data;
+} Data_t;
 
 // 定义一个节点结构体
 typedef struct Node {
     struct Node *next;
-    Data data;
+    Data_t data;
 } Node;
 
 // 定义一个列表结构体
@@ -45,11 +45,11 @@ typedef struct List {
 #ifdef __cplusplus
 extern "C" {
 #endif
-    List *list_create();
-    void list_append(List *list, Data data);
-    size_t list_size(List *list);
-    bool list_find(List *list, Data data);
-    void list_destroy(List *list);
+    List *  list_create();
+    void    list_append(List *list, Data_t data);
+    size_t  list_size(List *list);
+    bool    list_find(List *list, Data_t data);
+    void    list_destroy(List *list);
 
 #ifdef __cplusplus
 }           /* end of the 'extern "C"' block */

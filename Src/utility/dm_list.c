@@ -30,7 +30,7 @@ List *list_create() {
 }
 
 // 添加元素
-void list_append(List *list, Data data) {
+void list_append(List *list, Data_t data) {
     Node *new_node = (Node*)malloc(sizeof(Node));
     if (new_node == NULL) {
         return;
@@ -56,7 +56,7 @@ size_t list_size(List *list) {
 }
 
 // 查找元素，若找到返回true
-bool list_find(List *list, Data data) {
+bool list_find(List *list, Data_t data) {
     Node *node = list->head;
     while (node != NULL) {
         if (node->data.value == data.value) {
@@ -84,18 +84,18 @@ void list_destroy(List *list) {
 int test_list() {
     List *list = list_create();
 
-    Data data1 = {1};
+    Data_t data1 = {1};
     list_append(list, data1);
 
-    Data data2 = {2};
+    Data_t data2 = {2};
     list_append(list, data2);
 
-    Data data3 = {3};
+    Data_t data3 = {3};
     list_append(list, data3);
 
     printf("List size: %lu\n", list_size(list));
     printf("Find 2 in list: %s\n", list_find(list, data2) ? "true" : "false");
-    printf("Find 4 in list: %s\n", list_find(list, (Data){4}) ? "true" : "false");
+    printf("Find 4 in list: %s\n", list_find(list, (Data_t){4}) ? "true" : "false");
 
     list_destroy(list);
     return 0;

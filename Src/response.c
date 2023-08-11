@@ -310,6 +310,7 @@ int parseWebSocketFrame(const unsigned char *data, size_t data_length,
 extern void upto_ws_prot(int a, char key[]) 
 {
 	char sha[128] = {0};
+	strcat(key, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
 	sha1(key, sha);
 
 	unsigned char *byteArray = hexStringToByteArray(sha);
