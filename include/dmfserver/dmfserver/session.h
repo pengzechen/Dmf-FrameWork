@@ -34,19 +34,19 @@
 #define HASH_DEC_LEN 512
 
 typedef struct _SessionData {
-    char* key;
-    char* data;
-    int time_store;
-    int expire;
-    struct _SessionData* next;
+    char                    *   key;
+    char                    *   data;
+    int                         time_store;
+    int                         expire;
+    struct _SessionData     *   next;
 } SessionData;
 
 // Hash Map defination 
 typedef struct _HashNode
 {
-    char* key;
-    SessionData* value;
-    struct _HashNode* next; // 当下标相同时，指向集合中的下一个节点
+    char                *       key;
+    SessionData         *       value;
+    struct _HashNode    *       next; // 当下标相同时，指向集合中的下一个节点
 
 } HashNode ;
 

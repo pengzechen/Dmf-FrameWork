@@ -35,52 +35,52 @@
 
 
 struct Multi_kv {
-	char key[32];
-	char data[64];
+	char 				key[32];
+	char 				data[64];
 };
 
 struct Multipart {
-	struct Multi_kv name;
-	struct Multi_kv dis;
-	struct Multi_kv filename;
-	char *data;
-	int length;
+	struct Multi_kv 	name;
+	struct Multi_kv 	dis;
+	struct Multi_kv 	filename;
+	char 		*		data;
+	int 				length;
 };
 
 struct Query {
-	char key[64];
-	char data[512];
+	char 		key[64];
+	char 		data[512];
 };
 
 struct Params {
-	char key[64];
-	char data[256];
+	char 		key[64];
+	char 		data[256];
 };
 
 struct Body {
-	char *body;
-	int length;
+	char 	*	body;
+	size_t 		length;
 };
 
 typedef struct Perfd {
-	SSL* ssl;
-	int fd;
+	SSL		* 	ssl;
+	int 		fd;
 }Perfd;
 
 struct req {
-	char method[5];
-	char path[512];
-	char protocol[5];
-	char version[4];
+	char 			method[5];
+	char 			path[512];
+	char 			protocol[5];
+	char 			version[4];
 	
-	int q_int;
-	int p_int;
-	int multi_part_num;
+	int 			q_int;
+	int 			p_int;
+	int 			multi_part_num;
 	
-	struct Query query[10];
-	struct Params params[20];
-	struct Body body;
-	Perfd pfd;
+	struct Query 	query[10];
+	struct Params 	params[20];
+	struct Body 	body;
+	Perfd 			pfd;
 	
 	struct Multipart *multi[MULTI_PART_MAX_NUM];
 };
@@ -95,7 +95,7 @@ extern "C" {
 
 	void req_parse_http(Request *request, char *data, Perfd pfd);
 
-	void req_get_session_str(const Request* req, 		char session_str[]) ;
+	void req_get_session_str(const Request* req,  char session_str[]) ;
 
 	void req_get_param(const Request *req, char* key, 	char data[]);
 

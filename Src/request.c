@@ -411,14 +411,14 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 				break;
 			case 71:
 				for(int k=p_int;k>=0; k--){
-					if( strcmp(request->params[k].key, "Content-Length") == 0){
+					if( strcmp(request->params[k].key, "Content-Length") == 0) {
 						int len = atoi(request->params[k].data);
-						if( len <= BODY_MAX){
+						if( len <= BODY_MAX) {
 							request->body.length = len;
 							request->body.body=(char *)malloc(len + 1);
 							memset(request->body.body, 0, len + 1 );
 							memcpy(request->body.body, p, len);
-						}else{
+						} else {
 							printf("too big %d Bytes\n", len);
 						}
 					}
@@ -440,6 +440,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 				state = 1;
 				break;
 		}
+		
 		if(write){
 			temp[i] = *p;
 			i++;
@@ -508,7 +509,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 void req_get_session_str(const Request* req, char session_str[]) // OUT 
 {
     char* temp;
-	for(int i=0; i<=req->p_int; i++) {
+	for(int i=0; i<=req->p_int; i++) { 
 		if( strcmp(req->params[i].key, "Cookie") == 0 ) {
 			temp = strstr(req->params[i].data, "dmfsession=");
 			if( temp != NULL && strlen(temp) >= 21 ){  //
@@ -520,9 +521,8 @@ void req_get_session_str(const Request* req, char session_str[]) // OUT
 }
 
 
-void req_get_ws_key(const Request* req, char ws_key[]) // OUT 
+void req_get_ws_key(const Request* req, char ws_key[]) 			// OUT 
 {
-    char* temp;
 	for(int i=0; i<=req->p_int; i++) {
 		if( strcmp(req->params[i].key, "Sec-WebSocket-Key") == 0 ) {
 			strcpy(ws_key,req->params[i].data);
