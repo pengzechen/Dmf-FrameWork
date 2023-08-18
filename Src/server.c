@@ -273,7 +273,6 @@ void simple_ssl_server_make()
             req_parse_http(&req1, PerIoData->Buffer, pfd);
 
             // 根据解析出来的结果运行中间件
-
             if( middleware_handle(&req1) < 0) {
             #ifdef __SERVER_MPOOL__
                 pool_free( PerIoData);
@@ -288,7 +287,8 @@ void simple_ssl_server_make()
             // 进行必要日志记录
             serverTime(time);
             log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
-                    time , req1.path, strlen(PerIoData->Buffer), GetCurrentThreadId ());
+                    time , req1.path, strlen(PerIoData->Buffer), 
+                    GetCurrentThreadId ());
             memset(time, 0, 30);
             
             /*   
@@ -297,6 +297,8 @@ void simple_ssl_server_make()
                 *在view函数中必须调用response模块进行返回
                 */
             router_handle(PerHandleData->Socket, &req1);
+
+
             req_free(&req1);
         #endif // __SERVER_IOCP_DEBUG__
             
@@ -309,7 +311,7 @@ void simple_ssl_server_make()
             free( PerHandleData);
         #endif // __SERVER_MPOOL__
 
-            
+            /*
             // 继续向 socket 投递WSARecv操作
             DWORD Flags = 0;
             DWORD dwRecv = 0;
@@ -317,7 +319,7 @@ void simple_ssl_server_make()
             PerIoData->DataBuf.buf =PerIoData->Buffer;
             PerIoData->DataBuf.len = DATA_BUFSIZE;
             WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
-            
+            */
         }
 
     

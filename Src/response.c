@@ -51,7 +51,7 @@ extern void Res_NotFound(int acceptFd)
 {
 	char final_str[FINAL_STR_SIZE] = {0};
 	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
-	strcat( final_str, "Not Found");
+	strcat( final_str, "<h1>Not Found</h1>");
 	
 	ResHandel(acceptFd, final_str, strlen(final_str));
 }

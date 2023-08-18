@@ -24,9 +24,9 @@
 // #define MULTI_DEBUG
 // #define REQUEST_DEBUG
 
-#define BODY_MAX 1024*1024				// body 数据大小
-#define MULTI_PART_MAX 1024*1024		// multipart 数据大小
-#define MULTI_PART_MAX_NUM 20			// 最大multipart 数量
+#define BODY_MAX		 	1024*1024				// body 数据大小
+#define MULTI_PART_MAX 		1024*1024		// multipart 数据大小
+#define MULTI_PART_MAX_NUM 	20			// 最大multipart 数量
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,7 +95,7 @@ extern "C" {
 
 	void req_parse_http(Request *request, char *data, Perfd pfd);
 
-	void req_get_session_str(const Request* req,  char session_str[]) ;
+	void req_get_session_str(const Request* req,  char session_str[]);
 
 	void req_get_param(const Request *req, char* key, 	char data[]);
 

@@ -35,6 +35,7 @@
 #include <dmfserver/elr_mpl/elr_mpl.h>	// 初始化 内存池
 #include <dmfserver/mpool.h>
 #include <dmfserver/mdb/mdb_operate.h>
+#include <dmfserver/utility/dm_map.h>
 
 #include "./views/session.c"
 #include "./views/template.c"
@@ -120,10 +121,11 @@ int main(int argc, char* argv[])
 {
 	pcre_test();
 	jannson_test();
+    test_map();
     
 
 	#ifdef __WIN32__
-		system("cls");
+		// system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
@@ -165,7 +167,7 @@ int main(int argc, char* argv[])
 
     // 根据使用的平台启动服务器
 #ifdef __WIN32__	// Win32
-	iocp_server_make();
+	// iocp_server_make();
 	// simple_server_make();
 	// simple_ssl_server_make();
 #elif __linux__ 	// linux
@@ -181,6 +183,7 @@ int main(int argc, char* argv[])
 	pool_destroy();
     pool_destroy2();
     template_free();
-
+    char a[132] = {0};
+    gets(a);
 	return 0;
 }

@@ -121,8 +121,8 @@ void hashmap_destroy(hashmap_t *hashmap) {
     free(hashmap);
 }
 
-int main() {
-    hashmap_t *hashmap = hashmap_create(100);
+int test_map() {
+    hashmap_t *hashmap = hashmap_create(79);
 
     hashmap_insert(hashmap, "key1", "value1");
     hashmap_insert(hashmap, "key2", "value2");
