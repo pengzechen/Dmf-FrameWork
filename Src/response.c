@@ -282,7 +282,7 @@ int parseWebSocketFrame(const unsigned char *data, size_t data_length,
     }
 
 	// 检查关闭帧
-	printf("%d", payload_len);
+	printf("%ld", payload_len);
     if (payload_len == 2 && (data[0] & 0x0F) == 0x08) {
         return -100;  // 连接已断开
     }
@@ -343,7 +343,7 @@ extern void upto_ws_prot(int a, char key[])
 
     	size_t data_length = recv( a, data, sizeof(data), 0 );
 		if(data_length == 0) {
-			closesocket(a);
+			close(a);
 			return;
 		}
 
@@ -371,7 +371,7 @@ extern void upto_ws_prot(int a, char key[])
 		sendWebSocketFrame(a, message, strlen(message));
 	}
 
-	closesocket(a);
+	close(a);
 }
 
 

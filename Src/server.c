@@ -426,7 +426,7 @@ void simple_ssl_server_make()
         memset(&st_sersock, 0, sizeof(st_sersock));
         st_sersock.sin_family = AF_INET;
     //	st_sersock.sin_addr.s_addr = htonl(INADDR_ANY);
-        st_sersock.sin_port = htons( 80 );
+        st_sersock.sin_port = htons( 8080 );
         int out = 2;
         setsockopt(i_listenfd, SOL_SOCKET, SO_REUSEADDR, &out, sizeof(out));
         bind(i_listenfd,(struct sockaddr*)&st_sersock, sizeof(st_sersock));
@@ -533,7 +533,7 @@ void simple_ssl_server_make()
         arg->cmp = g_cmp;
         arg->fd = fd;
 
-        for (int i = 0; i < 16; ++i) {
+        for (int i = 0; i < 1; ++i) {
             pthread_t roundCheck;
             pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
             pthread_join(roundCheck, NULL);

@@ -68,7 +68,7 @@ thread_pool_t *thread_pool_create(int thread_count) {
 
 int dm_gettimeofday(struct timeval *tv, struct timezone *tz) {
     struct timespec ts;
-    if (clock_gettime(CLOCK_REALTIME, &ts) != 0) {
+    if (clock_gettime(0, &ts) != 0) {
         return -1;
     }
     tv->tv_sec = ts.tv_sec;

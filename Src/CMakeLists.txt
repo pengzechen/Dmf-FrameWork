@@ -47,7 +47,7 @@ elseif( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     find_package(LibXml2 REQUIRED)
     find_package(jansson REQUIRED)
     # find_package(pcre REQUIRED)
-    # find_package(libjwt REQUIRED)
+    find_package(libjwt REQUIRED)
 
     link_libraries(pthread mysqlclient ssl crypto xml2 jansson pcre jwt)
     include_directories(

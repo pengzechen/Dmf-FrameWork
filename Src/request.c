@@ -456,7 +456,6 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	}
 	
 /*
-
 	switch(state){
 		case 1:
 			break;

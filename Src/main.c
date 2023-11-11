@@ -37,21 +37,18 @@
 #include <dmfserver/mdb/mdb_operate.h>
 #include <dmfserver/utility/dm_map.h>
 
-#include "./views/session.c"
-#include "./views/template.c"
-#include "./views/mysql.c"
-#include "./views/other.c"
-#include "./views/mdb.c"
-#include "./views/ws.c"
+#include <stdlib.h>
 
-#ifdef __linux__
-#include <jansson.h>
-#include <pcre.h>
-#elif __WIN32__
-#include <jansson/jansson.h>
-#include <pcre/pcre.h>
 
-#endif
+#include "./testviews/session.c"
+#include "./testviews/template.c"
+#include "./testviews/mysql.c"
+#include "./testviews/other.c"
+#include "./testviews/mdb.c"
+#include "./testviews/ws.c"
+
+
+
 
 #define OVECCOUNT 30 /* should be a multiple of 3 */
 #define EBUFLEN 128
@@ -60,68 +57,10 @@
 typedef void (*worker_function)();
 void multi_process_init(worker_function _wf);
 
-int pcre_test() 
-{
-	pcre  *re;
-    const char *error;
-    int  erroffset;
-    int  ovector[OVECCOUNT];
-    int  rc, i;
-    char  src [] = "111 <title>Hello World</title> 222";   // 要被用来匹配的字符串
-    char  pattern [] = "<title>(.*)</(tit)le>";            // 将要被编译的字符串形式的正则表达式
-    printf("String : %s\n", src);
-    printf("Pattern: \"%s\"\n", pattern);
-    re = pcre_compile(pattern,      // pattern, 输入参数，将要被编译的字符串形式的正则表达式
-                      0,            // options, 输入参数，用来指定编译时的一些选项
-                      &error,       // errptr, 输出参数，用来输出错误信息
-                      &erroffset,   // erroffset, 输出参数，pattern中出错位置的偏移量
-                      NULL);        // tableptr, 输入参数，用来指定字符表，一般情况用NULL
-    // 返回值：被编译好的正则表达式的pcre内部表示结构
-    if (re == NULL) {                 //如果编译失败，返回错误信息
-        printf("PCRE compilation failed at offset %d: %s\n", erroffset, error);
-        return 1;
-    }
-    rc = pcre_exec(re,            // code, 输入参数，用pcre_compile编译好的正则表达结构的指针
-                   NULL,          // extra, 输入参数，用来向pcre_exec传一些额外的数据信息的结构的指针
-                   src,           // subject, 输入参数，要被用来匹配的字符串
-                   strlen(src),  // length, 输入参数， 要被用来匹配的字符串的指针
-                   0,             // startoffset, 输入参数，用来指定subject从什么位置开始被匹配的偏移量
-                   0,             // options, 输入参数， 用来指定匹配过程中的一些选项
-                   ovector,       // ovector, 输出参数，用来返回匹配位置偏移量的数组
-                   OVECCOUNT);    // ovecsize, 输入参数， 用来返回匹配位置偏移量的数组的最大大小
-    // 返回值：匹配成功返回非负数，没有匹配返回负数
-    if (rc < 0) {                     //如果没有匹配，返回错误信息
-        if (rc == PCRE_ERROR_NOMATCH)
-            printf("Sorry, no match ...\n");
-        else
-            printf("Matching error %d\n", rc);
-        pcre_free(re);
-        return 1;
-    }
-    printf("\nOK, has matched ...\n\n");   //没有出错，已经匹配
-    for (i = 0; i < rc; i++) {             //分别取出捕获分组 $0整个正则公式 $1第一个()
-        char *substring_start = src + ovector[2*i];
-        int substring_length = ovector[2*i+1] - ovector[2*i];
- 
-        printf("$%2d: %.*s\n", i, substring_length, substring_start);
-    }
- 
-    pcre_free(re);                     // 编译正则表达式re 释放内存
-}
-
-void jannson_test()
-{
-	json_t val;
-    int type = json_typeof(&val);
-    bool Judge = json_is_object(&val);
-}
 
 
 int main(int argc, char* argv[]) 
 {
-	pcre_test();
-	jannson_test();
-    test_map();
     
 
 	#ifdef __WIN32__
@@ -140,7 +79,7 @@ int main(int argc, char* argv[])
     // signal(SIGINT, handle_signal);
     // signal(SIGTERM, handle_signal);
 
-    conf_init();        // 服务框架参数初始化
+    conf_init();        // 框架参数初始化
     log_init();         // 日志记录模块初始化
     middleware_init();  // 中间件初始化
     session_init();     // session 模块初始化
@@ -152,12 +91,11 @@ int main(int argc, char* argv[])
 
     pool_init(2076, 2076*8192);  // server 模块内存池初始化
     pool_init2(4, 4*8192);       // server 模块内存池初始化
-    mdb_operate_init();   // mdb 模块初始化
+    mdb_operate_init();          // mdb 模块初始化
 
 
     // *以下载入 views 的函数，
     // *载入以后，router 将根据载入的函数调用相对应的 view
-
     model();
     other();
     session();
@@ -173,17 +111,15 @@ int main(int argc, char* argv[])
 #elif __linux__ 	// linux
 	// simple_server_make();
 	// simple_ssl_server_make();
-	// epoll_server_make();
-    multi_process_init(&epoll_server_make);
+	epoll_server_make();
+    // multi_process_init(&epoll_server_make);
 	// epoll_ssl_server();
 #endif 				// linux
-
 
     // 平滑退出时做相应的清理工作
 	pool_destroy();
     pool_destroy2();
     template_free();
-    char a[132] = {0};
-    gets(a);
+
 	return 0;
 }
