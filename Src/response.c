@@ -343,7 +343,11 @@ extern void upto_ws_prot(int a, char key[])
 
     	size_t data_length = recv( a, data, sizeof(data), 0 );
 		if(data_length == 0) {
+#ifdef __WIN32__
+			closesocket(a);
+#else	
 			close(a);
+#endif // Win32
 			return;
 		}
 
@@ -370,8 +374,11 @@ extern void upto_ws_prot(int a, char key[])
 		const char *message = "Hello, WebSocket!";
 		sendWebSocketFrame(a, message, strlen(message));
 	}
-
-	close(a);
+#ifdef __WIN32__
+			closesocket(a);
+#else	
+			close(a);
+#endif // Win32
 }
 
 
