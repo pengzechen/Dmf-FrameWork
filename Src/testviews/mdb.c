@@ -12,7 +12,7 @@ void mdbfind(int a, const Request* req)
 	char* pdata = data;
 
 	str_from_mdb = mdb_find(pdata);
-	Res_row(a, str_from_mdb);
+	res_row(a, str_from_mdb);
 	//free(str_from_mdb);
 }
 
@@ -26,7 +26,7 @@ void mdbinsert(int a, const Request* req)
 	char* key = ckey;
 	char* data = cdata;
 	mdb_insert(key, data);
-	Res_row(a, "insert ok!");
+	res_row(a, "insert ok!");
 }
 
 

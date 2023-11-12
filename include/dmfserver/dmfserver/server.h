@@ -84,7 +84,7 @@ typedef struct {
 	OVERLAPPED Overlapped;
 	WSABUF DataBuf;
 	CHAR Buffer[DATA_BUFSIZE];
-	// ContFunMap cmp;
+	// ctl_fun_map_t cmp;
 	
 }PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
 
@@ -102,7 +102,7 @@ typedef struct {
 
 
 typedef struct thread_arg {
-	ContFunMap cmp;
+	ctl_fun_map_t cmp;
 	long fd;
 } thread_arg;
 

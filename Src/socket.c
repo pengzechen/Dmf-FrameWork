@@ -50,6 +50,8 @@ int create_socket()
 }
 
 
+#ifdef __linux__
+
 int createSocket() 
 {
     int i_listenfd;
@@ -94,7 +96,7 @@ int create_socket_reuse()
 }
 
 
-
+#endif // linux
 
 
 #ifdef __WIN32__

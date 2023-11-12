@@ -16,13 +16,13 @@ void setsession(int a, const Request *req)
 	SessionCreate(Session_str, key, data);
 
 	Response res;
-	Res_init(a, &res);
-	SetHead(&res, "200");
-	SetType(&res, "text/html;utf-8;");
-	// SetCookie(&res, "dmfsession", "324fvw3qrc3c23x");
-	SetSession(&res, Session_str);
-	SetBody(&res, res_str, strlen(res_str));
-	ResParseSend(&res);
+	res_init(a, &res);
+	res_set_head(&res, "200");
+	res_set_type(&res, "text/html;utf-8;");
+	// res_set_cookie(&res, "dmfsession", "324fvw3qrc3c23x");
+	res_set_session(&res, Session_str);
+	res_set_body(&res, res_str, strlen(res_str));
+	res_parse_send(&res);
 }
 
 void getsession(int a, const Request *req) 
@@ -34,12 +34,12 @@ void getsession(int a, const Request *req)
 	
 	char* s = getSessionR(req, data );
 	if(s == NULL){
-		Res_row(a, "no such key");
+		res_row(a, "no such key");
 	}else{
 		char res[256] = {0};
 		strcat(res, "session data: ");
 		strcat(res, s);
-		Res_row(a, res);
+		res_row(a, res);
 	}
 }
 
@@ -65,7 +65,7 @@ void sessionadd(int a, const Request *req)
 		default: break;
 	}
 	
-	Res_row(a, res_str);
+	res_row(a, res_str);
 }
 
 void updatesession(int a, const Request *req) 
@@ -77,9 +77,9 @@ void updatesession(int a, const Request *req)
 	int res = UpdateSessionDataR(req, key, data);
 
 	if(res)
-		Res_row(a, "Update successfully!");
+		res_row(a, "Update successfully!");
 	else
-		Res_row(a, "Update faild");
+		res_row(a, "Update faild");
 }
 
 void sessiondebug(int a, const Request* req) 
@@ -87,7 +87,7 @@ void sessiondebug(int a, const Request* req)
 	printf("-----------session debug-------------\n");
 	SessionAll();
 	printf("-----------session debug-------------\n");
-	Res_row(a, "This is a test str");
+	res_row(a, "This is a test str");
 }
 
 RouterAdd(session)

@@ -20,7 +20,7 @@
 
 // 类似于 usleep 的函数
 void sleep_microseconds(int microseconds) {
-#ifdef _WIN32
+#ifdef __WIN32__
     Sleep(microseconds / 1000);
 #else
     usleep(microseconds);

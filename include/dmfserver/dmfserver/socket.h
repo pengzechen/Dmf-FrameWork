@@ -53,14 +53,13 @@ extern "C" {
 
 #ifdef __WIN32__
 
-static inline void wsa_init()
-{
+static inline void wsa_init() {
     WSADATA wsd;
-    if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)  OutErr("WSAStartup()");
+    if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)  
+        OutErr("WSAStartup()");
 }
 
-static inline void wsa_cleanup()
-{
+static inline void wsa_cleanup() {
     WSACleanup(); 
 }
 

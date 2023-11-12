@@ -21,7 +21,7 @@
 
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void ResHandel( int acceptFd, char* res_str, unsigned int size)
+static void res_handle( int acceptFd, char* res_str, unsigned int size)
 {
 	int sendbyets = send(acceptFd, res_str, size, 0);
 
@@ -36,34 +36,34 @@ static void ResHandel( int acceptFd, char* res_str, unsigned int size)
 
 
 // 以纯的字符串返回
-extern void Res_row(int acceptFd, char* res_str) 
+extern void res_row(int acceptFd, char* res_str) 
 {
 	char final_str[FINAL_STR_SIZE] = {0};
 
 	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
 	strcat( final_str, res_str);
 	
-	ResHandel(acceptFd, final_str, strlen(final_str));
+	res_handle(acceptFd, final_str, strlen(final_str));
 }
 
 // 返回 Not Found
-extern void Res_NotFound(int acceptFd)
+extern void res_notfound(int acceptFd)
 {
 	char final_str[FINAL_STR_SIZE] = {0};
 	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
 	strcat( final_str, "<h1>Not Found</h1>");
 	
-	ResHandel(acceptFd, final_str, strlen(final_str));
+	res_handle(acceptFd, final_str, strlen(final_str));
 }
 
 // 以模板返回
-extern void Res_render(int acceptFd, char* template_name, 
+extern void res_render(int acceptFd, char* template_name, 
 						struct Kvmap *kv, int num) 
 {
 	char* context = get_template(template_name);				// 需要释放内存
 	char* res = parse_context(context, kv, num-1);		// 模板返回值  需要释放内存
 
-	Res_row(acceptFd, res);
+	res_row(acceptFd, res);
 	memset(res, 0, TEMPLATE_RESULT_SIZE);
 	free(res);
 }
@@ -72,13 +72,13 @@ extern void Res_render(int acceptFd, char* template_name,
 // 中间件调用的返回函数
 // *************************************************************************
 
-extern void Res_without_permission(int acceptFd) 
+extern void res_without_permission(int acceptFd) 
 {
 	char final_str[FINAL_STR_SIZE] = {0};
 
 	strcat( final_str, "HTTP/1.1 403 \r\n\r\nYou are without permission");
 	
-	ResHandel(acceptFd, final_str, strlen(final_str));
+	res_handle(acceptFd, final_str, strlen(final_str));
 }
 
 // *************************************************************************
@@ -87,7 +87,7 @@ extern void Res_without_permission(int acceptFd)
 // 响应初始化 
 // *************************************************************************
 // 设置时间和服务器名称
-extern void Res_init(int fd, Response* res)
+extern void res_init(int fd, Response* res)
 {
 	memset(res->Server, 0, 32);
 	memset(res->Content_type, 0, 32);
@@ -112,7 +112,7 @@ extern void Res_init(int fd, Response* res)
 }
 
 // 设置 响应代码（首行）
-extern void SetHead(Response* res, char* code)
+extern void res_set_head(Response* res, char* code)
 {	
 	strcat(res->Head_code, "HTTP/1.1 ");
 	strcat(res->Head_code, code);
@@ -120,7 +120,7 @@ extern void SetHead(Response* res, char* code)
 }
 
 // 设置 Content-type
-extern void SetType(Response* res, char* type)
+extern void res_set_type(Response* res, char* type)
 {
 	strcat(res->Content_type, "Content-type:");
 	strcat(res->Content_type, type);
@@ -128,7 +128,7 @@ extern void SetType(Response* res, char* type)
 }
 
 // 设置 Set-cookie 
-extern void SetCookie(Response* res, char* name, char* value)
+extern void res_set_cookie(Response* res, char* name, char* value)
 {
 	strcat(res->Set_cookie, "Set-cookie:");
 	strcat(res->Set_cookie, name);
@@ -138,21 +138,21 @@ extern void SetCookie(Response* res, char* name, char* value)
 }
 
 // 设置 session
-extern void SetSession(Response*res , char* Session_str) 
+extern void res_set_session(Response*res , char* Session_str) 
 {
 	
-	SetCookie(res, "dmfsession", Session_str);
+	res_set_cookie(res, "dmfsession", Session_str);
 }
 
 // 设置 body
-extern void SetBody(Response* res, char* body, unsigned int size)
+extern void res_set_body(Response* res, char* body, unsigned int size)
 {
 	res->pbody = body;
 	res->body_size = size;
 }
 
 // 将结构体中的变量组合成字符串 发送
-extern void ResParseSend(Response* res) 
+extern void res_parse_send(Response* res) 
 {
 	char* final_str = malloc(sizeof(char)* FINAL_STR_SIZE);
 	memset(final_str, 0, FINAL_STR_SIZE);
@@ -168,7 +168,7 @@ extern void ResParseSend(Response* res)
 	int head_len = strlen(final_str);
 	memcpy(final_str + head_len, res->pbody, res->body_size);
 
-	ResHandel(res->fd, final_str, head_len + res->body_size);
+	res_handle(res->fd, final_str, head_len + res->body_size);
 	free(final_str);
 }
 
@@ -386,27 +386,27 @@ extern void upto_ws_prot(int a, char key[])
 // 以下是静态文件响应函数
 // *************************************************************************
 
-extern void Res_static(int acceptFd, char* path, unsigned int size, 
+extern void res_static(int acceptFd, char* path, unsigned int size, 
 						char* ext, char* content_type) 
 {
 	if(size > 1024*1024*1) {			//  文件大于 1Mb 调用文件handle
-		ResFileHandel(acceptFd, path, content_type, size);
+		res_file_handle(acceptFd, path, content_type, size);
 		return;
 	}
-	char* res_str = loadFile(path);
+	char* res_str = res_load_file(path);
 	Response res;
-	Res_init(acceptFd, &res);
-	SetHead(&res, "200");
-	SetType(&res, content_type);
-	SetBody(&res, res_str, size);
-	ResParseSend(&res);
+	res_init(acceptFd, &res);
+	res_set_head(&res, "200");
+	res_set_type(&res, content_type);
+	res_set_body(&res, res_str, size);
+	res_parse_send(&res);
 	// free(res.pbody);
 	free(res_str);
 }
 
 // 返回文件内容指针 调用者使用完文件内容要释放内存
 // 对于小文件直接全部读取
-static char* loadFile(char *path) 
+static char* res_load_file(char *path) 
 {
 	FILE *fp;
 	fp = fopen( path, "rb" );
@@ -429,7 +429,7 @@ static char* loadFile(char *path)
 }
 
 // 大文件调用此模块进行返回 
-static void ResFileHandel(int acceptFd, char* path, char* content_type, 
+static void res_file_handle(int acceptFd, char* path, char* content_type, 
 							unsigned int size) 
 {
 	char head[512] = {0};

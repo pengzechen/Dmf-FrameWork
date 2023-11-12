@@ -48,15 +48,12 @@
 #include "./testviews/ws.c"
 
 
-
-
 #define OVECCOUNT 30 /* should be a multiple of 3 */
 #define EBUFLEN 128
 #define BUFLEN 1024
 
 typedef void (*worker_function)();
 void multi_process_init(worker_function _wf);
-
 
 
 int main(int argc, char* argv[]) 
@@ -105,7 +102,7 @@ int main(int argc, char* argv[])
 
     // 根据使用的平台启动服务器
 #ifdef __WIN32__	// Win32
-	// iocp_server_make();
+	iocp_server_make();
 	// simple_server_make();
 	// simple_ssl_server_make();
 #elif __linux__ 	// linux

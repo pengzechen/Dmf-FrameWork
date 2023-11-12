@@ -80,12 +80,14 @@ void simple_server_make()
     struct sockaddr_in sock_in;
 	int sock_in_len = sizeof(sock_in);
     int sAccept;
+    
 	while(1){
 		sAccept = accept(sListen, (struct sockaddr *)&sock_in, &sock_in_len);
 		req_res_handler( sAccept );
 	}
 	
     close(sListen); //关闭 socket
+    
 #ifdef __WIN32__
     wsa_cleanup();
 #endif
@@ -265,12 +267,10 @@ int iocp_server_make()
     SYSTEM_INFO _system_info;
     GetSystemInfo(&_system_info);
 
-    for(int i = 0; i <_system_info.dwNumberOfProcessors * 2; i++) {
-        
+    for(int i = 0; i < _system_info.dwNumberOfProcessors * 2; i++) {
         HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle_io, completion_port, 0, NULL);
-        
-        if(hProcessIO) CloseHandle(hProcessIO);
-        
+        if(hProcessIO) 
+            CloseHandle(hProcessIO);
     }
 
     
@@ -294,21 +294,21 @@ int iocp_server_make()
         sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
         //sClient = accept(sListen, 0, 0);
 
-    #ifdef __SERVER_MPOOL__
+#ifdef __SERVER_MPOOL__
         PerHandleData =  (PER_HANDLE_DATA*)pool_alloc2();
-    #else
+#else
         PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
-    #endif // __SERVER_MPOOL__
+#endif // __SERVER_MPOOL__
 
         PerHandleData->Socket = sClient;
 
 
         // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
-    #ifdef __SERVER_MPOOL__
+#ifdef __SERVER_MPOOL__
         PerIoData = (PER_IO_OPERATION_DATA*)pool_alloc();
-    #else
+#else
         PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
-    #endif //__SERVER_MPOOL__
+#endif //__SERVER_MPOOL__
 
 
         //printf("PER_HANDLE_DATA size: %d\n", sizeof(PER_HANDLE_DATA));

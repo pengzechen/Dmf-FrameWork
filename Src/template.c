@@ -29,8 +29,7 @@ void template_init()
 	strcpy(g_template_dec.template_np[1].name, "test2.html");
 	g_template_dec.template_np[0].template_data = local_template("./templates/test.html");
 	g_template_dec.template_np[1].template_data = local_template("./templates/test2.html");
-	printf("[Template Info] template init ok!\n");
-	printf("\n");
+	printf("[SERVER: Info] template init successfully...\n");
 }
 
 

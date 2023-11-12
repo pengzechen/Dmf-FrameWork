@@ -23,7 +23,7 @@ void template(int a, const Request *req) {
 	kv[3].dec[3] = NULL;
 	kv[3].type = 3;
 	
-	Res_render(a, "test.html", kv, 4);
+	res_render(a, "test.html", kv, 4);
 }
 
 RouterAdd(apptemp)

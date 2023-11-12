@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#ifdef _WIN32
+#ifdef __WIN32__
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -41,6 +41,7 @@ typedef struct MinHeap {
     int size;
 } MinHeap;
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -49,8 +50,6 @@ extern "C" {
     static void min_heap_pop(MinHeap *heap);
     void handle_events(MinHeap *heap);
     void add_timer(MinHeap *heap, int timeout, void (*callback)());
-    
-
 #ifdef __cplusplus
 }           /* end of the 'extern "C"' block */
 #endif

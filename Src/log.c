@@ -78,8 +78,7 @@ void log_init()
 	// 分离日志写入线程
 	pthread_detach(tid);
 
-    printf("[Log: Info] log init successfully!\n");
-	printf("\n");
+    printf("[SERVER: Info] log init successfully...\n");
 }
 
 // 定义日志记录函数

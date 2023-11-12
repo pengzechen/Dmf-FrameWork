@@ -112,8 +112,7 @@ void mysql_pool_init()
 	}
 	pthread_mutex_unlock(&pool_mysql.lock);
 
-	printf("[Cpool: Info] %d connections mysqlpool init successfully... \n", pool_mysql.free_connections);
-	printf("\n");
+	printf("[SERVER: Info] %d connections mysqlpool init successfully...\n", pool_mysql.free_connections);
 }
 
 //从连接池中取出一个mysql连接,返回类型为mysql_conn,如果没有可用的连接，返回null。

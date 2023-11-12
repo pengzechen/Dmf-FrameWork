@@ -65,10 +65,10 @@ typedef struct _ContFunMap {
 	char* keys[ ContFunNUM ];
 	int curr_num;
 	
-} ContFunMap;
+} ctl_fun_map_t;
 
 // 全局 view 回调函数
-extern ContFunMap g_cmp;
+extern ctl_fun_map_t g_cmp;
 
 extern struct FileInfo g_file_list[MAX_FILES];
 extern int g_num_files;

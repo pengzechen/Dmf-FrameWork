@@ -56,35 +56,35 @@ typedef struct _Response {
 extern "C" {
 #endif
 
-void Res_init(int fd, Response* res);
+void res_init(int fd, Response* res);
 
-static void ResHandel( int acceptFd, char* res_str, unsigned int size);
+static void res_handle( int acceptFd, char* res_str, unsigned int size);
 
-extern void Res_without_permission(int acceptFd);
+extern void res_without_permission(int acceptFd);
 
-static char* loadFile(char *path);
+static char* res_load_file(char *path);
 
-extern void SetHead(Response* res, char* code);
+extern void res_set_head(Response* res, char* code);
 
-extern void SetType(Response* res, char* type);
+extern void res_set_type(Response* res, char* type);
 
-extern void SetCookie(Response* res, char* name, char* value);
+extern void res_set_cookie(Response* res, char* name, char* value);
 
-extern void SetSession(Response*res , char* Session_str);
+extern void res_set_session(Response*res , char* Session_str);
 
-extern void SetBody(Response* res, char* body, unsigned int size);
+extern void res_set_body(Response* res, char* body, unsigned int size);
 
-extern void ResParseSend(Response* res);
+extern void res_parse_send(Response* res);
 
-extern void Res_NotFound(int acceptFd);
+extern void res_notfound(int acceptFd);
 
-extern void Res_row( int acceptFd, char* res_str);
+extern void res_row( int acceptFd, char* res_str);
 
-extern void Res_render(int acceptFd, char* template_name, struct Kvmap *kv, int num);
+extern void res_render(int acceptFd, char* template_name, struct Kvmap *kv, int num);
 
-extern void Res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
+extern void res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 
-static void ResFileHandel(int acceptFd, char* path, char* content_type, unsigned int size);
+static void res_file_handle(int acceptFd, char* path, char* content_type, unsigned int size);
 
 extern void upto_ws_prot(int a, char key[]) ;
 

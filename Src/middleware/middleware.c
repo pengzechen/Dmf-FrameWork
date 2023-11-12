@@ -34,8 +34,7 @@
 
 extern void middleware_init()
 {
-    printf("[Middleware: Info] middleware init successfully!\n");
-    printf("\n");
+    printf("[SERVER: Info] middleware init successfully...\n");
 }
 
 static int middleware_check_if_too_often(const Request* req)
@@ -68,7 +67,7 @@ extern int middleware_handle(const Request* req)
 
     if( middleware_check_if_too_often(req) != 0 ) {
 
-        Res_without_permission(req->pfd.fd);
+        res_without_permission(req->pfd.fd);
         return -1001;
     }
 

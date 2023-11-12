@@ -57,20 +57,20 @@ typedef struct conf_model {
 
 
 // Router 模块
-typedef struct conf_router{
+typedef struct conf_router {
     char static_dir[1024];
 } conf_router;
 
 
-typedef struct Server_Conf {
+typedef struct server_cf_t {
     conf_model _conf_model;
     conf_server _conf_server;
     conf_router _conf_router;
-} Server_Conf;
+} server_cf_t;
 
 
 // conf 全局的配置变量
-extern Server_Conf g_server_conf_all;
+extern server_cf_t g_server_conf_all;
 
 #ifdef __cplusplus
 extern "C" {

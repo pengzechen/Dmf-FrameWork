@@ -23,7 +23,7 @@ void string(int a, const Request* req)
     // usleep1(400);
     // pool_free(block1);
 	//printf("%s\n", req->query[0].key);
-	Res_row(a, "test ok");
+	res_row(a, "test ok");
 }
 
 

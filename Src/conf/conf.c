@@ -20,7 +20,7 @@
 #include <dmfserver/conf/conf.h>
 
 // conf 全局的配置变量
-Server_Conf g_server_conf_all;
+server_cf_t g_server_conf_all;
 
 
 void conf_init()

@@ -147,8 +147,7 @@ extern void session_init()
         g_session_all_dec[i].value = NULL;
         g_session_all_dec[i].next = NULL;
     }
-    printf("[Session: Info] session init successfully...\n");
-    printf("\n");
+    printf("[SERVER: Info] session init successfully...\n");
 
     pthread_t roundCheck;
 	pthread_create(&roundCheck, NULL, session_write_file, NULL);

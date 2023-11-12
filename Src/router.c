@@ -19,7 +19,7 @@
 #include <dmfserver/router.h>
 
 // 全局 view 回调函数
-ContFunMap 			g_cmp;
+ctl_fun_map_t 			g_cmp;
 
 struct FileInfo 	g_file_list[MAX_FILES];
 
@@ -50,7 +50,7 @@ void router_init()
 	traverse_directory(static_dir, g_file_list, &g_num_files);
 
 	
-    printf("[Router: Info] %s found %d static files.\n", static_dir, g_num_files);
+    printf("[SERVER: Info] %s found %d static files.\n", static_dir, g_num_files);
 	
 	char* content_type;
 	char* url;
@@ -71,8 +71,7 @@ void router_init()
 	}
 	
 
-	printf("[Router: Info] Router init successfully...\n");
-	printf("\n");
+	printf("[SERVER: Info] Router init successfully...\n");
 }
 
 
@@ -96,12 +95,12 @@ void router_handle(int acceptFd, Request *req)
 		// int num = search_local_file(local_path);
 		for(int i=0; i <= g_num_files; i++) {
 			if( strcmp(req->path, g_file_list[i].url) == 0) {
-				Res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
+				res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
 				flag = 1;	// 静态资源找到了
 			}
 		}
 		if(flag == 0){	
-			Res_NotFound(acceptFd);   // 返回404Not Found
+			res_notfound(acceptFd);   // 返回404Not Found
 		}
 	}
 }
@@ -114,7 +113,7 @@ int search_local_file(char* local_paths[])
 	
 	int file_nums = -1;
 	
-	dir=opendir(STATIC_DIR);
+	dir = opendir(STATIC_DIR);
 	while((ptr=readdir(dir))!=NULL) {
 		if(ptr->d_name[0] == '.')
 			continue;

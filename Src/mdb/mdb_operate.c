@@ -121,10 +121,10 @@
             memset(shared_data[i].ip, 0, 16);
         }
 
-        printf("ip_limit_shared_memory size: %d\n", MAX_IP_LIMIT_HANDLE * sizeof(IpLimit));
-        printf("mdb_mapping size: %d\n", MAX_ENTRIES * sizeof(entry_t));
+        //printf("ip_limit_shared_memory size: %d\n", MAX_IP_LIMIT_HANDLE * sizeof(IpLimit));
+        //printf("mdb_mapping size: %d\n", MAX_ENTRIES * sizeof(entry_t));
 
-        printf("[Mdb: Info]: mdb init successfully! \n");
+        printf("[SERVER: Info] mdb init successfully...\n");
         printf("\n");
     }
 
@@ -277,8 +277,7 @@
 
     void mdb_operate_init()
     {
-        printf("[Mdb: Info]: mdb init successfully! \n");
-        printf("\n");
+        printf("[SERVER: Info] mdb init successfully...\n");
     }
 
     char* mdb_find(char* key)
