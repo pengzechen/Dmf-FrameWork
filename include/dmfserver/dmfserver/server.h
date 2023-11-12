@@ -19,7 +19,7 @@
 #ifndef __SERVER_INCLUDE__
 #define __SERVER_INCLUDE__
 
-#define SERVER_PORT 80
+
 #define RECEIVE_MAX_BYTES 1024*512
 #define DATA_BUFSIZE 2048
 #define MAXBUF 4096
@@ -31,6 +31,7 @@
 #include <dmfserver/log.h>
 #include <dmfserver/mpool.h>
 #include <dmfserver/middleware/middleware.h>
+#include <dmfserver/socket.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -43,10 +44,9 @@
 
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-// #include <openssl/applink.c>
 #include <sys/time.h>
 
-#define OutErr(a) printf("%s %s %d \n", a, __FILE__ , __LINE__ );
+
 
 
 #ifdef __linux__ // Linux
@@ -75,28 +75,28 @@
 
 #ifdef __WIN32__ // Windows
 
-	
-	#include <WinSock2.h>
-	#include <WS2tcpip.h>
-	
-	typedef struct {
-		
-		OVERLAPPED Overlapped;
-		WSABUF DataBuf;
-		CHAR Buffer[DATA_BUFSIZE];
-		// ContFunMap cmp;
-		
-	}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
-	
-	typedef struct {
-		
-		SOCKET Socket;
-		
-	}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
 
-	#define __SERVER_MPOOL__		// 启用server内存池
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+
+typedef struct {
 	
-	// #define __SERVER_IOCP_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
+	OVERLAPPED Overlapped;
+	WSABUF DataBuf;
+	CHAR Buffer[DATA_BUFSIZE];
+	// ContFunMap cmp;
+	
+}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
+
+typedef struct {
+	
+	SOCKET Socket;
+	
+}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
+
+#define __SERVER_MPOOL__		// 启用server内存池
+
+// #define __SERVER_IOCP_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
 
 #endif  		// Windows
 

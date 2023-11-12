@@ -15,8 +15,6 @@
     *  limitations under the License. 
     *
     */
-
-
    
 #include <dmfserver/server.h>
 
@@ -48,21 +46,6 @@ static SSL_CTX* get_ssl_ctx()
 }
 
 
-#ifdef __WIN32__
-
-    static void wsa_init()
-    {
-        WSADATA wsd;
-        if( WSAStartup(MAKEWORD(2, 2), &wsd) != 0)  OutErr("WSAStartup()");
-    }
-
-    static void wsa_cleanup()
-    {
-        WSACleanup(); 
-    }
-    
-#endif
-
 static void req_res_handler(int acceptFd ) 
 {
 	
@@ -84,36 +67,6 @@ static void req_res_handler(int acceptFd )
 	
 	req_free(&req1);
 
-}
-
-
-static int create_socket()
-{
-    
-	int serverPort;
-	// if configure not define port, we use default SERVER_PORT
-	if(g_server_conf_all._conf_server.port == 0)
-	serverPort = SERVER_PORT;
-	else serverPort = g_server_conf_all._conf_server.port;
-
-    int sListen;
-    struct sockaddr_in ser;
-    sListen = socket(AF_INET, SOCK_STREAM, 0);
-    ser.sin_family = AF_INET; 
-    ser.sin_port = htons(80); 
-    ser.sin_addr.s_addr = htonl(INADDR_ANY); 
-    if( bind(sListen, (struct sockaddr*)&ser, sizeof(ser) ) < 0) 
-    {
-		OutErr("bind Failed!");
-		return 1;
-	}
-    if( listen(sListen,5) != 0) 
-    {
-		OutErr("listen Failed!");
-		return 1;
-	}
-
-    return sListen;
 }
 
 
@@ -185,70 +138,24 @@ void simple_ssl_server_make()
 #ifdef __WIN32__  // WIN32
 
 
-    SOCKET iocp_bind_socket(int nPort)
-    {
+DWORD WINAPI iocp_handle_io(LPVOID lpParam)
+{
+    
+    HANDLE CompletionPort = (HANDLE)lpParam;
+    DWORD BytesTransferred;
+    LPPER_HANDLE_DATA PerHandleData;
+    LPPER_IO_OPERATION_DATA PerIoData;
+    Request req1;
+    char time [30] = {'\0'};
+    Perfd pfd;
 
-        SOCKET sServer = WSASocket(AF_INET,SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+    while(1){
 
-
-        struct sockaddr_in servAddr;
-        servAddr.sin_family = AF_INET;
-        servAddr.sin_port = htons(nPort);
-        servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-        if(bind(sServer, (struct sockaddr*)&servAddr, sizeof(servAddr)) < 0)
+        if(0 == GetQueuedCompletionStatus(CompletionPort, 
+            &BytesTransferred, (LPDWORD)&PerHandleData, (LPOVERLAPPED*)&PerIoData, INFINITE))
         {
-            OutErr("bind Failed!");
-            return 1;
-        }
-        if(listen(sServer, 200) != 0)
-        {
-            OutErr("listen Failed!");
-            return 1;
-        }
-        return sServer;
-    }
-
-
-    DWORD WINAPI iocp_handle_io(LPVOID lpParam)
-    {
-        
-        HANDLE CompletionPort = (HANDLE)lpParam;
-        DWORD BytesTransferred;
-        LPPER_HANDLE_DATA PerHandleData;
-        LPPER_IO_OPERATION_DATA PerIoData;
-        Request req1;
-        char time [30] = {'\0'};
-        Perfd pfd;
-
-        while(1){
-
-            if(0 == GetQueuedCompletionStatus(CompletionPort, 
-                &BytesTransferred, (LPDWORD)&PerHandleData, (LPOVERLAPPED*)&PerIoData, INFINITE))
-            {
-                if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
-                    printf("closingsocket %d\n", PerHandleData->Socket); 
-                    closesocket(PerHandleData->Socket);
-
-                #ifdef __SERVER_MPOOL__
-                    pool_free( PerIoData);
-                    pool_free2( PerHandleData);
-                #else 
-                    free( PerIoData);
-                    free( PerHandleData);
-                #endif // __SERVER_MPOOL__
-
-                    continue;
-                }else{
-                    OutErr("GetQueuedCompletionStatus failed!");
-                }
-                return 0;
-            }
-
-            // 说明客户端已经退出
-            if(BytesTransferred == 0)
-            {
-                printf("closingsocket %d\n", PerHandleData->Socket);
+            if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
+                printf("closingsocket %d\n", PerHandleData->Socket); 
                 closesocket(PerHandleData->Socket);
 
             #ifdef __SERVER_MPOOL__
@@ -260,49 +167,18 @@ void simple_ssl_server_make()
             #endif // __SERVER_MPOOL__
 
                 continue;
+            }else{
+                OutErr("GetQueuedCompletionStatus failed!");
             }
-            
-        #ifdef __SERVER_IOCP_DEBUG__
-            char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
-            send(PerHandleData->Socket, res_str, strlen(res_str), 0);
+            return 0;
+        }
+
+        // 说明客户端已经退出
+        if(BytesTransferred == 0)
+        {
+            printf("closingsocket %d\n", PerHandleData->Socket);
             closesocket(PerHandleData->Socket);
-        #else
-            pfd.fd = PerHandleData->Socket;
-            pfd.ssl = NULL;
-            // 解析 http 请求
-            req_parse_http(&req1, PerIoData->Buffer, pfd);
 
-            // 根据解析出来的结果运行中间件
-            if( middleware_handle(&req1) < 0) {
-            #ifdef __SERVER_MPOOL__
-                pool_free( PerIoData);
-                pool_free2( PerHandleData);
-            #else 
-                free( PerIoData);
-                free( PerHandleData);
-            #endif // __SERVER_MPOOL__
-                continue;
-            }
-
-            // 进行必要日志记录
-            serverTime(time);
-            log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
-                    time , req1.path, strlen(PerIoData->Buffer), 
-                    GetCurrentThreadId ());
-            memset(time, 0, 30);
-            
-            /*   
-                *req 对象进入路由模块
-                *路由模块调用用户的view函数
-                *在view函数中必须调用response模块进行返回
-                */
-            router_handle(PerHandleData->Socket, &req1);
-
-
-            req_free(&req1);
-        #endif // __SERVER_IOCP_DEBUG__
-            
-            
         #ifdef __SERVER_MPOOL__
             pool_free( PerIoData);
             pool_free2( PerHandleData);
@@ -311,239 +187,247 @@ void simple_ssl_server_make()
             free( PerHandleData);
         #endif // __SERVER_MPOOL__
 
-            /*
-            // 继续向 socket 投递WSARecv操作
-            DWORD Flags = 0;
-            DWORD dwRecv = 0;
-            ZeroMemory(PerIoData,sizeof(PER_IO_OPERATION_DATA));
-            PerIoData->DataBuf.buf =PerIoData->Buffer;
-            PerIoData->DataBuf.len = DATA_BUFSIZE;
-            WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
-            */
+            continue;
         }
+        
+    #ifdef __SERVER_IOCP_DEBUG__
+        char* res_str = "HTTP/1.1 200\r\n\r\nhello world!";
+        send(PerHandleData->Socket, res_str, strlen(res_str), 0);
+        closesocket(PerHandleData->Socket);
+    #else
+        pfd.fd = PerHandleData->Socket;
+        pfd.ssl = NULL;
+        // 解析 http 请求
+        req_parse_http(&req1, PerIoData->Buffer, pfd);
+
+        // 根据解析出来的结果运行中间件
+        if( middleware_handle(&req1) < 0) {
+        #ifdef __SERVER_MPOOL__
+            pool_free( PerIoData);
+            pool_free2( PerHandleData);
+        #else 
+            free( PerIoData);
+            free( PerHandleData);
+        #endif // __SERVER_MPOOL__
+            continue;
+        }
+
+        // 进行必要日志记录
+        serverTime(time);
+        log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
+                time , req1.path, strlen(PerIoData->Buffer), 
+                GetCurrentThreadId ());
+        memset(time, 0, 30);
+        
+        /*   
+            *req 对象进入路由模块
+            *路由模块调用用户的view函数
+            *在view函数中必须调用response模块进行返回
+            */
+        router_handle(PerHandleData->Socket, &req1);
+
+
+        req_free(&req1);
+    #endif // __SERVER_IOCP_DEBUG__
+        
+        
+    #ifdef __SERVER_MPOOL__
+        pool_free( PerIoData);
+        pool_free2( PerHandleData);
+    #else 
+        free( PerIoData);
+        free( PerHandleData);
+    #endif // __SERVER_MPOOL__
+
+        /*
+        // 继续向 socket 投递WSARecv操作
+        DWORD Flags = 0;
+        DWORD dwRecv = 0;
+        ZeroMemory(PerIoData,sizeof(PER_IO_OPERATION_DATA));
+        PerIoData->DataBuf.buf =PerIoData->Buffer;
+        PerIoData->DataBuf.len = DATA_BUFSIZE;
+        WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
+        */
+    }
+
+
+    return 0;
+}
+
+
+int iocp_server_make() 
+{
+
+    wsa_init();
+    
+    HANDLE completion_port = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+
+    SYSTEM_INFO _system_info;
+    GetSystemInfo(&_system_info);
+
+    for(int i = 0; i <_system_info.dwNumberOfProcessors * 2; i++) {
+        
+        HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle_io, completion_port, 0, NULL);
+        
+        if(hProcessIO) CloseHandle(hProcessIO);
+        
+    }
 
     
-        return 0;
+    // if configure not define port then use SERVER_PORT
+    int serverPort;
+    if(g_server_conf_all._conf_server.port == 0)
+    serverPort = SERVER_PORT;
+    else serverPort = g_server_conf_all._conf_server.port;
+    // Listening socket
+    SOCKET sListen = iocp_bind_socket(serverPort);
+
+    SOCKET sClient;
+
+    // PER_HANDLE_DATA 指针
+    LPPER_HANDLE_DATA PerHandleData;
+    LPPER_IO_OPERATION_DATA PerIoData;
+
+    while(1) {
+        
+        // wait for client
+        sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
+        //sClient = accept(sListen, 0, 0);
+
+    #ifdef __SERVER_MPOOL__
+        PerHandleData =  (PER_HANDLE_DATA*)pool_alloc2();
+    #else
+        PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
+    #endif // __SERVER_MPOOL__
+
+        PerHandleData->Socket = sClient;
+
+
+        // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
+    #ifdef __SERVER_MPOOL__
+        PerIoData = (PER_IO_OPERATION_DATA*)pool_alloc();
+    #else
+        PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
+    #endif //__SERVER_MPOOL__
+
+
+        //printf("PER_HANDLE_DATA size: %d\n", sizeof(PER_HANDLE_DATA));
+        //printf("PER_IO_OPERATION_DATA size: %d\n", sizeof(PER_IO_OPERATION_DATA));
+        // 将接入的客户端和完成端口联系起来
+        CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
+
+        ZeroMemory(PerIoData, sizeof(PER_IO_OPERATION_DATA));
+        PerIoData->DataBuf.buf = PerIoData->Buffer;
+        PerIoData->DataBuf.len = DATA_BUFSIZE;
+
+        // 投递一个WSARecv操作
+        DWORD Flags = 0;
+        DWORD dwRecv = 0;
+        WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
     }
 
+    
 
-    int iocp_server_make() 
+    DWORD dwByteTrans;
+    //将一个已经完成的IO通知添加到IO完成端口的队列中.
+    //提供了与线程池中的所有线程通信的方式.
+    PostQueuedCompletionStatus(completion_port,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
+
+    closesocket(sListen);
+
+    wsa_cleanup();
+
+    printf("[MAIN: %d] exit\n", GetCurrentThreadId());
+    
+    return 0;
+}
+
+
+#elif __linux__ 
+
+
+static void* epoll_handle_io(void* p)
+{	
+    thread_arg* arg = (thread_arg*)p;
+    long i_listenfd = arg->fd;
+    i_listenfd = createSocket();
+
+    struct epoll_event ev, events[100];
+    int epfd, nCounts;
+    int i_connfd;
+    epfd = epoll_create(100);
+
+    // ev.events = EPOLLIN | EPOLLEXCLUSIVE;
+    ev.events = EPOLLIN | EPOLLET;
+    ev.data.fd = i_listenfd;
+    epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
+
+    Request req1;
+    char time [30] = {'\0'};
+    char res_str[RECEIVE_MAX_BYTES] = {'\0'};
+    int receive_bytes;
+
+    for(;;)
     {
-
-        wsa_init();
-        
-        HANDLE completion_port = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-
-        SYSTEM_INFO _system_info;
-        GetSystemInfo(&_system_info);
-
-        for(int i = 0; i <_system_info.dwNumberOfProcessors * 2; i++) {
-            
-            HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle_io, completion_port, 0, NULL);
-            
-            if(hProcessIO) CloseHandle(hProcessIO);
-            
-        }
-
-        
-        // if configure not define port then use SERVER_PORT
-        int serverPort;
-        if(g_server_conf_all._conf_server.port == 0)
-        serverPort = SERVER_PORT;
-        else serverPort = g_server_conf_all._conf_server.port;
-        // Listening socket
-        SOCKET sListen = iocp_bind_socket(serverPort);
-
-        SOCKET sClient;
-
-        // PER_HANDLE_DATA 指针
-        LPPER_HANDLE_DATA PerHandleData;
-        LPPER_IO_OPERATION_DATA PerIoData;
-
-        while(1) {
-            
-            // wait for client
-            sClient = WSAAccept(sListen, NULL, NULL, NULL, 0);
-            //sClient = accept(sListen, 0, 0);
-
-        #ifdef __SERVER_MPOOL__
-            PerHandleData =  (PER_HANDLE_DATA*)pool_alloc2();
-        #else
-            PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
-        #endif // __SERVER_MPOOL__
-
-            PerHandleData->Socket = sClient;
-
-
-            // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
-        #ifdef __SERVER_MPOOL__
-            PerIoData = (PER_IO_OPERATION_DATA*)pool_alloc();
-        #else
-            PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
-        #endif //__SERVER_MPOOL__
-
-
-            //printf("PER_HANDLE_DATA size: %d\n", sizeof(PER_HANDLE_DATA));
-            //printf("PER_IO_OPERATION_DATA size: %d\n", sizeof(PER_IO_OPERATION_DATA));
-            // 将接入的客户端和完成端口联系起来
-            CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
-
-            ZeroMemory(PerIoData, sizeof(PER_IO_OPERATION_DATA));
-            PerIoData->DataBuf.buf = PerIoData->Buffer;
-            PerIoData->DataBuf.len = DATA_BUFSIZE;
-
-            // 投递一个WSARecv操作
-            DWORD Flags = 0;
-            DWORD dwRecv = 0;
-            WSARecv(sClient, &PerIoData->DataBuf, 1, &dwRecv, &Flags, &PerIoData->Overlapped, NULL);
-        }
-
-        
-
-        DWORD dwByteTrans;
-        //将一个已经完成的IO通知添加到IO完成端口的队列中.
-        //提供了与线程池中的所有线程通信的方式.
-        PostQueuedCompletionStatus(completion_port,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
-
-        closesocket(sListen);
-
-        wsa_cleanup();
-
-        printf("[MAIN: %d] exit\n", GetCurrentThreadId());
-        
-        return 0;
-    }
-
-
-#elif __linux__  // linux 由于socket库不同 要重写三个函数
-
-
-    static int createSocket() 
-    {
-        int i_listenfd;
-        struct sockaddr_in st_sersock;
-        i_listenfd = socket(AF_INET, SOCK_STREAM, 0);
-        memset(&st_sersock, 0, sizeof(st_sersock));
-        st_sersock.sin_family = AF_INET;
-    //	st_sersock.sin_addr.s_addr = htonl(INADDR_ANY);
-        st_sersock.sin_port = htons( 8080 );
-        int out = 2;
-        setsockopt(i_listenfd, SOL_SOCKET, SO_REUSEADDR, &out, sizeof(out));
-        bind(i_listenfd,(struct sockaddr*)&st_sersock, sizeof(st_sersock));
-        listen(i_listenfd, 20);
-        return i_listenfd;
-    }
-
-
-    static int create_socket_reuse()
-    {
-        int fd = socket(AF_INET, SOCK_STREAM, 0);
-        assert(fd > 0 && "socket error");
-
-        struct sockaddr_in addr;
-        memset(&addr, 0, sizeof(addr));
-        addr.sin_family = AF_INET;
-        // addr.sin_addr.s_addr = inet_addr(LOCAL_IP);
-        addr.sin_addr.s_addr = htonl(INADDR_ANY); 
-        addr.sin_port = htons(80);
-
-        int flag = 1;
-        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
-
-        int code = bind(fd, (struct sockaddr *)&addr, sizeof(addr));
-        assert(code == 0 && "bind error");
-
-        code = listen(fd, 1024);
-        assert(code == 0 && "listen error");
-
-        struct timeval tv = {0, 500 * 1000};
-        setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(struct timeval));
-        return fd;
-    }
-
-
-    static void* epoll_handle_io(void* p)
-    {	
-        thread_arg* arg = (thread_arg*)p;
-        long i_listenfd = arg->fd;
-        i_listenfd = createSocket();
-
-        struct epoll_event ev, events[100];
-        int epfd, nCounts;
-        int i_connfd;
-        epfd = epoll_create(100);
-
-        // ev.events = EPOLLIN | EPOLLEXCLUSIVE;
-        ev.events = EPOLLIN | EPOLLET;
-        ev.data.fd = i_listenfd;
-        epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
-
-        Request req1;
-        char time [30] = {'\0'};
-        char res_str[RECEIVE_MAX_BYTES] = {'\0'};
-        int receive_bytes;
-
-        for(;;)
+        nCounts = epoll_wait(epfd, events, 100, -1);
+        for(int i = 0; i < nCounts; i++)
         {
-            nCounts = epoll_wait(epfd, events, 100, -1);
-            for(int i = 0; i < nCounts; i++)
-            {
-                int tmp_epoll_recv_fd = events[i].data.fd;
-                if(tmp_epoll_recv_fd == i_listenfd)	{
-                    i_connfd = accept(i_listenfd, (struct sockaddr*)NULL, NULL);	
-                    ev.events = EPOLLIN;
-                    ev.data.fd = i_connfd;
-                    epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
-                } else {
-                    
-                    
-                    receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
-                    Perfd pfd;
-                    pfd.fd = tmp_epoll_recv_fd;
-                    pfd.ssl = NULL;
-                    
-                    req_parse_http(&req1, res_str, pfd);
-                    serverTime(time);
+            int tmp_epoll_recv_fd = events[i].data.fd;
+            if(tmp_epoll_recv_fd == i_listenfd)	{
+                i_connfd = accept(i_listenfd, (struct sockaddr*)NULL, NULL);	
+                ev.events = EPOLLIN;
+                ev.data.fd = i_connfd;
+                epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
+            } else {
+                
+                
+                receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
+                Perfd pfd;
+                pfd.fd = tmp_epoll_recv_fd;
+                pfd.ssl = NULL;
+                
+                req_parse_http(&req1, res_str, pfd);
+                serverTime(time);
 
-                    log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
-                    
-                    memset(time, 0, 30);
-                    
-                    router_handle(tmp_epoll_recv_fd, &req1);
-                    
-                    req_free(&req1);
-                    // send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
+                log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
+                
+                memset(time, 0, 30);
+                
+                router_handle(tmp_epoll_recv_fd, &req1);
+                
+                req_free(&req1);
+                // send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
 
 
-                    //printf("[dmfServer Thread]\n");
-                    epoll_ctl(epfd, EPOLL_CTL_DEL, tmp_epoll_recv_fd, NULL);
-                    close(tmp_epoll_recv_fd);
-                }
+                //printf("[dmfServer Thread]\n");
+                epoll_ctl(epfd, EPOLL_CTL_DEL, tmp_epoll_recv_fd, NULL);
+                close(tmp_epoll_recv_fd);
             }
         }
-        close(i_listenfd);
-        close(epfd);
     }
+    close(i_listenfd);
+    close(epfd);
+}
 
 
-    extern void epoll_server_make() {
+extern void epoll_server_make() {
 
-        long fd = 1;
-        thread_arg* arg = malloc(sizeof(thread_arg));
-        arg->cmp = g_cmp;
-        arg->fd = fd;
+    long fd = 1;
+    thread_arg* arg = malloc(sizeof(thread_arg));
+    arg->cmp = g_cmp;
+    arg->fd = fd;
 
-        for (int i = 0; i < 1; ++i) {
-            pthread_t roundCheck;
-            pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
-            pthread_join(roundCheck, NULL);
-        }
-        
-        return;
+    for (int i = 0; i < 1; ++i) {
+        pthread_t roundCheck;
+        pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
+        pthread_join(roundCheck, NULL);
     }
+    
+    return;
+}
 
 
-    extern int epoll_ssl_server()
+extern int epoll_ssl_server()
     {
         /*初始化socket*/
         int srvFd = create_socket_reuse();
