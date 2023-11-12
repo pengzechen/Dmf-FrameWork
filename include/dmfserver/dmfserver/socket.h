@@ -47,9 +47,9 @@
 extern "C" {
 #endif
 
-	int create_socket();
-    int createSocket();
-    int create_socket_reuse();
+	extern int create_socket();
+    extern int createSocket();
+    extern int create_socket_reuse();
 
 #ifdef __WIN32__
 

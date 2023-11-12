@@ -76,13 +76,13 @@ typedef struct thread_pool_t {
 extern "C" {
 #endif
 
-	static void			sleep_microseconds(int microseconds);
-	void* 				thread_func(void *arg);
-	void 				thread_pool_destroy(thread_pool_t *pool);
-	thread_pool_t*		thread_pool_create(int thread_count);
-	int 				thread_pool_add_task(thread_pool_t *pool, void (*func)(void*), void *arg);
-	//int 				add_timer(thread_pool_t *pool, int seconds, void (func)(void), void *arg);
-	int 				is_thread_pool_empty(thread_pool_t *pool);
+static void			sleep_microseconds(int microseconds);
+void* 				thread_func(void *arg);
+void 				thread_pool_destroy(thread_pool_t *pool);
+thread_pool_t*		thread_pool_create(int thread_count);
+int 				thread_pool_add_task(thread_pool_t *pool, void (*func)(void*), void *arg);
+//int 				add_timer(thread_pool_t *pool, int seconds, void (func)(void), void *arg);
+int 				is_thread_pool_empty(thread_pool_t *pool);
 
 #ifdef __cplusplus
 }           /* end of the 'extern "C"' block */

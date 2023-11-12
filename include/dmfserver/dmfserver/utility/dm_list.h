@@ -45,6 +45,7 @@ typedef struct List {
 #ifdef __cplusplus
 extern "C" {
 #endif
+
     List *  list_create();
     void    list_append(List *list, Data_t data);
     size_t  list_size(List *list);

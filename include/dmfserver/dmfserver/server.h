@@ -110,29 +110,23 @@ typedef struct thread_arg {
 extern "C" {
 #endif
 
-	static SSL_CTX* get_ssl_ctx();
-#ifdef __WIN32__
+static SSL_CTX* get_ssl_ctx();
 
-	static void wsa_init();
+static void req_res_handler(int acceptFd );
 
-	static void wsa_cleanup();
-	
-#endif
-	static void req_res_handler(int acceptFd );
+extern void simple_server_make();
 
-	extern void simple_server_make();
-
-	extern void simple_ssl_server_make();
+extern void simple_ssl_server_make();
 
 
-	#ifdef __WIN32__   // Windows IOCP Model
-		extern int iocp_server_make();
-	#endif  		   // Windows
-	
-	#ifdef __linux__   // linux epool Model
-		extern void epoll_server_make();
-		extern int epoll_ssl_server();
-	#endif  		   // linux
+#ifdef __WIN32__   // Windows IOCP Model
+extern int iocp_server_make();
+#endif  		   // Windows
+
+#ifdef __linux__   // linux epool Model
+extern void epoll_server_make();
+extern int epoll_ssl_server();
+#endif  		   // linux
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

@@ -100,7 +100,7 @@ extern void res_init(int fd, Response* res)
 	strcat(res->Server, "Server:DmfServer\r\n");
 	
 	char time_str[32] = {'\0'};
-	serverTime(time_str);
+	server_time(time_str);
 	strcat(res->Date, "Date:");
 	strcat(res->Date, time_str);
 	strcat(res->Date, "\r\n");

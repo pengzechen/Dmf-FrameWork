@@ -24,8 +24,8 @@
 
 
 // 初始化哈希映射
-hashmap_t *hashmap_create(size_t size) {
-    hashmap_t *hashmap = (hashmap_t *)malloc(sizeof(hashmap_t));
+hashmap_tp hashmap_create(size_t size) {
+    hashmap_tp hashmap = (hashmap_tp)malloc(sizeof(hashmap_t));
     if (hashmap == NULL) {
         return NULL;
     }
@@ -40,40 +40,24 @@ hashmap_t *hashmap_create(size_t size) {
     return hashmap;
 }
 
-// 哈希函数示例（简化版）
-size_t hash_function(const char *key, size_t size) {
-    size_t hash = 0;
-    while (*key) {
-        hash = (hash * 31) + *key;
-        key++;
-    }
-    return hash % size;
-}
-
 // 插入键值对到哈希映射
-int hashmap_insert(hashmap_t *hashmap, const char *key, void *value) {
-    size_t index = hash_function(key, hashmap->size);
+int hashmap_insert(hashmap_tp hashmap, hashmap_node_t * node) {
+    size_t index = HASH_FUNCTION(node->key) % hashmap->size;
 
-    hashmap_node_t *new_node = (hashmap_node_t *)malloc(sizeof(hashmap_node_t));
-    if (new_node == NULL) {
-        return -1;
-    }
+    node->next = hashmap->buckets[index];
 
-    new_node->key = strdup(key);
-    new_node->value = value;
-    new_node->next = hashmap->buckets[index];
-    hashmap->buckets[index] = new_node;
+    hashmap->buckets[index] = node;
 
     return 0;
 }
 
 // 获取指定键的值
-void *hashmap_get(hashmap_t *hashmap, const char *key) {
-    size_t index = hash_function(key, hashmap->size);
+void * hashmap_get(hashmap_tp hashmap, char *key) {
+    size_t index = HASH_FUNCTION(key) % hashmap->size;
 
-    hashmap_node_t *node = hashmap->buckets[index];
-    while (node != NULL) {
-        if (strcmp(node->key, key) == 0) {
+    hashmap_node_t * node = hashmap->buckets[index];
+    while ( node != NULL ) {
+        if ( strcmp(node->key, key) == 0 ) {
             return node->value;
         }
         node = node->next;
@@ -83,11 +67,12 @@ void *hashmap_get(hashmap_t *hashmap, const char *key) {
 }
 
 // 删除指定键的节点
-int hashmap_remove(hashmap_t *hashmap, const char *key) {
-    size_t index = hash_function(key, hashmap->size);
+int hashmap_remove(hashmap_tp hashmap, char *key) {
+    size_t index = HASH_FUNCTION(key) % hashmap->size;
 
     hashmap_node_t *prev = NULL;
     hashmap_node_t *curr = hashmap->buckets[index];
+
     while (curr != NULL) {
         if (strcmp(curr->key, key) == 0) {
             if (prev == NULL) {
@@ -107,7 +92,7 @@ int hashmap_remove(hashmap_t *hashmap, const char *key) {
 }
 
 // 释放哈希映射的内存
-void hashmap_destroy(hashmap_t *hashmap) {
+void hashmap_destroy(hashmap_tp hashmap) {
     for (size_t i = 0; i < hashmap->size; i++) {
         hashmap_node_t *node = hashmap->buckets[i];
         while (node != NULL) {
@@ -121,13 +106,18 @@ void hashmap_destroy(hashmap_t *hashmap) {
     free(hashmap);
 }
 
+// hashmap 测试
 int test_map() {
-    hashmap_t *hashmap = hashmap_create(79);
 
-    hashmap_insert(hashmap, "key1", "value1");
-    hashmap_insert(hashmap, "key2", "value2");
+    hashmap_tp hashmap = hashmap_create(79);
 
-    void *value1 = hashmap_get(hashmap, "key1");
+    hashmap_node_t node1 = {"key1", "value1", NULL};
+    hashmap_node_t node2 = {"key222", "value222", NULL};
+
+    hashmap_insert(hashmap, &node1);
+    hashmap_insert(hashmap, &node2);
+
+    void * value1 = hashmap_get(hashmap, "key1");
     if (value1 != NULL) {
         printf("Value for key1: %s\n", (char *)value1);
     }

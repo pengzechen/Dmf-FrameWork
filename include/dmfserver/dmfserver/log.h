@@ -57,19 +57,19 @@ typedef struct {
 extern "C" {
 #endif
 
-    static void *log_thread(void *arg);
-    
-    extern void log_init();
-    
-    extern void log_write(int level, const char *filename, int line, const char *format, ...);
-    
-    extern void log_info(const char *filename, int line, const char *format, ...);
-    
-    extern void log_debug(const char *filename, int line, const char *format, ...);
-    
-    extern void log_warn(const char *filename, int line, const char *format, ...);
-    
-    extern void log_error(const char *filename, int line, const char *format, ...);
+static void *log_thread(void *arg);
+
+extern void log_init();
+
+extern void log_write(int level, const char *filename, int line, const char *format, ...);
+
+extern void log_info(const char *filename, int line, const char *format, ...);
+
+extern void log_debug(const char *filename, int line, const char *format, ...);
+
+extern void log_warn(const char *filename, int line, const char *format, ...);
+
+extern void log_error(const char *filename, int line, const char *format, ...);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

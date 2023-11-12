@@ -47,7 +47,6 @@ typedef struct _HashNode
     char                *       key;
     SessionData         *       value;
     struct _HashNode    *       next; // 当下标相同时，指向集合中的下一个节点
-
 } HashNode ;
 
 #define SESSION_EXPIRE_DEFAULT 60 * 5
@@ -59,23 +58,23 @@ static HashNode g_session_all_dec[ HASH_DEC_LEN ];
 extern "C" {
 #endif
 
-    extern void session_init();
+extern void session_init();
 
-    extern void SessionCreate(char* ,char*, char*);
+extern void SessionCreate(char* ,char*, char*);
 
-    extern void SessionAll();
+extern void SessionAll();
 
-    extern char* getSessionR(const Request* req, char* key);
+extern char * getSessionR(const Request* req, char* key);
 
-    extern int SessionAddR(const Request* req, char* key, char* data);
+extern int SessionAddR(const Request* req, char* key, char* data);
 
-    extern int UpdateSessionDataR(const Request* req, char* key, char* newdata);
+extern int UpdateSessionDataR(const Request* req, char* key, char* newdata);
 
-    extern char* getSession(char* session_str, char* key);
+extern char * getSession(char* session_str, char* key);
 
-    extern int SessionAdd(char* session_str, char* key, char* value);
+extern int SessionAdd(char* session_str, char* key, char* value);
 
-    extern int UpdateSessionData(char* session_str, char* key, char* newdata);
+extern int UpdateSessionData(char* session_str, char* key, char* newdata);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

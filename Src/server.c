@@ -59,7 +59,7 @@ static void req_res_handler(int acceptFd )
 	req_parse_http(&req1, res_str, pfd);
 	
 	char time [30] = {'\0'};
-	serverTime(time);
+	server_time(time);
 	printf("[%s][Server: Info] %s\n", time, req1.path);
 	
 	router_handle(acceptFd, &req1);
@@ -215,7 +215,7 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
         }
 
         // 进行必要日志记录
-        serverTime(time);
+        server_time(time);
         log_info("SERVER", 247, "[%s][Server: Info] %s %d id: %d ", 
                 time , req1.path, strlen(PerIoData->Buffer), 
                 GetCurrentThreadId ());
@@ -387,7 +387,7 @@ static void* epoll_handle_io(void* p)
                 pfd.ssl = NULL;
                 
                 req_parse_http(&req1, res_str, pfd);
-                serverTime(time);
+                server_time(time);
 
                 log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
                 

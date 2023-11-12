@@ -28,9 +28,9 @@
 extern "C" {
 #endif
 
-    extern void serverTime(char* str);
+extern void server_time(char* str);
 
-    char *itoa(int value,char *string,int radix);
+extern char * itoa(int value,char *string,int radix);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

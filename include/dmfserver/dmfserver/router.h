@@ -77,17 +77,17 @@ extern int g_num_files;
 extern "C" {
 #endif
 
-void router_init();
+extern void router_init();
 
-void router_handle(int acceptFd, Request *req);
+extern void router_handle(int acceptFd, Request *req);
 
 static int search_local_file(char* local_paths[]);
 
-void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files);
+static void traverse_directory(const char *path, struct FileInfo file_list[], int *num_files);
 
-char* get_content_type(char *file_ext);
+static char* get_content_type(char *file_ext);
 
-void router_add_app(ContFun cf[], char* keys[], const char* name);
+extern void router_add_app(ContFun cf[], char* keys[], const char* name);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

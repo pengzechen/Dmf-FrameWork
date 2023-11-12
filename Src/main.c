@@ -58,8 +58,8 @@ void multi_process_init(worker_function _wf);
 
 int main(int argc, char* argv[]) 
 {
-    
-
+    test_map();
+#if 0
 	#ifdef __WIN32__
 		// system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
@@ -117,6 +117,8 @@ int main(int argc, char* argv[])
 	pool_destroy();
     pool_destroy2();
     template_free();
+
+#endif
 
 	return 0;
 }
