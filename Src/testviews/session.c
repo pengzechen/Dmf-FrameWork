@@ -3,14 +3,16 @@
 void setsession(int a, const Request *req) 
 {
 	char res_str[80] = {0};
-	strcat(res_str, "SET session ");
-	strcat(res_str, req->query[0].key);
-	strcat(res_str, " data: ");
-	strcat(res_str, req->query[0].data);
 
-	char key[32] = {0}; char data[32] = {0};
-	strcat(key, req->query[0].key);
-	strcat(data, req->query[0].data);
+	char * key = hashmap_get( req->query, "key"); 
+	char * data = hashmap_get( req->query, "data");
+	if ((key == NULL) || (data == NULL)) 
+		printf("some error");
+		
+	strcat(res_str, "SET session ");
+	strcat(res_str, key);
+	strcat(res_str, " data: ");
+	strcat(res_str, data);
 
 	char Session_str[11] = {'\0'};
 	SessionCreate(Session_str, key, data);
@@ -27,12 +29,9 @@ void setsession(int a, const Request *req)
 
 void getsession(int a, const Request *req) 
 {
-	char key[32] = {0}; char data[32] = {0};
-	strcat(key, req->query[0].key);
-	strcat(data, req->query[0].data);
-
+	char* data = hashmap_get( req->query, "name");
 	
-	char* s = getSessionR(req, data );
+	char* s = getSessionR(req, data);
 	if(s == NULL){
 		res_row(a, "no such key");
 	}else{
@@ -46,9 +45,10 @@ void getsession(int a, const Request *req)
 void sessionadd(int a, const Request *req) 
 {
 
-	char key[32] = {0}; char data[32] = {0};
-	strcat(key, req->query[0].key);
-	strcat(data, req->query[0].data);
+	char * key = hashmap_get( req->query, "key"); 
+	char * data = hashmap_get( req->query, "data");
+	if ((key == NULL) || (data == NULL)) 
+		printf("some error");
 
 	char res_str[80] = {0};
 	strcat(res_str, "SET session ");
@@ -70,9 +70,10 @@ void sessionadd(int a, const Request *req)
 
 void updatesession(int a, const Request *req) 
 {
-	char key[32] = {0}; char data[32] = {0};
-	strcat(key, req->query[0].key);
-	strcat(data, req->query[0].data);
+	char * key = hashmap_get( req->query, "key"); 
+	char * data = hashmap_get( req->query, "data");
+	if ((key == NULL) || (data == NULL)) 
+		printf("some error");
 
 	int res = UpdateSessionDataR(req, key, data);
 

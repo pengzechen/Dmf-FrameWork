@@ -1,5 +1,5 @@
 
-
+#include <dmfserver/ws.h>
 void wsfunc(int a, const Request *req) 
 {	
     char key[128] = {0};

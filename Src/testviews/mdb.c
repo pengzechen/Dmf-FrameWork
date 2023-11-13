@@ -8,7 +8,7 @@ void mdbfind(int a, const Request* req)
 	
 	char data[40] = {0};
 	
-	strcpy(data, req->query[0].data);
+	strcpy(data, hashmap_get( req->query, "name"));
 	char* pdata = data;
 
 	str_from_mdb = mdb_find(pdata);
@@ -20,8 +20,8 @@ void mdbinsert(int a, const Request* req)
 {
 	char ckey[64] = {0};
 	char cdata[512] = {0};
-	strcpy(ckey, req->query[0].key);
-	strcpy(cdata, req->query[0].data);
+	strcpy(ckey, "name");
+	strcpy(cdata, hashmap_get( req->query, "name"));
 	
 	char* key = ckey;
 	char* data = cdata;
