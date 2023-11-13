@@ -28,16 +28,19 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include <openssl/sha.h>
-#include <dmfserver/utility/base64.h>  
+
 
 #ifdef __WIN32__
+
 #include <WinSock2.h>		// 为了使用 send
+
 #elif __linux__
+
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <netinet/in.h>
-#include <unistd.h> // for close
+#include <unistd.h>         // for close
+
 #endif
 
 typedef struct _Response {
@@ -47,7 +50,7 @@ typedef struct _Response {
 	char Content_type[32];
 	char Set_cookie[32];	
 	char Connection[32];
-	char* pbody;
+	char * pbody;
 	unsigned int body_size;
 	int fd;
 }Response;
@@ -56,37 +59,37 @@ typedef struct _Response {
 extern "C" {
 #endif
 
-void res_init(int fd, Response* res);
+void res_init( int fd, Response* res);
 
 static void res_handle( int acceptFd, char* res_str, unsigned int size);
 
-extern void res_without_permission(int acceptFd);
+extern void res_without_permission( int acceptFd);
 
-static char* res_load_file(char *path);
+static char * res_load_file( char *path);
 
-extern void res_set_head(Response* res, char* code);
+extern void res_set_head( Response* res, char* code);
 
-extern void res_set_type(Response* res, char* type);
+extern void res_set_type( Response* res, char* type);
 
-extern void res_set_cookie(Response* res, char* name, char* value);
+extern void res_set_cookie( Response* res, char* name, char* value);
 
-extern void res_set_session(Response*res , char* Session_str);
+extern void res_set_session( Response*res , char* Session_str);
 
-extern void res_set_body(Response* res, char* body, unsigned int size);
+extern void res_set_body( Response* res, char* body, unsigned int size);
 
-extern void res_parse_send(Response* res);
+extern void res_parse_send( Response* res);
 
-extern void res_notfound(int acceptFd);
+extern void res_notfound( int acceptFd);
 
-extern void res_row( int acceptFd, char* res_str);
+extern void res_row(  int acceptFd, char* res_str);
 
-extern void res_render(int acceptFd, char* template_name, struct Kvmap *kv, int num);
+extern void res_render( int acceptFd, char* template_name, struct Kvmap *kv, int num);
 
-extern void res_static(int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
+extern void res_static( int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
 
-static void res_file_handle(int acceptFd, char* path, char* content_type, unsigned int size);
+static void res_file_handle( int acceptFd, char* path, char* content_type, unsigned int size);
 
-extern void upto_ws_prot(int a, char key[]) ;
+
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
