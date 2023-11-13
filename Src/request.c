@@ -253,13 +253,21 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	int i = 0;
 	
 	//初始化 multi_part_num query param  的个数
-	int q_int = 0;
-	int p_int = 0;
 	request->multi_part_num = -1;		//  -1 表示没有
 	
 	
 	// 计算还有多少 bytes  没有读取
 	int num;
+
+	request->query = hashmap_create(21);
+	request->params = hashmap_create(21);
+
+	hashmap_node_t * query_tmp = NULL;
+	hashmap_node_t * params_tmp = NULL;
+
+	char *cls = NULL;
+	char *cts = NULL;
+	
 	
 	
 	for(int t=0; t < MULTI_PART_MAX_NUM; t++)
@@ -286,7 +294,8 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					//printf("%s\n", temp);
 				}
 				break;
-				//处理 path
+			
+			//处理 path
 			case 20:
 				if( *p == '/'){
 					write = 1;
@@ -309,15 +318,18 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					//printf("%s\n", temp);
 				}
 				break;
-				//处理 query 
+			
+			//处理 query 
 			case 30:    //上一个字符遇到 ？
 				write = 1;
 				int flag = 1;
 				if( *p == '=' ){
 					write = 0;
-					
-					strcpy(request->query[q_int].key, temp);
-					//printf("key: %s\n", temp);
+					query_tmp = (hashmap_node_t *) malloc (sizeof(hashmap_node_t));
+					query_tmp->next = NULL;
+					query_tmp->key = (char*) malloc (sizeof(char)*strlen(temp));
+					strcpy(query_tmp->key, temp);
+					// printf("key: %s\n", temp);
 					state = 31;
 					flag = 0;
 				}
@@ -328,19 +340,24 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 			case 31:
 				write = 1;
 				if( *p == '&'){
-					strcpy(request->query[q_int].data, temp);
-					//printf("value: %s\n", temp);
+					query_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
+					strcpy(query_tmp->value, temp);
+					// printf("value: %s\n", temp);
+					hashmap_insert(request->query, query_tmp);
 					write = 0;
 					state = 30;
-					q_int++;
 				}
 				if (*p == ' '){
-					strcpy(request->query[q_int].data, temp);
-					//printf("value: %s\n", temp);
+					query_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
+					strcpy(query_tmp->value, temp);
+					// printf("value: %s\n", temp);
+					hashmap_insert(request->query, query_tmp);
 					write = 0;
 					state = 50;
 				}
 				break;
+			
+
 			// 解析 协议 版本
 			case 50:
 				write = 1;
@@ -360,6 +377,8 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					state = 60;
 				}
 				break;
+			
+
 			//  解析 参数
 			case 60:      // 跳过 \n
 				state = 61;
@@ -368,36 +387,37 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 				if(*p >= 'A'&& *p<='Z'){
 					write = 1;
 				}
-					// write = 1;
 				if(*p == ':'){
 					write = 0;
-					strcpy(request->params[p_int].key, temp);
-					//printf("key--%d: %s\n", p_int, temp);
+					// strcpy(request->params[p_int].key, temp);
+					params_tmp = (hashmap_node_t *) malloc (sizeof(hashmap_node_t));
+					params_tmp->next = NULL;
+					params_tmp->key = (char*) malloc (sizeof(char)*strlen(temp));
+					strcpy(params_tmp->key, temp);
+					// printf("%s\n", temp);
 					state = 62;
 				}
 				if(*p == '\r' && *pp == '\n'){		// 进入 body 
-				
-					p_int--;
 					state = 70;
 				}
 				break;
-			
 			case 62:    // 跳过 空格
 				state = 63;
 				break;
-			
 			case 63:
 				write = 1;
 				if(*p == '\r' && *pp == '\n'){
 					write = 0;
-					strcpy(request->params[p_int].data, temp);
+					// strcpy(request->query[q_int].data, temp);
+					params_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
+					strcpy(params_tmp->value, temp);
+					hashmap_insert(request->params, params_tmp);
 					//printf("value--%d: %s\n", p_int, temp);
-					
 					state = 60;
-					
-					p_int++;
 				}
 				break;
+
+
 			// 解析 body 
 			case 70:      // 跳过 \n
 				if(strcmp(request->method,"POST") == 0){			
@@ -410,33 +430,32 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 				}
 				break;
 			case 71:
-				for(int k=p_int;k>=0; k--){
-					if( strcmp(request->params[k].key, "Content-Length") == 0) {
-						int len = atoi(request->params[k].data);
-						if( len <= BODY_MAX) {
-							request->body.length = len;
-							request->body.body=(char *)malloc(len + 1);
-							memset(request->body.body, 0, len + 1 );
-							memcpy(request->body.body, p, len);
-						} else {
-							printf("too big %d Bytes\n", len);
-						}
+				
+				cls = (char*)hashmap_get(request->params, "Content-Length");
+				if ( cls != NULL) {
+					int len = atoi(cls);
+					if( len <= HTTP_BODY_MAX) {
+						request->body.length = len;
+						request->body.body=(char *)malloc(len + 1);
+						memset(request->body.body, 0, len + 1 );
+						memcpy(request->body.body, p, len);
+					} else {
+						printf("too big %d Bytes\n", len);
 					}
-					break;
 				}
-				for(int k=p_int;k>=0; k--){
-					if( strcmp(request->params[k].key, "Content-Type") == 0) {
-						if(strstr(request->params[k].data, "multipart/form-data") != NULL){
-							char *b;
-							char boundary[64];
-							b = strstr(request->params[k].data, "boundary=");
-							memset(boundary, 0, 64);
-							memcpy(boundary, b+9, strlen(b) - 9);
-							req_parse_multi_part(request, boundary);
-						}
+				
+				cts = hashmap_get(request->params, "Content-Type");
+				if( cts != NULL) {
+					if(strstr(cts, "multipart/form-data") != NULL){
+						char *b;
+						char boundary[64];
+						b = strstr(cts, "boundary=");
+						memset(boundary, 0, 64);
+						memcpy(boundary, b+9, strlen(b) - 9);
+						req_parse_multi_part(request, boundary);
 					}
-					break;
 				}
+					
 				state = 1;
 				break;
 		}
@@ -481,9 +500,6 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	}
 
 	
-	request->q_int = q_int;
-	request->p_int = p_int;
-	
 #ifdef REQUEST_DEBUG 
 	printf("--------------------REQUEST-DEBUG--------------------\n");
 	printf("----STATE: %d  p_int: %d  q_int: %d----\n", state, p_int, q_int);
@@ -491,13 +507,6 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	printf("%s\n", request->path);
 	printf("%s\n", request->protocol);
 	printf("%s\n", request->version);
-	for(;q_int >=0; q_int--){
-		printf("%s: %s\n", request->query[q_int].key, request->query[q_int].data);
-	}
-	for(;p_int >=0; p_int--){
-		printf("%s: %s\n", request->params[p_int].key, request->params[p_int].data);
-	}
-	
 	printf("length: %d\nBody: %#x\n", request->body.length, &(request->body.body) );
 	printf("--------------------REQUEST-DEBUG--------------------\n");
 #endif
@@ -508,50 +517,54 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 void req_get_session_str(const Request* req, char session_str[]) // OUT 
 {
     char* temp;
-	for(int i=0; i<=req->p_int; i++) { 
-		if( strcmp(req->params[i].key, "Cookie") == 0 ) {
-			temp = strstr(req->params[i].data, "dmfsession=");
-			if( temp != NULL && strlen(temp) >= 21 ){  //
-				*(temp + 21) = '\0';
-				strcpy(session_str, temp + 11);
-			}
+	char* data = hashmap_get(req->params, "Cookie");
+
+	if( data != NULL ) {
+		temp = strstr(data, "dmfsession=");
+		if( temp != NULL && strlen(temp) >= 21 ){  //
+			*(temp + 21) = '\0';
+			strcpy(session_str, temp + 11);
 		}
 	}
+
 }
 
 
 void req_get_ws_key(const Request* req, char ws_key[]) 			// OUT 
 {
-	for(int i=0; i<=req->p_int; i++) {
-		if( strcmp(req->params[i].key, "Sec-WebSocket-Key") == 0 ) {
-			strcpy(ws_key,req->params[i].data);
-		}
+	char* data = hashmap_get(req->params, "Sec-WebSocket-Key");
+	if( data != NULL ) {
+		strcpy(ws_key, data);
 	}
+
 }
 
 
 void req_get_param(const Request *req, char* key, char data[]) // OUT
 {
-	for(int i=0; i<=req->q_int; i++) {
-		if( strcmp(req->params[i].key, key) == 0 ) {
-			strcpy(data, req->params[i].data);
-		}
+	char* data1 = hashmap_get(req->params, key);
+	if( data1 != NULL ) {
+		strcpy(data, data1);
 	}
+
 }
 
 
 void req_get_query(const Request *req, char* key, char data[]) // OUT
 {
-	for(int i=0; i<=req->q_int; i++) {
-		if( strcmp(req->query[i].key, key) == 0 ) {
-			strcpy(data, req->query[i].data);
-		}
+	char* data1 = hashmap_get(req->query, key);
+	if( data1 != NULL ) {
+		strcpy(data, data1);
 	}
+
 }
 
 
 void req_free(Request *req) 
 {
+
+	hashmap_destroy(req->query);
+	hashmap_destroy(req->params);
 	
 	free(req->body.body);
 	

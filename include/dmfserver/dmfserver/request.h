@@ -24,14 +24,29 @@
 // #define MULTI_DEBUG
 // #define REQUEST_DEBUG
 
-#define BODY_MAX		 	1024*1024				// body 数据大小
-#define MULTI_PART_MAX 		1024*1024		// multipart 数据大小
+
+#define MULTI_PART_MAX 		1024*1024	// multipart 数据大小
 #define MULTI_PART_MAX_NUM 	20			// 最大multipart 数量
+
+
+// HTTP协议相关 
+
+// 第一行
+#define HTTP_METHOD_MAX    5
+#define HTTP_URI_MAX       512
+#define HTTP_PROTOCOL_MAX  5
+#define HTTP_VERSION_MAX   4
+
+#define HTTP_BODY_MAX		 	1024*1024	// body 数据大小
+
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <openssl/ssl.h>
+
+#include <dmfserver/utility/dm_map.h>
 
 
 struct Multi_kv {
@@ -47,17 +62,7 @@ struct Multipart {
 	int 				length;
 };
 
-struct Query {
-	char 		key[64];
-	char 		data[512];
-};
-
-struct Params {
-	char 		key[64];
-	char 		data[256];
-};
-
-struct Body {
+struct http_body_t {
 	char 	*	body;
 	size_t 		length;
 };
@@ -68,21 +73,19 @@ typedef struct Perfd {
 }Perfd;
 
 struct req {
-	char 			method[5];
-	char 			path[512];
-	char 			protocol[5];
-	char 			version[4];
-	
-	int 			q_int;
-	int 			p_int;
+	char 			method[ HTTP_METHOD_MAX ];
+	char 			path[ HTTP_URI_MAX];
+	char 			protocol[ HTTP_PROTOCOL_MAX ];
+	char 			version[ HTTP_VERSION_MAX ];
 	int 			multi_part_num;
 	
-	struct Query 	query[10];
-	struct Params 	params[20];
-	struct Body 	body;
-	Perfd 			pfd;
+	hashmap_tp     query;
+	hashmap_tp     params;
+
+	struct http_body_t 		body;
+	Perfd 			        pfd;
 	
-	struct Multipart *multi[MULTI_PART_MAX_NUM];
+	struct Multipart * multi[ MULTI_PART_MAX_NUM ];
 };
 
 typedef struct req Request;
