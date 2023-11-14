@@ -18,8 +18,9 @@
 
 #ifndef __CONNECTION_INCLUDE__
 #define __CONNECTION_INCLUDE__
-
-
+#ifdef __linux__
+#include <sys/epoll.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,7 +43,19 @@ typedef struct {
     struct _connection_t * conn;
 } per_handle_data_t, * per_handle_data_tp;
 
-#endif  		// Windows
+#else  		// Windows
+
+typedef struct {
+	char Buffer[ DATA_BUFSIZE ];
+} per_io_data_t, * per_io_data_tp;
+
+typedef struct {
+    int efd;
+	int Socket;
+    struct _connection_t * conn;
+} per_handle_data_t, * per_handle_data_tp;
+
+#endif // linux
 
 typedef struct _connection_t {
     per_io_data_tp      per_io_data;
@@ -58,8 +71,10 @@ extern "C" {
 extern connection_tp 
 new_connection ();
 
+#ifdef __WIN32__
 extern void
 send_next (connection_tp conn) ;
+#endif
 
 extern void 
 connection_close (connection_tp conn);

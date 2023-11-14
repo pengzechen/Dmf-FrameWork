@@ -335,11 +335,10 @@ static void* epoll_handle_io(void* p)
     epfd = epoll_create(100);
 
     // ev.events = EPOLLIN | EPOLLEXCLUSIVE;
-    ev.events = EPOLLIN | EPOLLET;
+    ev.events = EPOLLIN;
     ev.data.fd = i_listenfd;
     epoll_ctl(epfd, EPOLL_CTL_ADD, i_listenfd, &ev);
 
-    Request req1;
     char time [30] = {'\0'};
     char res_str[RECEIVE_MAX_BYTES] = {'\0'};
     int receive_bytes;
@@ -350,35 +349,34 @@ static void* epoll_handle_io(void* p)
         for(int i = 0; i < nCounts; i++)
         {
             int tmp_epoll_recv_fd = events[i].data.fd;
+
             if(tmp_epoll_recv_fd == i_listenfd)	{
+            
                 i_connfd = accept(i_listenfd, (struct sockaddr*)NULL, NULL);	
                 ev.events = EPOLLIN;
                 ev.data.fd = i_connfd;
                 epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
+            
             } else {
                 
-                
                 receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
-                Perfd pfd;
-                pfd.fd = tmp_epoll_recv_fd;
-                pfd.ssl = NULL;
-                
-                req_parse_http(&req1, res_str, pfd);
-                server_time(time);
 
-                log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , req1.path, (int)strlen(res_str), getpid());
-                
+                connection_tp conn_ptr = (connection_tp)malloc(sizeof(connection_t));
+                conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
+                conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     
+                conn_ptr->req = (Request*)malloc(sizeof(Request));
+
+                conn_ptr->per_handle_data->Socket = tmp_epoll_recv_fd;
+                conn_ptr->per_handle_data->efd = epfd;
+
+                req_parse_http(conn_ptr->req, res_str);
+                server_time(time);
+                log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , 
+                    conn_ptr->req->path, (int)strlen(res_str), getpid());
                 memset(time, 0, 30);
                 
-                router_handle(tmp_epoll_recv_fd, &req1);
-                
-                req_free(&req1);
-                // send(tmp_epoll_recv_fd, "HTTP/1.1 200 OK\r\n\r\nhello", 24, 0);
+                router_handle(conn_ptr, conn_ptr->req);
 
-
-                //printf("[dmfServer Thread]\n");
-                epoll_ctl(epfd, EPOLL_CTL_DEL, tmp_epoll_recv_fd, NULL);
-                close(tmp_epoll_recv_fd);
             }
         }
     }

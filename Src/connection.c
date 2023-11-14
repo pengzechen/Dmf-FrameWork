@@ -40,10 +40,14 @@ new_connection () {
 
 extern void 
 connection_close (connection_tp conn) {
-
+#ifdef __linux__
+    epoll_ctl(conn->per_handle_data->efd, 2, 
+        conn->per_handle_data->Socket, NULL);  // EPOLL_CTL_DEL 2
+#endif
 	close_socket(conn->per_handle_data->Socket);
 }
 
+#ifdef __WIN32__
 extern void
 send_next (connection_tp conn) {
     // 继续向 socket 投递WSARecv操作
@@ -55,6 +59,7 @@ send_next (connection_tp conn) {
     WSARecv( conn->per_handle_data->Socket, &conn->per_io_data->DataBuf, 1, &dwRecv, 
             &Flags, &conn->per_io_data->Overlapped, NULL);
 }
+#endif
 
 extern void
 connection_free_base (connection_tp conn) {

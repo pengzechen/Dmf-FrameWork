@@ -31,7 +31,9 @@ hashmap_tp hashmap_create(size_t size) {
     }
 
     hashmap->size = size;
-    hashmap->buckets = (hashmap_node_t **)calloc(size, sizeof(hashmap_node_t *));
+    hashmap->buckets = (hashmap_node_t **)malloc(size * sizeof(hashmap_node_t *));
+    memset(hashmap->buckets, 0, sizeof(hashmap_node_t *) * size);
+    
     if (hashmap->buckets == NULL) {
         free(hashmap);
         return NULL;
