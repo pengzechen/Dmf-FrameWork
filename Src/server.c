@@ -329,10 +329,10 @@ static void* epoll_handle_io(void* p)
     long i_listenfd = arg->fd;
     i_listenfd = createSocket();
 
-    struct epoll_event ev, events[100];
+    struct epoll_event ev, events[1024];
     int epfd, nCounts;
     int i_connfd;
-    epfd = epoll_create(100);
+    epfd = epoll_create(1024);
 
     // ev.events = EPOLLIN | EPOLLEXCLUSIVE;
     ev.events = EPOLLIN;
@@ -345,37 +345,49 @@ static void* epoll_handle_io(void* p)
 
     for(;;)
     {
-        nCounts = epoll_wait(epfd, events, 100, -1);
+        nCounts = epoll_wait(epfd, events, 1024, -1);
         for(int i = 0; i < nCounts; i++)
         {
             int tmp_epoll_recv_fd = events[i].data.fd;
+            connection_tp conn = events[i].data.ptr;
 
             if(tmp_epoll_recv_fd == i_listenfd)	{
             
                 i_connfd = accept(i_listenfd, (struct sockaddr*)NULL, NULL);	
-                ev.events = EPOLLIN;
-                ev.data.fd = i_connfd;
-                epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
-            
-            } else {
-                
-                receive_bytes = recv( tmp_epoll_recv_fd, res_str, sizeof(res_str), 0 );
 
                 connection_tp conn_ptr = (connection_tp)malloc(sizeof(connection_t));
                 conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
                 conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     
                 conn_ptr->req = (Request*)malloc(sizeof(Request));
 
-                conn_ptr->per_handle_data->Socket = tmp_epoll_recv_fd;
+                conn_ptr->per_handle_data->Socket = i_connfd;
                 conn_ptr->per_handle_data->efd = epfd;
+                req_parse_init(conn_ptr->req);
 
-                req_parse_http(conn_ptr->req, res_str);
+                ev.events = EPOLLIN;
+                ev.data.ptr = (void*)conn_ptr;
+
+                epoll_ctl( epfd, EPOLL_CTL_ADD, i_connfd, &ev );
+            
+            } else {
+
+                int fd = conn->per_handle_data->Socket;
+
+                receive_bytes = recv( fd, res_str, sizeof(res_str), 0 );
+                if (receive_bytes == -1) {
+                    connection_close(conn);
+	                connection_free(conn);
+                    continue;
+                }
+                
+                req_parse_http(conn->req, res_str);
+
                 server_time(time);
                 log_info("SERVER", 506, "[%s][Server: Info] %s %d id: %d\n",time , 
-                    conn_ptr->req->path, (int)strlen(res_str), getpid());
+                    conn->req->path, (int)strlen(res_str), getpid());
                 memset(time, 0, 30);
                 
-                router_handle(conn_ptr, conn_ptr->req);
+                router_handle(conn, conn->req);
 
             }
         }
@@ -392,7 +404,7 @@ extern void epoll_server_make() {
     arg->cmp = g_cmp;
     arg->fd = fd;
 
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 4; ++i) {
         pthread_t roundCheck;
         pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
         pthread_join(roundCheck, NULL);

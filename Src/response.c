@@ -27,8 +27,12 @@ static void res_handle( connection_tp conn, char* res_str, unsigned int size )
 {
 	int acceptFd = conn->per_handle_data->Socket;
 	int sendbyets = send(acceptFd, res_str, size, 0);
+	if (sendbyets == -1) {
+		connection_close(conn);
+		connection_free(conn);	
+	}
 
-	printf("socket %d: Send: %d byets\n", acceptFd, sendbyets);
+	// printf("socket %d: Send: %d byets\n", acceptFd, sendbyets);
 	connection_close(conn);
 	connection_free(conn);
 	// send_next(conn);

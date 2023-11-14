@@ -117,13 +117,13 @@ int test_map() {
     hashmap_node_t node1 = {"key1", "value1", NULL};
     hashmap_node_t node2 = {"key222", "value222", NULL};
 
-    hashmap_insert(hashmap, &node1);
-    hashmap_insert(hashmap, &node2);
+    // hashmap_insert(hashmap, &node1);
+    // hashmap_insert(hashmap, &node2);
 
-    void * value1 = hashmap_get(hashmap, "key1");
-    if (value1 != NULL) {
-        printf("Value for key1: %s\n", (char *)value1);
-    }
+    // void * value1 = hashmap_get(hashmap, "key1");
+    // if (value1 != NULL) {
+        // printf("Value for key1: %s\n", (char *)value1);
+    // }
 
     hashmap_remove(hashmap, "key1");
 

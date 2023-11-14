@@ -63,8 +63,11 @@ int createSocket()
     st_sersock.sin_port = htons( 8080 );
     int out = 2;
     setsockopt(i_listenfd, SOL_SOCKET, SO_REUSEADDR, &out, sizeof(out));
-    bind(i_listenfd,(struct sockaddr*)&st_sersock, sizeof(st_sersock));
-    listen(i_listenfd, 20);
+    int code = bind(i_listenfd, (struct sockaddr *)&st_sersock, sizeof(st_sersock));
+    assert(code == 0 && "bind error");
+
+    code = listen(i_listenfd, 1024);
+    assert(code == 0 && "listen error");
     return i_listenfd;
 }
 

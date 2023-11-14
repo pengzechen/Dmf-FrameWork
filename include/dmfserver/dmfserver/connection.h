@@ -46,7 +46,7 @@ typedef struct {
 #else  		// Windows
 
 typedef struct {
-	char Buffer[ DATA_BUFSIZE ];
+	char Buffer[ 5 ];
 } per_io_data_t, * per_io_data_tp;
 
 typedef struct {
