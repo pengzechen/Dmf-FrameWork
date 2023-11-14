@@ -21,7 +21,6 @@
 
 
 #define RECEIVE_MAX_BYTES 1024*512
-#define DATA_BUFSIZE 2048
 #define MAXBUF 4096
 
 
@@ -71,34 +70,6 @@
 	} fd_ssl_map ;
 
 #endif  		// Linux
-
-
-#ifdef __WIN32__ // Windows
-
-
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-
-typedef struct {
-	
-	OVERLAPPED Overlapped;
-	WSABUF DataBuf;
-	CHAR Buffer[DATA_BUFSIZE];
-	// ctl_fun_map_t cmp;
-	
-}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
-
-typedef struct {
-	
-	SOCKET Socket;
-	
-}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
-
-#define __SERVER_MPOOL__		// 启用server内存池
-
-// #define __SERVER_IOCP_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
-
-#endif  		// Windows
 
 
 typedef struct thread_arg {

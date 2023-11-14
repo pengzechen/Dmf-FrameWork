@@ -21,16 +21,16 @@
 
 
 // Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void res_handle( int acceptFd, char* res_str, unsigned int size)
+static void res_handle( int acceptFd, char* res_str, unsigned int size )
 {
 	int sendbyets = send(acceptFd, res_str, size, 0);
 
 	// printf("[Response: ] Send: %d byets \n", sendbyets);
-	#ifdef __WIN32__
+#ifdef __WIN32__
 	closesocket(acceptFd);
-	#elif __linux__
+#elif __linux__
 	close(acceptFd);
-	#endif // linux 
+#endif // linux 
 
 }
 

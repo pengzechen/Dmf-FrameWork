@@ -59,7 +59,7 @@ void multi_process_init(worker_function _wf);
 int main(int argc, char* argv[]) 
 {
     test_map();
-#if 0
+#if 1
 	#ifdef __WIN32__
 		// system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
@@ -87,7 +87,8 @@ int main(int argc, char* argv[])
     elr_mpl_init();     // 内存池初始化
 
     pool_init(2076, 2076*8192);  // server 模块内存池初始化
-    pool_init2(4, 4*8192);       // server 模块内存池初始化
+    pool_init2(8, 8*8192);       // server 模块内存池初始化
+    
     mdb_operate_init();          // mdb 模块初始化
 
 

@@ -82,9 +82,12 @@ void router_handle(int acceptFd, Request *req)
 	
 	// 先在control回调函数列表中寻找
 	for(int i=0; g_cmp.keys[i] != NULL; i++) {
+		
 		if( strcmp(req->path, g_cmp.keys[i]) == 0) {
 			func_view = g_cmp.cf[i];
+
 			func_view(acceptFd, req);
+			
 			flag = 1;	// 回调函数找到了
 		}
 	}

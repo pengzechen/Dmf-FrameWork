@@ -36,14 +36,14 @@ typedef struct{
    WSABUF DataBuf;
    CHAR Buffer[DATA_BUFSIZE];
    
-}PER_IO_OPERATION_DATA,* LPPER_IO_OPERATION_DATA;
+}per_io_data_t,* per_io_data_tp;
  
  
 typedef struct{
    SOCKET Socket;
    int status;
    
-}PER_HANDLE_DATA,* LPPER_HANDLE_DATA;
+}per_handle_data_t,* per_handle_data_tp;
 
 static HANDLE mdb_mapping;
 static HANDLE mdb_mutex;
@@ -181,12 +181,12 @@ SOCKET BindServerOverlapped(int nPort)
 	return sServer;
 }
  
-void next(PER_HANDLE_DATA* PerHandleData, PER_IO_OPERATION_DATA* PerIoData)
+void next(per_handle_data_t* PerHandleData, per_io_data_t* PerIoData)
 {
  
 	DWORD Flags = 0;
 	DWORD dwRecv = 0;
-	ZeroMemory(PerIoData,sizeof(PER_IO_OPERATION_DATA));
+	ZeroMemory(PerIoData,sizeof(per_io_data_t));
 	PerIoData->DataBuf.buf = PerIoData->Buffer;
 	PerIoData->DataBuf.len = DATA_BUFSIZE;
 	WSARecv(PerHandleData->Socket,&PerIoData->DataBuf, 1, &dwRecv, &Flags,&PerIoData->Overlapped, NULL);
@@ -197,8 +197,8 @@ DWORD WINAPI ProcessIO(LPVOID lpParam)
 {
     HANDLE CompletionPort = (HANDLE)lpParam;
     DWORD BytesTransferred;
-    LPPER_HANDLE_DATA PerHandleData;
-    LPPER_IO_OPERATION_DATA PerIoData;
+    per_handle_data_tp PerHandleData;
+    per_io_data_tp PerIoData;
  
 	while(1){
 		if(0 == GetQueuedCompletionStatus(CompletionPort, &BytesTransferred, (LPDWORD)&PerHandleData, 
@@ -280,21 +280,21 @@ int main(){
 	SOCKET sListen = BindServerOverlapped(PORT);
 
 	SOCKET sClient;
-	LPPER_HANDLE_DATA PerHandleData;
-	LPPER_IO_OPERATION_DATA PerIoData;
+	per_handle_data_tp PerHandleData;
+	per_io_data_tp PerIoData;
 	while(1)
 	{
 		   sClient = accept(sListen, 0, 0);
 		   printf("Socket %d connected \n", sClient);
 
-		   PerHandleData =  (PER_HANDLE_DATA*)malloc(sizeof(PER_HANDLE_DATA));
+		   PerHandleData =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
 		   PerHandleData->Socket = sClient;
 		   PerHandleData->status = 0;
 		   
-		   PerIoData =  (PER_IO_OPERATION_DATA*)malloc(sizeof(PER_IO_OPERATION_DATA));
+		   PerIoData =  (per_io_data_t*)malloc(sizeof(per_io_data_t));
 		   CreateIoCompletionPort((HANDLE)sClient, CompletionPort,(DWORD)PerHandleData, 0);
 
-		   ZeroMemory(PerIoData, sizeof(PER_IO_OPERATION_DATA));
+		   ZeroMemory(PerIoData, sizeof(per_io_data_t));
 		   PerIoData->DataBuf.buf = PerIoData->Buffer;
 		   PerIoData->DataBuf.len = DATA_BUFSIZE;
 

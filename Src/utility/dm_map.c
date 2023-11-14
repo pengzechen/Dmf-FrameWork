@@ -99,6 +99,7 @@ void hashmap_destroy(hashmap_tp hashmap) {
             hashmap_node_t *temp = node;
             node = node->next;
             free(temp->key);
+            free(temp->value);
             free(temp);
         }
     }

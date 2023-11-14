@@ -29,8 +29,7 @@
 #define MULTI_PART_MAX_NUM 	20			// 最大multipart 数量
 
 
-// HTTP协议相关 
-
+//******************  HTTP协议相关 *****************
 // 第一行
 #define HTTP_METHOD_MAX    5
 #define HTTP_URI_MAX       512
@@ -38,7 +37,37 @@
 #define HTTP_VERSION_MAX   4
 
 #define HTTP_BODY_MAX		 	1024*1024	// body 数据大小
+//******************  HTTP协议相关 *****************
 
+//******************  HTTP解析状态机 *****************
+
+typedef  enum _HTTP_PARSE_STATE {
+	PARSE_INVALID	,
+	PARSE_START  	,
+	PARSE_METHOD 	,
+
+	PARSE_PATH_START      ,
+	PARSE_PATH         ,
+
+	PARSE_QUERY_START  ,
+	PARSE_QUERY        ,
+	PARSE_QUERY_TEMP   ,
+
+	PARSE_PV_START     ,
+	PARSE_PV_TEMP      ,
+	PARSE_PV           ,
+
+	PARSE_PARAM_START  ,
+	PARSE_PARAM1		   ,
+	PARSE_PARAM2		   ,
+	PARSE_PARAM3		   ,
+	
+	PARSE_BODY_START  ,
+	PARSE_BODY
+
+} HTTP_PARSE_STATE ;
+
+//******************  HTTP解析状态机 *****************
 
 
 #include <stdio.h>
@@ -96,7 +125,9 @@ extern "C" {
 
 void req_parse_multi_part (Request *request, char *boundary );
 
-void req_parse_http(Request *request, char *data, Perfd pfd);
+void req_parse_init(Request* request);
+
+void req_parse_http(Request *request, char *data);
 
 void req_get_session_str(const Request* req,  char session_str[]);
 

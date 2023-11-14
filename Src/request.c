@@ -37,9 +37,7 @@ void req_parse_multi_part (Request *request, char *boundary )
 {
 	
 	char *p = NULL;
-	char *pp = NULL;
 	p = request->body.body;
-	pp = p+1;
 	
 	// 状态参量 这次要不要写字符
 	int state = 10;
@@ -66,7 +64,7 @@ void req_parse_multi_part (Request *request, char *boundary )
 		switch(state){
 			
 			case 10:
-				if(*p == '-' && *pp == '-'){
+				if(*p == '-' && *(p+1) == '-'){
 					state = 11;
 					mul_num++;
 				}
@@ -77,12 +75,12 @@ void req_parse_multi_part (Request *request, char *boundary )
 				}else{
 					write = 1;
 				}
-				if(*p == '\r' && *pp == '\n'){
+				if(*p == '\r' && *(p+1) == '\n'){
 					// printf("%s\n", temp);
 					state = 90;				 // 校对 boundary
 					write = 0;
 				}
-				if(*p == '-' && *pp == '-'){
+				if(*p == '-' && *(p+1) == '-'){
 					state = 1;
 					mul_num--;
 				}
@@ -119,7 +117,7 @@ void req_parse_multi_part (Request *request, char *boundary )
 				}else{
 					write = 1;
 				}
-				if(*p == '=' && *pp == '"'){
+				if(*p == '=' && *(p+1) == '"'){
 					
 					// puts(temp);
 					if(strcmp(temp, "name")==0){
@@ -153,7 +151,7 @@ void req_parse_multi_part (Request *request, char *boundary )
 				if(*p == ';'){
 					state = 22;				// 返回 22
 				}
-				if(*p == '\r' && *pp == '\n'){
+				if(*p == '\r' && *(p+1) == '\n'){
 					state = 25;
 				}
 				break;
@@ -168,7 +166,7 @@ void req_parse_multi_part (Request *request, char *boundary )
 				break;
 			case 28:
 				write = 2;
-				if(*p == '\r' && *pp == '\n'){
+				if(*p == '\r' && *(p+1) == '\n'){
 					memset(b, 0, 64);
 					memcpy(b, p+4, boundary_len);
 					if(strcmp(boundary, b) == 0){
@@ -207,19 +205,12 @@ void req_parse_multi_part (Request *request, char *boundary )
 				memset(temp, 0, 1024);
 			}
 		}
-		
 		p ++;
-		pp = p + 1;
-		
 		if(state == 1)
 			break;
-		
-		
 	}
 
 	request->multi_part_num = mul_num;
-	
-	
 	
 #ifdef MULTI_DEBUG 
 	printf("---------------------MULTI-DEBUG--------------------\n");
@@ -237,16 +228,22 @@ void req_parse_multi_part (Request *request, char *boundary )
 }
 
 
-void req_parse_http(Request *request, char *data, Perfd pfd)
+void req_parse_init (Request *request) {
+	// request->pfd = pfd;
+	request->query = hashmap_create(17);
+	request->params = hashmap_create(17);
+}
+
+
+void req_parse_http(Request *request, char *data )
 {
 	
 	//p 指向 data 首地址
 	char *p;
-	char *pp;
 	p = data;   
 	
 	// 解析状态 
-	int state = 10;  
+	HTTP_PARSE_STATE state = PARSE_START;  
 	
 	int write = 0;
 	char temp[512] = {'\0'};
@@ -255,72 +252,64 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 	//初始化 multi_part_num query param  的个数
 	request->multi_part_num = -1;		//  -1 表示没有
 	
-	
-	// 计算还有多少 bytes  没有读取
-	int num;
-
-	request->query = hashmap_create(21);
-	request->params = hashmap_create(21);
-
 	hashmap_node_t * query_tmp = NULL;
 	hashmap_node_t * params_tmp = NULL;
 
-	char *cls = NULL;
-	char *cts = NULL;
-	
+	char *cls = NULL;   //Content-Length
+	char *cts = NULL;   //Content-Type
 	
 	
 	for(int t=0; t < MULTI_PART_MAX_NUM; t++)
 		request->multi[t] = NULL;
 	
-	request->pfd = pfd;
 	
-	while(*p != '\0') {
+	
+	while( *p != '\0' ) {
 				
-		switch(state){
-			case 10:
+		switch( state ){
+			case PARSE_START:
 				if( *p == 'G' || *p=='P'){
 					write = 1;
-					state = 12;
+					state = PARSE_METHOD;
 				}else{
-					state = -1;			//首字母不是 P G 不合法
+					state = PARSE_INVALID;			//首字母不是 P G 不合法
 				}
 				break;
-			case 12:
-				if( *p == ' '){
+			case PARSE_METHOD:
+				if( *p == ' ') {
 					write = 0;
-					state = 20;
+					state = PARSE_PATH_START;
 					strcpy(request->method, temp);
 					//printf("%s\n", temp);
 				}
 				break;
 			
 			//处理 path
-			case 20:
+			case PARSE_PATH_START:
 				if( *p == '/'){
 					write = 1;
-					state = 21;
+					state = PARSE_PATH;
 				}else{
-					state = -2;			//path 不以 / 开头不合法
+					state = PARSE_INVALID;			//path 不以 / 开头不合法
 				}
 				break;
-			case 21:
+			case PARSE_PATH:
 				if( *p == '?'){
 					write = 0;
-					state = 30;
+					state = PARSE_QUERY_START;
 					strcpy(request->path, temp);
 					//printf("%s\n", temp);
 				}
 				if( *p == ' '){
 					write = 0;
-					state = 50;
+					state = PARSE_PV_START;
 					strcpy(request->path, temp);
 					//printf("%s\n", temp);
 				}
 				break;
 			
 			//处理 query 
-			case 30:    //上一个字符遇到 ？
+			case PARSE_QUERY_START:    //上一个字符遇到 ？
 				write = 1;
 				int flag = 1;
 				if( *p == '=' ){
@@ -330,14 +319,14 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					query_tmp->key = (char*) malloc (sizeof(char)*strlen(temp));
 					strcpy(query_tmp->key, temp);
 					// printf("key: %s\n", temp);
-					state = 31;
+					state = PARSE_QUERY_TEMP;
 					flag = 0;
 				}
-				if(*pp == ' ' && flag){
-					state = -3;				// 下一个字符出现空格 但还没出现”=“  不合法
+				if(*(p+1) == ' ' && flag){
+					state = PARSE_INVALID;				// 下一个字符出现空格 但还没出现”=“  不合法
 				}
 				break;
-			case 31:
+			case PARSE_QUERY_TEMP:
 				write = 1;
 				if( *p == '&'){
 					query_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
@@ -345,7 +334,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					// printf("value: %s\n", temp);
 					hashmap_insert(request->query, query_tmp);
 					write = 0;
-					state = 30;
+					state = PARSE_QUERY_START;
 				}
 				if (*p == ' '){
 					query_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
@@ -353,75 +342,72 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					// printf("value: %s\n", temp);
 					hashmap_insert(request->query, query_tmp);
 					write = 0;
-					state = 50;
+					state = PARSE_PV_START;
 				}
 				break;
 			
 
 			// 解析 协议 版本
-			case 50:
+			case PARSE_PV_START:
 				write = 1;
 				if(*p == '/'){
 					write = 0;
 					strcpy(request->protocol, temp);
 					//printf("protocol: %s\n", temp);
-					state = 51;
+					state = PARSE_PV_TEMP;
 				}
 				break;
-			case 51:
+			case PARSE_PV_TEMP:
 				write = 1;
-				if(*p == '\r' && *pp == '\n'){
+				if(*p == '\r' && *(p+1) == '\n'){
 					write = 0;
 					strcpy(request->version, temp);
 					//printf("version: %s\n", temp);
-					state = 60;
+					state = PARSE_PARAM_START;
 				}
 				break;
 			
 
 			//  解析 参数
-			case 60:      // 跳过 \n
-				state = 61;
+			case PARSE_PARAM_START:      // 跳过 \n
+				state = PARSE_PARAM1;
 				break;
-			case 61:
+			case PARSE_PARAM1:
 				if(*p >= 'A'&& *p<='Z'){
 					write = 1;
 				}
 				if(*p == ':'){
 					write = 0;
-					// strcpy(request->params[p_int].key, temp);
 					params_tmp = (hashmap_node_t *) malloc (sizeof(hashmap_node_t));
 					params_tmp->next = NULL;
 					params_tmp->key = (char*) malloc (sizeof(char)*strlen(temp));
 					strcpy(params_tmp->key, temp);
 					// printf("%s\n", temp);
-					state = 62;
+					state = PARSE_PARAM2;
 				}
-				if(*p == '\r' && *pp == '\n'){		// 进入 body 
-					state = 70;
+				if(*p == '\r' && *(p+1) == '\n'){		// 进入 body 
+					state = PARSE_BODY_START;
 				}
 				break;
-			case 62:    // 跳过 空格
-				state = 63;
+			case PARSE_PARAM2:    // 跳过 空格
+				state = PARSE_PARAM3;
 				break;
-			case 63:
+			case PARSE_PARAM3:
 				write = 1;
-				if(*p == '\r' && *pp == '\n'){
+				if(*p == '\r' && *(p+1) == '\n'){
 					write = 0;
-					// strcpy(request->query[q_int].data, temp);
 					params_tmp->value = (char*) malloc (sizeof(char)*strlen(temp));
 					strcpy(params_tmp->value, temp);
 					hashmap_insert(request->params, params_tmp);
-					//printf("value--%d: %s\n", p_int, temp);
-					state = 60;
+					state = PARSE_PARAM_START;
 				}
 				break;
 
 
 			// 解析 body 
-			case 70:      // 跳过 \n
+			case PARSE_BODY_START:      // 跳过 \n
 				if(strcmp(request->method,"POST") == 0){			
-					state = 71;
+					state = PARSE_BODY;
 				}
 				else{						// \r\n\r\n  后面没有字符
 					state = 1;
@@ -429,7 +415,7 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 					request->body.body = NULL;
 				}
 				break;
-			case 71:
+			case PARSE_BODY:
 				
 				cls = (char*)hashmap_get(request->params, "Content-Length");
 				if ( cls != NULL) {
@@ -460,16 +446,15 @@ void req_parse_http(Request *request, char *data, Perfd pfd)
 				break;
 		}
 		
-		if(write){
+		if (write) {
 			temp[i] = *p;
 			i++;
-		}else{
+		} else {
 			i=0;
 			memset(temp, 0, 512);
 		}
 		p ++;
-		pp = p+1;
-		num++;
+
 		if(state == 1)
 			break;
 	}

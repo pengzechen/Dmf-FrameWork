@@ -55,7 +55,7 @@ struct FileInfo {
     char url[512];
 };
 
-typedef void (*ContFun)(int acceptFd, const Request *req );
+typedef void (*ContFun) (int acceptFd, const Request *req );
 
 #define RouterAdd(name) void name()
 
