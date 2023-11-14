@@ -17,13 +17,13 @@ void usleep1(unsigned long usec)
 }
 #endif
 
-void string(int a, const Request* req)
+void string(connection_tp conn, const Request* req)
 {
 	// void *block1 = pool_alloc();
     // usleep1(400);
     // pool_free(block1);
 	//printf("%s\n", req->query[0].key);
-	res_row(a, "test ok");
+	res_row(conn, "test ok");
 }
 
 

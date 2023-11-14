@@ -5,7 +5,7 @@ void mfunction(char *out, char *in) {
 	strcpy(out, in);
 }
 
-void template(int a, const Request *req) {
+void template(connection_tp conn, const Request *req) {
 
 	struct Kvmap kv0 = {.key = "name", .value = "Dmfserver", .type = 1};
 	struct Kvmap kv1 = {.key = "date", .value = "2023/4/14", .type = 1};
@@ -23,7 +23,7 @@ void template(int a, const Request *req) {
 	kv[3].dec[3] = NULL;
 	kv[3].type = 3;
 	
-	res_render(a, "test.html", kv, 4);
+	res_render(conn, "test.html", kv, 4);
 }
 
 RouterAdd(apptemp)

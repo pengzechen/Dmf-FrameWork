@@ -1,11 +1,11 @@
 
 #include <dmfserver/ws.h>
-void wsfunc(int a, const Request *req) 
+void wsfunc(connection_tp conn, const Request *req) 
 {	
     char key[128] = {0};
     req_get_ws_key(req, key);
     
-	upto_ws_prot(a, key);
+	upto_ws_prot(conn, key);
 }
 
 RouterAdd(ws)

@@ -2,7 +2,7 @@
 #include <dmfserver/request.h>
 
 
-void mdbfind(int a, const Request* req)
+void mdbfind(connection_tp conn, const Request* req)
 {
 	char* str_from_mdb;
 	
@@ -12,11 +12,11 @@ void mdbfind(int a, const Request* req)
 	char* pdata = data;
 
 	str_from_mdb = mdb_find(pdata);
-	res_row(a, str_from_mdb);
+	res_row(conn, str_from_mdb);
 	//free(str_from_mdb);
 }
 
-void mdbinsert(int a, const Request* req)
+void mdbinsert(connection_tp conn, const Request* req)
 {
 	char ckey[64] = {0};
 	char cdata[512] = {0};
@@ -26,7 +26,7 @@ void mdbinsert(int a, const Request* req)
 	char* key = ckey;
 	char* data = cdata;
 	mdb_insert(key, data);
-	res_row(a, "insert ok!");
+	res_row(conn, "insert ok!");
 }
 
 

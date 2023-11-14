@@ -1,6 +1,6 @@
 
 
-void setsession(int a, const Request *req)
+void setsession(connection_tp conn, const Request *req)
 {
 	char res_str[80] = {0};
 
@@ -18,7 +18,7 @@ void setsession(int a, const Request *req)
 	SessionCreate(Session_str, key, data);
 
 	Response res;
-	res_init(a, &res);
+	res_init(conn, &res);
 	res_set_head(&res, "200");
 	res_set_type(&res, "text/html;utf-8;");
 	// res_set_cookie(&res, "dmfsession", "324fvw3qrc3c23x");
@@ -27,22 +27,22 @@ void setsession(int a, const Request *req)
 	res_parse_send(&res);
 }
 
-void getsession(int a, const Request *req) 
+void getsession(connection_tp conn, const Request *req) 
 {
 	char* data = hashmap_get( req->query, "name");
 	
 	char* s = getSessionR(req, data);
 	if(s == NULL){
-		res_row(a, "no such key");
+		res_row(conn, "no such key");
 	}else{
 		char res[256] = {0};
 		strcat(res, "session data: ");
 		strcat(res, s);
-		res_row(a, res);
+		res_row(conn, res);
 	}
 }
 
-void sessionadd(int a, const Request *req) 
+void sessionadd(connection_tp conn, const Request *req) 
 {
 
 	char * key = hashmap_get( req->query, "key"); 
@@ -65,10 +65,10 @@ void sessionadd(int a, const Request *req)
 		default: break;
 	}
 	
-	res_row(a, res_str);
+	res_row(conn, res_str);
 }
 
-void updatesession(int a, const Request *req) 
+void updatesession(connection_tp conn, const Request *req) 
 {
 	char * key = hashmap_get( req->query, "key"); 
 	char * data = hashmap_get( req->query, "data");
@@ -78,17 +78,17 @@ void updatesession(int a, const Request *req)
 	int res = UpdateSessionDataR(req, key, data);
 
 	if(res)
-		res_row(a, "Update successfully!");
+		res_row(conn, "Update successfully!");
 	else
-		res_row(a, "Update faild");
+		res_row(conn, "Update faild");
 }
 
-void sessiondebug(int a, const Request* req) 
+void sessiondebug(connection_tp conn, const Request* req) 
 {
 	printf("-----------session debug-------------\n");
 	SessionAll();
 	printf("-----------session debug-------------\n");
-	res_row(a, "This is a test str");
+	res_row(conn, "This is a test str");
 }
 
 RouterAdd(session)

@@ -1,7 +1,7 @@
 #include <dmfserver/model.h>
 
 
-void mysqltest(int a, const Request* req)
+void mysqltest(connection_tp conn, const Request* req)
 {
 	
 	mysql_conn* conn1 = get_mysql_connection_block();
@@ -20,16 +20,16 @@ void mysqltest(int a, const Request* req)
 	mysql_free_result(res_ptr);
 	free(res_ptr);
 
-	res_row(a, "ok");
+	res_row(conn, "ok");
 	release_mysql_connection(conn1);
 }
 
-void mysqltest1(int a, const Request* req) 
+void mysqltest1(connection_tp conn, const Request* req) 
 {
 	
 	exe_sql("select id from test where id=3;");
 
-	res_row(a, "ok");
+	res_row(conn, "ok");
 }
 
 RouterAdd(model)
