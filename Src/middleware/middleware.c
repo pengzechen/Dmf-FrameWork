@@ -62,12 +62,13 @@ static int middleware_check_if_too_often(const Request* req)
 // 返回值大于零说明所有中间件都经过检测
 // 返回值小于零则是相应的中间件未通过
 // 在返回之前要调用response模块返回请求错误
-extern int middleware_handle(const Request* req)
+extern int middleware_handle(connection_tp conn )
 {
+    Request* req = conn->req;
 
     if( middleware_check_if_too_often(req) != 0 ) {
 
-        res_without_permission(req->pfd.fd);
+        res_without_permission(conn);
         return -1001;
     }
 

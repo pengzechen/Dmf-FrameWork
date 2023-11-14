@@ -20,7 +20,8 @@
 
 #include <openssl/sha.h>
 #include <dmfserver/utility/base64.h>  
-
+#include <dmfserver/connection.h>
+#include <dmfserver/socket.h>
 
 static void sha1(char sText[], char* shaed) {
 	SHA_CTX ctx;
@@ -150,8 +151,9 @@ int parseWebSocketFrame(const unsigned char *data, size_t data_length,
 }
 
 //  将协议转换到websocket
-extern void upto_ws_prot(int a, char key[]) 
+extern void upto_ws_prot(connection_tp conn, char key[]) 
 {
+    int a = conn->per_handle_data->Socket;
 	char sha[128] = {0};
 	strcat(key, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
 	sha1(key, sha);
@@ -172,9 +174,8 @@ extern void upto_ws_prot(int a, char key[])
 	// strcat(res, "Sec-WebSocket-Protocol: chat\r\n");
 	strcat(res, "\r\n");
 	res_len = strlen(res);
-
 	int sendbyets = send(a, res, res_len, 0);
-	// closesocket(a);
+
 
 	const char *message = "Hello, WebSocket!";
     sendWebSocketFrame(a, message, strlen(message));
@@ -186,11 +187,7 @@ extern void upto_ws_prot(int a, char key[])
 
     	size_t data_length = recv( a, data, sizeof(data), 0 );
 		if(data_length == 0) {
-#ifdef __WIN32__
-			closesocket(a);
-#else	
-			close(a);
-#endif // Win32
+            close_socket(a);
 			return;
 		}
 
@@ -217,9 +214,5 @@ extern void upto_ws_prot(int a, char key[])
 		const char *message = "Hello, WebSocket!";
 		sendWebSocketFrame(a, message, strlen(message));
 	}
-#ifdef __WIN32__
-			closesocket(a);
-#else	
-			close(a);
-#endif // Win32
+    close_socket(a);
 }

@@ -38,7 +38,7 @@ int file(){
 
 #ifdef __linux__
 
-char *itoa(int value,char *string,int radix) {
+char *itoa(int value ,char *string, int radix) {
 
 	char zm[37]="0123456789abcdefghijklmnopqrstuvwxyz";
 	char aa[100]={0};

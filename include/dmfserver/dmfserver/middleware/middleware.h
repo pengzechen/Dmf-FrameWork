@@ -31,7 +31,7 @@ extern "C" {
 
     extern void middleware_init();
 
-    extern int middleware_handle(const Request* req);
+    extern int middleware_handle(connection_tp conn );
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */

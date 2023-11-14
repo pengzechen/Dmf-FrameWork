@@ -15,7 +15,7 @@
     *  limitations under the License. 
     *
     */
-
+#include <dmfserver/socket.h>
 #include <dmfserver/connection.h>
 #include <dmfserver/cfg.h>
 #include <dmfserver/mpool.h>
@@ -30,7 +30,8 @@ new_connection () {
     conn_ptr-> per_io_data = (per_io_data_t*)pool_alloc();
 #else
     conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
-    conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
+    // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
+    conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     
 #endif // __SERVER_MPOOL__
     conn_ptr->req = (Request*)malloc(sizeof(Request));
     
@@ -39,7 +40,8 @@ new_connection () {
 
 extern void 
 connection_close (connection_tp conn) {
-    closesocket(conn->per_handle_data->Socket);
+
+	close_socket(conn->per_handle_data->Socket);
 }
 
 extern void

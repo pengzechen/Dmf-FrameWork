@@ -65,7 +65,7 @@ static void req_res_handler(int acceptFd )
 	server_time(time);
 	printf("[%s][Server: Info] %s\n", time, req1.path);
 	
-	router_handle(acceptFd, &req1);
+	// router_handle(acceptFd, &req1);
 	//通过请求的 path 调用了对应的处理函数
 	
 	req_free(&req1);
@@ -155,10 +155,9 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 
     while(1){
 
-        if(0 == GetQueuedCompletionStatus(CompletionPort, 
-            &BytesTransferred, (LPDWORD)&PerHandleData, (LPOVERLAPPED*)&PerIoData, INFINITE))
+        if(0 == GetQueuedCompletionStatus(CompletionPort, &BytesTransferred, (LPDWORD)&PerHandleData, (LPOVERLAPPED*)&PerIoData, INFINITE))
         {
-            if( (GetLastError() ==WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
+            if( (GetLastError() == WAIT_TIMEOUT)) { //|| (GetLastError() == ERROR_NETNAME_DELETED ) ){
                 printf("closingsocket %d\n", PerHandleData->Socket); 
                 closesocket(PerHandleData->Socket);
                 connection_tp conn;
@@ -166,7 +165,7 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
                 conn->per_io_data = PerIoData;
                 connection_free_base(conn);
                 continue;
-            }else{
+            } else {
                 OutErr("GetQueuedCompletionStatus failed!");
             }
             return 0;
@@ -176,16 +175,10 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
            
         // 说明客户端已经退出
         if(BytesTransferred == 0) {
-            printf("closingsocket %d\n", PerHandleData->Socket);
+            printf("客户端已经退出 closingsocket %d\n", PerHandleData->Socket);
             connection_close(conn_ptr);
             free(conn_ptr->req);
-#ifdef __SERVER_MPOOL__
-            pool_free( conn_ptr->per_io_data );
-            pool_free2( conn_ptr->per_handle_data );
-#else 
-            free( conn_ptr->per_io_data );
-            free( conn_ptr->per_handle_data );
-#endif // __SERVER_MPOOL__
+            connection_free_base(conn_ptr);
             free(conn_ptr);
             continue;
         }
@@ -214,19 +207,17 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
     #endif // __SERVER_MPOOL__
         free(conn_ptr);
 
-#else
+#endif
         
-        // 初始化一个 request
-        req_parse_init(conn_ptr->req);
         // 解析 http 请求
         req_parse_http(conn_ptr->req, conn_ptr->per_io_data->Buffer);
         
         // 根据解析出来的结果运行中间件
-        // if( middleware_handle(conn_ptr->req) < 0) {
-        //     connection_close(conn_ptr);
-        //     connection_free(conn_ptr);
-        //     continue;
-        // }
+        if( middleware_handle(conn_ptr) < 0) {
+            connection_close(conn_ptr);
+            connection_free(conn_ptr);
+            continue;
+        }
 
         // 进行必要日志记录
         char time [30] = {'\0'};
@@ -241,10 +232,9 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
             *路由模块调用用户的view函数
             *在view函数中必须调用response模块进行返回
             */
-        router_handle(conn_ptr->per_handle_data->Socket, conn_ptr->req);
+        router_handle(conn_ptr, conn_ptr->req);
         
-        connection_free(conn_ptr);
-#endif
+
     }
 
     return 0;
@@ -289,6 +279,9 @@ int iocp_server_make()
         //sClient = accept(sListen, 0, 0);
 
         connection_tp conn_ptr = new_connection();
+        // 初始化一个 request
+        req_parse_init(conn_ptr->req);
+
         PerHandleData = conn_ptr->per_handle_data;
         PerIoData = conn_ptr->per_io_data;
 

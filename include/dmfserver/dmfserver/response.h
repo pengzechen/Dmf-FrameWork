@@ -24,6 +24,7 @@
 #include <dmfserver/conf/conf.h>
 #include <dmfserver/template.h>					// 以模板作为响应
 #include <dmfserver/utility/utility.h>        	// 引入时间
+#include <dmfserver/connection.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -52,42 +53,42 @@ typedef struct _Response {
 	char Connection[32];
 	char * pbody;
 	unsigned int body_size;
-	int fd;
-}Response;
+	connection_tp conn;
+}response_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void res_init( int fd, Response* res);
+void res_init( connection_tp conn, response_t* res);
 
-static void res_handle( int acceptFd, char* res_str, unsigned int size);
+static void res_handle( connection_tp conn, char* res_str, unsigned int size);
 
-extern void res_without_permission( int acceptFd);
+extern void res_without_permission( connection_tp conn);
 
 static char * res_load_file( char *path);
 
-extern void res_set_head( Response* res, char* code);
+extern void res_set_head( response_t* res, char* code);
 
-extern void res_set_type( Response* res, char* type);
+extern void res_set_type( response_t* res, char* type);
 
-extern void res_set_cookie( Response* res, char* name, char* value);
+extern void res_set_cookie( response_t* res, char* name, char* value);
 
-extern void res_set_session( Response*res , char* Session_str);
+extern void res_set_session( response_t*res , char* Session_str);
 
-extern void res_set_body( Response* res, char* body, unsigned int size);
+extern void res_set_body( response_t* res, char* body, unsigned int size);
 
-extern void res_parse_send( Response* res);
+extern void res_parse_send( response_t* res);
 
-extern void res_notfound( int acceptFd);
+extern void res_notfound( connection_tp conn);
 
-extern void res_row(  int acceptFd, char* res_str);
+extern void res_row(  connection_tp conn, char* res_str);
 
-extern void res_render( int acceptFd, char* template_name, struct Kvmap *kv, int num);
+extern void res_render( connection_tp conn, char* template_name, struct Kvmap *kv, int num);
 
-extern void res_static( int acceptFd, char* path, unsigned int size, char* ext, char* content_type);
+extern void res_static( connection_tp conn, char* path, unsigned int size, char* ext, char* content_type);
 
-static void res_file_handle( int acceptFd, char* path, char* content_type, unsigned int size);
+static void res_file_handle( connection_tp conn, char* path, char* content_type, unsigned int size);
 
 
 

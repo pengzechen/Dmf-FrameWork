@@ -24,6 +24,7 @@
 
 #include <dmfserver/request.h>	// Router要接受req并把req传给 control function
 #include <dmfserver/response.h>   // Router找不到资源时直接调用 response 返回
+#include <dmfserver/connection.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,7 +56,7 @@ struct FileInfo {
     char url[512];
 };
 
-typedef void (*ContFun) (int acceptFd, const Request *req );
+typedef void (*ContFun) (connection_tp conn, const Request *req );
 
 #define RouterAdd(name) void name()
 
@@ -79,7 +80,7 @@ extern "C" {
 
 extern void router_init();
 
-extern void router_handle(int acceptFd, Request *req);
+extern void router_handle(connection_tp conn, Request *req);
 
 static int search_local_file(char* local_paths[]);
 

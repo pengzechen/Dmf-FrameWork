@@ -18,52 +18,61 @@
 
    
 #include <dmfserver/response.h>
+#include <dmfserver/utility/utility.h>
+#include <dmfserver/socket.h>
 
 
-// Response 模块最后调用此函数  发送并关闭此次TCP连接
-static void res_handle( int acceptFd, char* res_str, unsigned int size )
+// response_t 模块最后调用此函数  发送并关闭此次TCP连接
+static void res_handle( connection_tp conn, char* res_str, unsigned int size )
 {
+	int acceptFd = conn->per_handle_data->Socket;
 	int sendbyets = send(acceptFd, res_str, size, 0);
 
-	// printf("[Response: ] Send: %d byets \n", sendbyets);
-#ifdef __WIN32__
-	closesocket(acceptFd);
-#elif __linux__
-	close(acceptFd);
-#endif // linux 
-
+	printf("socket %d: Send: %d byets\n", acceptFd, sendbyets);
+	connection_close(conn);
+	connection_free(conn);
+	// send_next(conn);
 }
 
 
 // 以纯的字符串返回
-extern void res_row(int acceptFd, char* res_str) 
+extern void res_row(connection_tp conn, char* res_str) 
 {
+	int con_len = strlen(res_str);
+	char conlen[8] = {0}; 
+	itoa(con_len, conlen, 10); 
+
 	char final_str[FINAL_STR_SIZE] = {0};
 
-	strcat( final_str, "HTTP/1.1 200 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
+	strcat( final_str, "HTTP/1.1 200 OK\r\nContent-type:text/html;utf-8;\r\nConnection: Keep-alive;\r\n" );
+	strcat( final_str, "Content-Length: ");strcat( final_str, conlen);strcat( final_str, "\r\n\r\n");
 	strcat( final_str, res_str);
 	
-	res_handle(acceptFd, final_str, strlen(final_str));
+	res_handle(conn, final_str, strlen(final_str));
 }
 
 // 返回 Not Found
-extern void res_notfound(int acceptFd)
+extern void res_notfound(connection_tp conn)
 {
+	// int acceptFd = conn->per_handle_data->Socket;
+
 	char final_str[FINAL_STR_SIZE] = {0};
-	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n\r\n" );
+	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\nConnection: close;\r\nContent-Length: 18\r\n\r\n" );
 	strcat( final_str, "<h1>Not Found</h1>");
 	
-	res_handle(acceptFd, final_str, strlen(final_str));
+	res_handle(conn, final_str, strlen(final_str));
 }
 
 // 以模板返回
-extern void res_render(int acceptFd, char* template_name, 
+extern void res_render(connection_tp conn, char* template_name, 
 						struct Kvmap *kv, int num) 
 {
+	// int acceptFd = conn->per_handle_data->Socket;
+
 	char* context = get_template(template_name);				// 需要释放内存
 	char* res = parse_context(context, kv, num-1);		// 模板返回值  需要释放内存
 
-	res_row(acceptFd, res);
+	res_row(conn, res);
 	memset(res, 0, TEMPLATE_RESULT_SIZE);
 	free(res);
 }
@@ -72,13 +81,13 @@ extern void res_render(int acceptFd, char* template_name,
 // 中间件调用的返回函数
 // *************************************************************************
 
-extern void res_without_permission(int acceptFd) 
+extern void res_without_permission(connection_tp conn) 
 {
 	char final_str[FINAL_STR_SIZE] = {0};
 
 	strcat( final_str, "HTTP/1.1 403 \r\n\r\nYou are without permission");
 	
-	res_handle(acceptFd, final_str, strlen(final_str));
+	res_handle(conn, final_str, strlen(final_str));
 }
 
 // *************************************************************************
@@ -87,7 +96,7 @@ extern void res_without_permission(int acceptFd)
 // 响应初始化 
 // *************************************************************************
 // 设置时间和服务器名称
-extern void res_init(int fd, Response* res)
+extern void res_init(connection_tp conn, response_t* res)
 {
 	memset(res->Server, 0, 32);
 	memset(res->Content_type, 0, 32);
@@ -108,11 +117,11 @@ extern void res_init(int fd, Response* res)
 	strcat(res->Connection, "Connection:keep-alive");
 	strcat(res->Connection, "\r\n");
 	
-	res->fd = fd;
+	res->conn = conn;
 }
 
 // 设置 响应代码（首行）
-extern void res_set_head(Response* res, char* code)
+extern void res_set_head(response_t* res, char* code)
 {	
 	strcat(res->Head_code, "HTTP/1.1 ");
 	strcat(res->Head_code, code);
@@ -120,7 +129,7 @@ extern void res_set_head(Response* res, char* code)
 }
 
 // 设置 Content-type
-extern void res_set_type(Response* res, char* type)
+extern void res_set_type(response_t* res, char* type)
 {
 	strcat(res->Content_type, "Content-type:");
 	strcat(res->Content_type, type);
@@ -128,7 +137,7 @@ extern void res_set_type(Response* res, char* type)
 }
 
 // 设置 Set-cookie 
-extern void res_set_cookie(Response* res, char* name, char* value)
+extern void res_set_cookie(response_t* res, char* name, char* value)
 {
 	strcat(res->Set_cookie, "Set-cookie:");
 	strcat(res->Set_cookie, name);
@@ -138,21 +147,21 @@ extern void res_set_cookie(Response* res, char* name, char* value)
 }
 
 // 设置 session
-extern void res_set_session(Response*res , char* Session_str) 
+extern void res_set_session(response_t*res , char* Session_str) 
 {
 	
 	res_set_cookie(res, "dmfsession", Session_str);
 }
 
 // 设置 body
-extern void res_set_body(Response* res, char* body, unsigned int size)
+extern void res_set_body(response_t* res, char* body, unsigned int size)
 {
 	res->pbody = body;
 	res->body_size = size;
 }
 
 // 将结构体中的变量组合成字符串 发送
-extern void res_parse_send(Response* res) 
+extern void res_parse_send(response_t* res) 
 {
 	char* final_str = malloc(sizeof(char)* FINAL_STR_SIZE);
 	memset(final_str, 0, FINAL_STR_SIZE);
@@ -168,24 +177,26 @@ extern void res_parse_send(Response* res)
 	int head_len = strlen(final_str);
 	memcpy(final_str + head_len, res->pbody, res->body_size);
 
-	res_handle(res->fd, final_str, head_len + res->body_size);
+	res_handle(res->conn, final_str, head_len + res->body_size);
 	free(final_str);
 }
+
 
 
 // 以下是静态文件响应函数
 // *************************************************************************
 
-extern void res_static(int acceptFd, char* path, unsigned int size, 
+extern void res_static(connection_tp conn, char* path, unsigned int size, 
 						char* ext, char* content_type) 
 {
+	// int acceptFd = conn->per_handle_data->Socket;
 	if(size > 1024*1024*1) {			//  文件大于 1Mb 调用文件handle
-		res_file_handle(acceptFd, path, content_type, size);
+		res_file_handle(conn, path, content_type, size);
 		return;
 	}
 	char* res_str = res_load_file(path);
-	Response res;
-	res_init(acceptFd, &res);
+	response_t res;
+	res_init(conn, &res);
 	res_set_head(&res, "200");
 	res_set_type(&res, content_type);
 	res_set_body(&res, res_str, size);
@@ -201,7 +212,7 @@ static char* res_load_file(char *path)
 	FILE *fp;
 	fp = fopen( path, "rb" );
 	if(fp == NULL){ 
-		printf("[Response: ]%s open Failed\n", path);  
+		printf("[response_t: ]%s open Failed\n", path);  
 		return "";
 	}
 	unsigned long int file_size;
@@ -219,9 +230,11 @@ static char* res_load_file(char *path)
 }
 
 // 大文件调用此模块进行返回 
-static void res_file_handle(int acceptFd, char* path, char* content_type, 
+static void res_file_handle(connection_tp conn, char* path, char* content_type, 
 							unsigned int size) 
 {
+	int acceptFd = conn->per_handle_data->Socket;
+
 	char head[512] = {0};
 	strcat(head, "HTTP/1.1 200 OK\r\n");
 	strcat(head, "Content-Type: ");
@@ -241,11 +254,7 @@ static void res_file_handle(int acceptFd, char* path, char* content_type,
 
 	fp = fopen(path, "rb");
 	if(fp == NULL){
-		#ifdef __WIN32__
-		closesocket(acceptFd);
-		#elif __linux__
-		close(acceptFd);
-		#endif // linux 
+		close_socket(acceptFd);
 		return;
 	}
 	fseek(fp, 0L, 2);
@@ -266,10 +275,5 @@ static void res_file_handle(int acceptFd, char* path, char* content_type,
 	// printf("%d, %ld \n", size, file_size);
 	// printf("%d, %ld \n", size, all_size);
 
-	#ifdef __WIN32__
-	closesocket(acceptFd);
-	#elif __linux__
-	close(acceptFd);
-	#endif // linux 
-
+	close_socket(acceptFd);
 }

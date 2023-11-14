@@ -42,6 +42,11 @@
 #define SERVER_PORT 80
 #define OutErr(a) printf("%s %s %d \n", a, __FILE__ , __LINE__ );
 
+#ifdef __WIN32__
+#define close_socket closesocket
+#else
+#define close_socket close
+#endif // __WIN32__
 
 #ifdef __cplusplus
 extern "C" {

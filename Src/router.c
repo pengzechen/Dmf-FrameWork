@@ -21,9 +21,9 @@
 // 全局 view 回调函数
 ctl_fun_map_t 			g_cmp;
 
-struct FileInfo 	g_file_list[MAX_FILES];
+struct FileInfo 		g_file_list[MAX_FILES];
 
-int 				g_num_files = 0;
+int 					g_num_files = 0;
 
 
 void router_init() 
@@ -75,7 +75,7 @@ void router_init()
 }
 
 
-void router_handle(int acceptFd, Request *req) 
+void router_handle(connection_tp conn, Request *req) 
 {
 	int flag = 0;
 	ContFun func_view;
@@ -86,7 +86,7 @@ void router_handle(int acceptFd, Request *req)
 		if( strcmp(req->path, g_cmp.keys[i]) == 0) {
 			func_view = g_cmp.cf[i];
 
-			func_view(acceptFd, req);
+			func_view(conn, req);
 			
 			flag = 1;	// 回调函数找到了
 		}
@@ -98,12 +98,12 @@ void router_handle(int acceptFd, Request *req)
 		// int num = search_local_file(local_path);
 		for(int i=0; i <= g_num_files; i++) {
 			if( strcmp(req->path, g_file_list[i].url) == 0) {
-				res_static(acceptFd, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
+				res_static(conn, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
 				flag = 1;	// 静态资源找到了
 			}
 		}
 		if(flag == 0){	
-			res_notfound(acceptFd);   // 返回404Not Found
+			res_notfound(conn);   // 返回404Not Found
 		}
 	}
 }

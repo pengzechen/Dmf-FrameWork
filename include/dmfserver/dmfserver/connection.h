@@ -35,12 +35,13 @@ typedef struct {
 	OVERLAPPED Overlapped;
 	WSABUF DataBuf;
 	CHAR Buffer[ DATA_BUFSIZE ];
-} per_io_data_t,* per_io_data_tp;
+} per_io_data_t, * per_io_data_tp;
 
 typedef struct {
 	SOCKET Socket;
     struct _connection_t * conn;
-} per_handle_data_t,* per_handle_data_tp;
+} per_handle_data_t, * per_handle_data_tp;
+
 #endif  		// Windows
 
 typedef struct _connection_t {
@@ -61,7 +62,7 @@ extern void
 send_next (connection_tp conn) ;
 
 extern void 
-connection_close(connection_tp conn);
+connection_close (connection_tp conn);
 
 extern void
 connection_free_base (connection_tp conn);

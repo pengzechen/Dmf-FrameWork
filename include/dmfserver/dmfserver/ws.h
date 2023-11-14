@@ -23,7 +23,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <dmfserver/connection.h>
 
 
 #ifdef __WIN32__
@@ -39,7 +39,7 @@
 extern "C" {
 #endif
 
-extern void upto_ws_prot( int a, char key[]) ;
+extern void upto_ws_prot( connection_tp conn, char key[]) ;
 
 
 #ifdef __cplusplus

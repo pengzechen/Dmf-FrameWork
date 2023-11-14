@@ -17,7 +17,7 @@ void setsession(connection_tp conn, const Request *req)
 	char Session_str[11] = {'\0'};
 	SessionCreate(Session_str, key, data);
 
-	Response res;
+	response_t res;
 	res_init(conn, &res);
 	res_set_head(&res, "200");
 	res_set_type(&res, "text/html;utf-8;");

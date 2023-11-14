@@ -20,7 +20,7 @@
 #define __CFG_INCLUDE__
 
 
-#define __SERVER_MPOOL__		// 启用server内存池
+// #define __SERVER_MPOOL__		// 启用server内存池
 
 // #define __SERVER_IOCP_DEBUG__  // 不会启用request router 等模块，接到请求直接返回 hello woorld 字符串
 
