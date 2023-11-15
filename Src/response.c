@@ -61,7 +61,8 @@ extern void res_notfound(connection_tp conn)
 	// int acceptFd = conn->per_handle_data->Socket;
 
 	char final_str[FINAL_STR_SIZE] = {0};
-	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\nConnection: close;\r\nContent-Length: 18\r\n\r\n" );
+	strcat( final_str, "HTTP/1.1 404 \r\nContent-type:text/html;utf-8;\r\n"
+			"Connection: close;\r\nContent-Length: 18\r\n\r\n" );
 	strcat( final_str, "<h1>Not Found</h1>");
 	
 	res_handle(conn, final_str, strlen(final_str));

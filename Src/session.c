@@ -259,7 +259,7 @@ extern void SessionCreate(char* random_str, char* key, char* value)
 
 /*  \brief 通过 session_str 和数据名得到对应数据 
     \param 传入 req   */
-extern char* getSessionR(const Request* req, char* key) 
+extern char* getSessionR(const request_t* req, char* key) 
 {
    	char req_session[32] = {0};
 	req_get_session_str(req, req_session);
@@ -316,7 +316,7 @@ extern char* getSession(char* session_str, char* key)
     \return  成功返回 1, 失败返回非0 
     \return -2: session 链中没有找到目标 session_str 
     \return -1: req 对象没有 session  */
-extern int SessionAddR(const Request* req, char* key, char* data) 
+extern int SessionAddR(const request_t* req, char* key, char* data) 
 {
     char str1[32] = {0};
     req_get_session_str(req, str1);
@@ -371,7 +371,7 @@ extern int SessionAdd(char* session_str, char* key, char* value)
 
 /*  \brief 修改session data 
     \return 修改成功返回1  */
-extern int UpdateSessionDataR(const Request* req, char* key, char* newdata) 
+extern int UpdateSessionDataR(const request_t* req, char* key, char* newdata) 
 {
     char str1[32] = {0};
     req_get_session_str(req, str1);

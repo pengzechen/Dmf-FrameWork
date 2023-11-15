@@ -1,6 +1,6 @@
 
 
-void setsession(connection_tp conn, const Request *req)
+void setsession(connection_tp conn, const request_t *req)
 {
 	char res_str[80] = {0};
 
@@ -27,7 +27,7 @@ void setsession(connection_tp conn, const Request *req)
 	res_parse_send(&res);
 }
 
-void getsession(connection_tp conn, const Request *req) 
+void getsession(connection_tp conn, const request_t *req) 
 {
 	char* data = hashmap_get( req->query, "name");
 	
@@ -42,7 +42,7 @@ void getsession(connection_tp conn, const Request *req)
 	}
 }
 
-void sessionadd(connection_tp conn, const Request *req) 
+void sessionadd(connection_tp conn, const request_t *req) 
 {
 
 	char * key = hashmap_get( req->query, "key"); 
@@ -68,7 +68,7 @@ void sessionadd(connection_tp conn, const Request *req)
 	res_row(conn, res_str);
 }
 
-void updatesession(connection_tp conn, const Request *req) 
+void updatesession(connection_tp conn, const request_t *req) 
 {
 	char * key = hashmap_get( req->query, "key"); 
 	char * data = hashmap_get( req->query, "data");
@@ -83,7 +83,7 @@ void updatesession(connection_tp conn, const Request *req)
 		res_row(conn, "Update faild");
 }
 
-void sessiondebug(connection_tp conn, const Request* req) 
+void sessiondebug(connection_tp conn, const request_t* req) 
 {
 	printf("-----------session debug-------------\n");
 	SessionAll();

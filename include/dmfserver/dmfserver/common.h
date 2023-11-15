@@ -16,27 +16,15 @@
     *
     */
 
+#ifndef __COMMON_INCLUDE__
+#define __COMMON_INCLUDE__
 
-#ifndef __MIDDLEWARE_INCLUDE__
-#define __MIDDLEWARE_INCLUDE__
+#include <dmfserver/mpool.h>
 
-#include <dmfserver/request.h>
-#include <dmfserver/response.h>
-#include <dmfserver/connection.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    static int middleware_check_if_too_often(connection_tp conn);
-
-    extern void middleware_init();
-
-    extern int middleware_handle(connection_tp conn );
-
-#ifdef __cplusplus
-}		/* end of the 'extern "C"' block */
-#endif
+typedef struct _server_t {
+	pool_t pool_io;
+	pool_t pool_handle;
+} server_t;
 
 
-#endif // __MIDDLEWARE_INCLUDE__
+#endif  // __COMMON_INCLUDE__

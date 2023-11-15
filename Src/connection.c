@@ -19,21 +19,23 @@
 #include <dmfserver/connection.h>
 #include <dmfserver/cfg.h>
 #include <dmfserver/mpool.h>
+#include <dmfserver/common.h>
 
+extern server_t g_server;
 
 // 仅仅做分配工作
 extern connection_tp 
 new_connection () {
     connection_tp conn_ptr = (connection_tp)malloc(sizeof(connection_t));
 #ifdef __SERVER_MPOOL__
-    conn_ptr-> per_handle_data =  (per_handle_data_t*)pool_alloc2();
-    conn_ptr-> per_io_data = (per_io_data_t*)pool_alloc();
+    conn_ptr-> per_handle_data =  (per_handle_data_t*)pool_alloc(&g_server.pool_handle);
+    conn_ptr-> per_io_data = (per_io_data_t*)pool_alloc(&g_server.pool_io);
 #else
     conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
     // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
     conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     
 #endif // __SERVER_MPOOL__
-    conn_ptr->req = (Request*)malloc(sizeof(Request));
+    conn_ptr->req = (request_t*)malloc(sizeof(request_t));
     
     return conn_ptr;
 }
@@ -64,8 +66,8 @@ send_next (connection_tp conn) {
 extern void
 connection_free_base (connection_tp conn) {
 #ifdef __SERVER_MPOOL__
-    pool_free( conn->per_io_data );
-    pool_free2( conn->per_handle_data );
+    pool_free(&g_server.pool_io, conn->per_io_data );
+    pool_free(&g_server.pool_handle, conn->per_handle_data );
 #else 
     free( conn->per_io_data);
     free( conn->per_handle_data);
@@ -78,8 +80,8 @@ connection_free (connection_tp conn) {
     free(conn->req);
 
 #ifdef __SERVER_MPOOL__
-    pool_free( conn->per_io_data );
-    pool_free2( conn->per_handle_data );
+    pool_free(&g_server.pool_io, conn->per_io_data );
+    pool_free(&g_server.pool_handle, conn->per_handle_data );
 #else 
     free( conn->per_io_data );
     free( conn->per_handle_data );

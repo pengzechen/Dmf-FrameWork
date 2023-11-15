@@ -1,6 +1,6 @@
 
 #include <dmfserver/ws.h>
-void wsfunc(connection_tp conn, const Request *req) 
+void wsfunc(connection_tp conn, const request_t *req) 
 {	
     char key[128] = {0};
     req_get_ws_key(req, key);

@@ -1,7 +1,7 @@
 #include <dmfserver/model.h>
 
 
-void mysqltest(connection_tp conn, const Request* req)
+void mysqltest(connection_tp conn, const request_t* req)
 {
 	
 	mysql_conn* conn1 = get_mysql_connection_block();
@@ -24,7 +24,7 @@ void mysqltest(connection_tp conn, const Request* req)
 	release_mysql_connection(conn1);
 }
 
-void mysqltest1(connection_tp conn, const Request* req) 
+void mysqltest1(connection_tp conn, const request_t* req) 
 {
 	
 	exe_sql("select id from test where id=3;");

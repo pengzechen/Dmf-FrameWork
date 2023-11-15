@@ -17,7 +17,7 @@ void usleep1(unsigned long usec)
 }
 #endif
 
-void string(connection_tp conn, const Request* req)
+void string(connection_tp conn, const request_t* req)
 {
 	// void *block1 = pool_alloc();
     // usleep1(400);

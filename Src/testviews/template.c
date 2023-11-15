@@ -5,7 +5,7 @@ void mfunction(char *out, char *in) {
 	strcpy(out, in);
 }
 
-void template(connection_tp conn, const Request *req) {
+void template(connection_tp conn, const request_t *req) {
 
 	struct Kvmap kv0 = {.key = "name", .value = "Dmfserver", .type = 1};
 	struct Kvmap kv1 = {.key = "date", .value = "2023/4/14", .type = 1};

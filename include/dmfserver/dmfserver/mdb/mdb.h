@@ -32,7 +32,7 @@
 /*      cache Shared Memory       */
     #define SHARED_STR      "cache_shared_memory"
     #define SHARED_MUTEX    "cache_shared_memory_mutex"
-    #define MAX_ENTRIES 65535
+    #define MAX_ENTRIES 512
 
     #define MAX_KEY_LEN 64
     #define MAX_VALUE_LEN 512
@@ -50,7 +50,7 @@
 /*      Middle1 Shared Memory       */
 #define IP_LIMIT_SHARED_STR     "ip_limit_shared_memory"
 #define IP_LIMIT_MUTEX          "ip_limit_shared_memory_mutex"
-#define MAX_IP_LIMIT_HANDLE 10240
+#define MAX_IP_LIMIT_HANDLE 1024
 
 typedef struct _IpLimit {
     char    ip[16];

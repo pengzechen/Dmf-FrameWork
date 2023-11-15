@@ -37,13 +37,13 @@ extern void middleware_init()
     printf("[SERVER: Info] middleware init successfully...\n");
 }
 
-static int middleware_check_if_too_often(const Request* req)
+static int middleware_check_if_too_often(connection_tp conn)
 {
     // 得到客户端ip地址
     struct sockaddr_in client_addr;
     memset(&client_addr, 0x00, sizeof(client_addr));
     socklen_t nl=sizeof(client_addr);
-    getpeername(req->pfd.fd, (struct sockaddr*)&client_addr, &nl);
+    getpeername(conn->per_handle_data->Socket , (struct sockaddr*)&client_addr, &nl);
     char* addr=inet_ntoa(client_addr.sin_addr);  
 
     switch ( ip_check_valid(addr) ) {
@@ -64,9 +64,9 @@ static int middleware_check_if_too_often(const Request* req)
 // 在返回之前要调用response模块返回请求错误
 extern int middleware_handle(connection_tp conn )
 {
-    Request* req = conn->req;
+    request_t* req = conn->req;
 
-    if( middleware_check_if_too_often(req) != 0 ) {
+    if( middleware_check_if_too_often(conn) != 0 ) {
 
         res_without_permission(conn);
         return -1001;

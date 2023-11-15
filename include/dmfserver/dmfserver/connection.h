@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dmfserver/request.h>
+#include <dmfserver/mpool.h>
 
 #define DATA_BUFSIZE 2048
 
@@ -60,7 +61,7 @@ typedef struct {
 typedef struct _connection_t {
     per_io_data_tp      per_io_data;
     per_handle_data_tp  per_handle_data;
-    Request             *req;
+    request_t             *req;
 } connection_t, * connection_tp;
 
 

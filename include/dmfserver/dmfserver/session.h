@@ -64,11 +64,11 @@ extern void SessionCreate(char* ,char*, char*);
 
 extern void SessionAll();
 
-extern char * getSessionR(const Request* req, char* key);
+extern char * getSessionR(const request_t* req, char* key);
 
-extern int SessionAddR(const Request* req, char* key, char* data);
+extern int SessionAddR(const request_t* req, char* key, char* data);
 
-extern int UpdateSessionDataR(const Request* req, char* key, char* newdata);
+extern int UpdateSessionDataR(const request_t* req, char* key, char* newdata);
 
 extern char * getSession(char* session_str, char* key);
 

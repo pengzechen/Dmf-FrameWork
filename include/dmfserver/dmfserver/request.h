@@ -96,48 +96,41 @@ struct http_body_t {
 	size_t 		length;
 };
 
-typedef struct Perfd {
-	SSL		* 	ssl;
-	int 		fd;
-}Perfd;
 
 struct req {
-	char 			method[ HTTP_METHOD_MAX ];
-	char 			path[ HTTP_URI_MAX];
-	char 			protocol[ HTTP_PROTOCOL_MAX ];
-	char 			version[ HTTP_VERSION_MAX ];
-	int 			multi_part_num;
-	
+	char 			method		[ HTTP_METHOD_MAX ];
+	char 			path		[ HTTP_URI_MAX];
+	char 			protocol	[ HTTP_PROTOCOL_MAX ];
+	char 			version		[ HTTP_VERSION_MAX ];
 	hashmap_tp     query;
 	hashmap_tp     params;
-
 	struct http_body_t 		body;
-	Perfd 			        pfd;
-	
+
+	int 			multi_part_num;
 	struct Multipart * multi[ MULTI_PART_MAX_NUM ];
 };
 
-typedef struct req Request;
+typedef struct req request_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void req_parse_multi_part (Request *request, char *boundary );
+void req_parse_multi_part (request_t * request, char * boundary );
 
-void req_parse_init(Request* request);
+void req_parse_init(request_t * request);
 
-void req_parse_http(Request *request, char *data);
+void req_parse_http(request_t * request, char * data);
 
-void req_get_session_str(const Request* req,  char session_str[]);
+void req_get_session_str(const request_t * req,  char session_str[]);
 
-void req_get_param(const Request *req, char* key, 	char data[]);
+void req_get_param(const request_t * req, char * key, 	char data[]);
 
-void req_get_query(const Request *req, char* key, 	char data[]);
+void req_get_query(const request_t * req, char * key, 	char data[]);
 
-void req_get_ws_key(const Request* req,  char ws_key[]);
+void req_get_ws_key(const request_t * req,  char ws_key[]);
 
-void req_free(Request *req);
+void req_free(request_t * req);
 
 
 #ifdef __cplusplus

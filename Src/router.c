@@ -75,7 +75,7 @@ void router_init()
 }
 
 
-void router_handle(connection_tp conn, Request *req) 
+void router_handle(connection_tp conn, request_t *req) 
 {
 	int flag = 0;
 	ContFun func_view;

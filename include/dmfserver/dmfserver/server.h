@@ -89,6 +89,9 @@ extern void simple_server_make();
 
 extern void simple_ssl_server_make();
 
+extern void server_init ();
+
+extern void server_start ();
 
 #ifdef __WIN32__   // Windows IOCP Model
 extern int iocp_server_make();

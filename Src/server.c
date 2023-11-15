@@ -19,6 +19,11 @@
 #include <dmfserver/server.h>
 #include <dmfserver/connection.h>
 #include <dmfserver/cfg.h>
+#include <dmfserver/common.h>
+
+server_t g_server;
+
+#define SERVER_MPOOL_NUM 8192
 
 
 static SSL_CTX* get_ssl_ctx()
@@ -48,16 +53,44 @@ static SSL_CTX* get_ssl_ctx()
 }
 
 
+extern void server_init () {
+
+#define SIZE_HANDLE sizeof(per_handle_data_t)
+#define SIZE_IO sizeof(per_io_data_t)
+    #ifdef __SERVER_MPOOL__
+        printf("server mpool start !\n");
+        pool_init(&g_server.pool_io, SIZE_IO, SIZE_IO * SERVER_MPOOL_NUM);  // server 模块内存池初始化
+        pool_init(&g_server.pool_handle, SIZE_HANDLE, SIZE_HANDLE * SERVER_MPOOL_NUM);       // server 模块内存池初始化
+    #endif // __SERVER_MPOOL__
+}
+
+
+extern void server_start () {
+    // 根据使用的平台启动服务器
+#ifdef __WIN32__	// Win32
+	iocp_server_make();
+	// simple_server_make();
+	// simple_ssl_server_make();
+#elif __linux__ 	// linux
+	// simple_server_make();
+	// simple_ssl_server_make();
+	epoll_server_make();
+    // multi_process_init(&epoll_server_make);
+	// epoll_ssl_server();
+#endif 				// linux
+
+}
+
+
 static void req_res_handler(int acceptFd ) 
 {
 	
 	char res_str[ RECEIVE_MAX_BYTES ] = {'\0'};
 
-	Request req1;
+	request_t req1;
 	int receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
     printf("recv: \n%s\n", res_str);
 
-    Perfd pfd = {.fd = acceptFd, .ssl = NULL};
     req_parse_init(&req1);
 	req_parse_http(&req1, res_str);
 	
@@ -288,9 +321,6 @@ int iocp_server_make()
         PerHandleData->Socket = sClient;
         PerHandleData->conn   = conn_ptr;
         
-
-        // printf("per_handle_data_t size: %d\n", sizeof(per_handle_data_t));
-        // printf("per_io_data_t size: %d\n", sizeof(per_io_data_t));
         // 将接入的客户端和完成端口联系起来
         CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
 
@@ -308,7 +338,7 @@ int iocp_server_make()
     DWORD dwByteTrans;
     //将一个已经完成的IO通知添加到IO完成端口的队列中.
     //提供了与线程池中的所有线程通信的方式.
-    PostQueuedCompletionStatus(completion_port,dwByteTrans, 0, 0);  //IO操作完成时接收的字节数.
+    PostQueuedCompletionStatus(completion_port, dwByteTrans, 0 , 0);  //IO操作完成时接收的字节数.
 
     closesocket(sListen);
 
@@ -358,7 +388,7 @@ static void* epoll_handle_io(void* p)
                 connection_tp conn_ptr = (connection_tp)malloc(sizeof(connection_t));
                 conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
                 conn_ptr->per_io_data  =  (per_io_data_t*)malloc(sizeof(per_io_data_t));     
-                conn_ptr->req = (Request*)malloc(sizeof(Request));
+                conn_ptr->req = (request_t*)malloc(sizeof(request_t));
 
                 conn_ptr->per_handle_data->Socket = i_connfd;
                 conn_ptr->per_handle_data->efd = epfd;

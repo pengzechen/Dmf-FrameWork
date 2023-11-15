@@ -26,14 +26,14 @@
 /*	
 	*						REQUEST MODEL
 	*
-	*	This model parse http, and save relevant infomation in a const Request struct
+	*	This model parse http, and save relevant infomation in a const request_t struct
 	*	this model doesn't do well, I will imporove it in the future. (Ajax 2023/4/28)
 	*   It Reduces server performance by 16 percent.
 	*/
 
 #include <dmfserver/request.h>
 
-void req_parse_multi_part (Request *request, char *boundary ) 
+void req_parse_multi_part (request_t *request, char *boundary ) 
 {
 	
 	char *p = NULL;
@@ -228,14 +228,14 @@ void req_parse_multi_part (Request *request, char *boundary )
 }
 
 
-void req_parse_init (Request *request) {
+void req_parse_init (request_t *request) {
 	// request->pfd = pfd;
 	request->query = hashmap_create(17);
 	request->params = hashmap_create(17);
 }
 
 
-void req_parse_http(Request *request, char *data )
+void req_parse_http(request_t *request, char *data )
 {
 	
 	//p 指向 data 首地址
@@ -261,7 +261,6 @@ void req_parse_http(Request *request, char *data )
 	
 	for(int t=0; t < MULTI_PART_MAX_NUM; t++)
 		request->multi[t] = NULL;
-	
 	
 	
 	while( *p != '\0' ) {
@@ -499,14 +498,14 @@ void req_parse_http(Request *request, char *data )
 }
 
 
-void req_get_session_str(const Request* req, char session_str[]) // OUT 
+void req_get_session_str(const request_t* req, char session_str[]) // OUT 
 {
     char* temp;
 	char* data = hashmap_get(req->params, "Cookie");
 
 	if( data != NULL ) {
 		temp = strstr(data, "dmfsession=");
-		if( temp != NULL && strlen(temp) >= 21 ){  //
+		if( temp != NULL && strlen(temp) >= 21 ) {  //
 			*(temp + 21) = '\0';
 			strcpy(session_str, temp + 11);
 		}
@@ -515,7 +514,7 @@ void req_get_session_str(const Request* req, char session_str[]) // OUT
 }
 
 
-void req_get_ws_key(const Request* req, char ws_key[]) 			// OUT 
+void req_get_ws_key(const request_t* req, char ws_key[]) 			// OUT 
 {
 	char* data = hashmap_get(req->params, "Sec-WebSocket-Key");
 	if( data != NULL ) {
@@ -525,7 +524,7 @@ void req_get_ws_key(const Request* req, char ws_key[]) 			// OUT
 }
 
 
-void req_get_param(const Request *req, char* key, char data[]) // OUT
+void req_get_param(const request_t *req, char* key, char data[]) // OUT
 {
 	char* data1 = hashmap_get(req->params, key);
 	if( data1 != NULL ) {
@@ -535,7 +534,7 @@ void req_get_param(const Request *req, char* key, char data[]) // OUT
 }
 
 
-void req_get_query(const Request *req, char* key, char data[]) // OUT
+void req_get_query(const request_t *req, char* key, char data[]) // OUT
 {
 	char* data1 = hashmap_get(req->query, key);
 	if( data1 != NULL ) {
@@ -545,7 +544,7 @@ void req_get_query(const Request *req, char* key, char data[]) // OUT
 }
 
 
-void req_free(Request *req) 
+void req_free(request_t *req) 
 {
 
 	hashmap_destroy(req->query);

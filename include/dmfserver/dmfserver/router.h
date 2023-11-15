@@ -56,7 +56,7 @@ struct FileInfo {
     char url[512];
 };
 
-typedef void (*ContFun) (connection_tp conn, const Request *req );
+typedef void (*ContFun) (connection_tp conn, const request_t *req );
 
 #define RouterAdd(name) void name()
 
@@ -80,7 +80,7 @@ extern "C" {
 
 extern void router_init();
 
-extern void router_handle(connection_tp conn, Request *req);
+extern void router_handle(connection_tp conn, request_t *req);
 
 static int search_local_file(char* local_paths[]);
 

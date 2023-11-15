@@ -58,7 +58,6 @@ void multi_process_init(worker_function _wf);
 
 int main(int argc, char* argv[]) 
 {
-    test_map();
 #if 1
 	#ifdef __WIN32__
 		// system("cls");
@@ -66,11 +65,6 @@ int main(int argc, char* argv[])
 		// ShowWindow(GetConsoleWindow(), SW_HIDE);
 		// FreeConsole();
 	#endif // WIN32
-
-
-    #ifdef __SERVER_MPOOL__
-        printf("server mpool start !\n");
-    #endif // __SERVER_MPOOL__
 
     // 安装信号
     // signal(SIGINT, handle_signal);
@@ -82,14 +76,9 @@ int main(int argc, char* argv[])
     session_init();     // session 模块初始化
     template_init();    // 模板模块初始化
     router_init();      // 路由模块初始化
-
     mysql_pool_init();  // mysql 连接池初始化
     elr_mpl_init();     // 内存池初始化
-
-    pool_init(2076, 2076*8192);  // server 模块内存池初始化
-    pool_init2(8, 8*8192);       // server 模块内存池初始化
-    
-    mdb_operate_init();          // mdb 模块初始化
+    mdb_operate_init(); // mdb 模块初始化
 
 
     // *以下载入 views 的函数，
@@ -101,22 +90,11 @@ int main(int argc, char* argv[])
     mdb();
     ws();
 
-    // 根据使用的平台启动服务器
-#ifdef __WIN32__	// Win32
-	iocp_server_make();
-	// simple_server_make();
-	// simple_ssl_server_make();
-#elif __linux__ 	// linux
-	// simple_server_make();
-	// simple_ssl_server_make();
-	epoll_server_make();
-    // multi_process_init(&epoll_server_make);
-	// epoll_ssl_server();
-#endif 				// linux
+    server_init();
+    server_start();
+
 
     // 平滑退出时做相应的清理工作
-	pool_destroy();
-    pool_destroy2();
     template_free();
 
 #endif

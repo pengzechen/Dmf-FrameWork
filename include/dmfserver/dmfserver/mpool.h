@@ -49,15 +49,11 @@ typedef struct {
 extern "C" {
 #endif
 
-void pool_init(int block_size, int total_size);
-void pool_destroy();
-void *pool_alloc();
-void pool_free(void *data);
+void pool_init(pool_t * pool, int block_size, int total_size);
+void pool_destroy(pool_t * pool);
+void * pool_alloc(pool_t * pool);
+void pool_free(pool_t * pool, void *data);
 
-void pool_init2(int block_size, int total_size);
-void pool_destroy2();
-void *pool_alloc2();
-void pool_free2(void *data);
 
 #ifdef __cplusplus
 }		/* end of the 'extern "C"' block */
