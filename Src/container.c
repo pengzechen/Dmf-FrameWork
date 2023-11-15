@@ -16,19 +16,21 @@
     *
     */
    
-#include <dmfserver/server.h>
+#include <dmfserver/container.h>
 #include <dmfserver/connection.h>
 #include <dmfserver/cfg.h>
 #include <dmfserver/common.h>
 
 server_t g_server;
+_Atomic int all = 0;
+
 
 #define SERVER_MPOOL_NUM 8192
 
 
-static SSL_CTX* get_ssl_ctx()
+static SSL_CTX * get_ssl_ctx()
 {
-    SSL_CTX *ctx ;
+    SSL_CTX * ctx ;
     SSL_library_init();
     OpenSSL_add_all_algorithms();
     SSL_load_error_strings();
@@ -53,60 +55,62 @@ static SSL_CTX* get_ssl_ctx()
 }
 
 
-extern void server_init () {
+extern void container_init () {
 
 #define SIZE_HANDLE sizeof(per_handle_data_t)
 #define SIZE_IO sizeof(per_io_data_t)
-    #ifdef __SERVER_MPOOL__
-        printf("server mpool start !\n");
-        pool_init(&g_server.pool_io, SIZE_IO, SIZE_IO * SERVER_MPOOL_NUM);  // server 模块内存池初始化
-        pool_init(&g_server.pool_handle, SIZE_HANDLE, SIZE_HANDLE * SERVER_MPOOL_NUM);       // server 模块内存池初始化
-    #endif // __SERVER_MPOOL__
+
+#ifdef __SERVER_MPOOL__
+    printf("server mpool start !\n");
+    pool_init(&g_server.pool_io, SIZE_IO, SIZE_IO * SERVER_MPOOL_NUM);  // server 模块内存池初始化
+    pool_init(&g_server.pool_handle, SIZE_HANDLE, SIZE_HANDLE * SERVER_MPOOL_NUM);       // server 模块内存池初始化
+#endif // __SERVER_MPOOL__
+
 }
 
 
-extern void server_start () {
+extern void container_start () {
     // 根据使用的平台启动服务器
-#ifdef __WIN32__	// Win32
-	iocp_server_make();
-	// simple_server_make();
-	// simple_ssl_server_make();
-#elif __linux__ 	// linux
-	// simple_server_make();
-	// simple_ssl_server_make();
-	epoll_server_make();
-    // multi_process_init(&epoll_server_make);
-	// epoll_ssl_server();
-#endif 				// linux
+#ifdef __WIN32__
+	iocp_container_make();
+	// simple_container_make();
+	// simple_ssl_container_make();
+#elif __linux__
+	// simple_container_make();
+	// simple_ssl_container_make();
+	epoll_container_make();
+    // multi_process_init(&epoll_container_make);
+	// epoll_ssl_container();
+#endif // linux
 
 }
 
 
-static void req_res_handler(int acceptFd ) 
+static void simple_container_handler(connection_tp conn_ptr ) 
 {
 	
 	char res_str[ RECEIVE_MAX_BYTES ] = {'\0'};
 
-	request_t req1;
-	int receive_bytes = recv( acceptFd, res_str, sizeof(res_str), 0 );
-    printf("recv: \n%s\n", res_str);
+	int receive_bytes = recv( conn_ptr->per_handle_data->Socket, res_str, sizeof(res_str), 0 );
+    // printf("recv: \n%s\n", res_str);
 
-    req_parse_init(&req1);
-	req_parse_http(&req1, res_str);
+	req_parse_http(conn_ptr->req, res_str);
 	
-	char time [30] = {'\0'};
-	server_time(time);
-	printf("[%s][Server: Info] %s\n", time, req1.path);
+	// 进行必要日志记录
+    char time [30] = {'\0'};
+    server_time(time);
+    log_info("SERVER", 211, "[%s][Server: Info] %s %d id: %d , all: %d", 
+            time , conn_ptr->req->path, strlen(conn_ptr->per_io_data->Buffer), 
+            GetCurrentThreadId (), all++);
+    memset(time, 0, 30);
 	
-	// router_handle(acceptFd, &req1);
-	//通过请求的 path 调用了对应的处理函数
+	router_handle(conn_ptr, conn_ptr->req);
+	// 通过请求的 path 调用了对应的处理函数
 	
-	req_free(&req1);
-
 }
 
 
-void simple_server_make()
+extern void simple_container_make()
 {
 #ifdef __WIN32__
     wsa_init();
@@ -119,7 +123,12 @@ void simple_server_make()
     
 	while(1){
 		sAccept = accept(sListen, (struct sockaddr *)&sock_in, &sock_in_len);
-		req_res_handler( sAccept );
+        connection_tp conn_ptr = new_connection();
+        // 初始化一个 request
+        req_parse_init(conn_ptr->req);
+        conn_ptr->per_handle_data->Socket = sAccept;
+
+		simple_container_handler( conn_ptr );
 	}
 	
     close(sListen); //关闭 socket
@@ -130,7 +139,7 @@ void simple_server_make()
 }
 
 
-void simple_ssl_server_make()
+extern void simple_ssl_container_make()
 {
 	SSL_CTX *ctx = get_ssl_ctx();
 #ifdef __WIN32__
@@ -173,11 +182,9 @@ void simple_ssl_server_make()
 }
 
 
-#ifdef __WIN32__  // WIN32
+#ifdef __WIN32__  
 
-_Atomic int all = 0;
-
-DWORD WINAPI iocp_handle_io(LPVOID lpParam)
+DWORD WINAPI iocp_handle(LPVOID lpParam)
 {
     
     HANDLE CompletionPort = (HANDLE)lpParam;
@@ -274,7 +281,7 @@ DWORD WINAPI iocp_handle_io(LPVOID lpParam)
 }
 
 
-int iocp_server_make() 
+int iocp_container_make() 
 {
 
     wsa_init();
@@ -285,7 +292,7 @@ int iocp_server_make()
     GetSystemInfo(&_system_info);
 
     for(int i = 0; i < _system_info.dwNumberOfProcessors * 2; i++) {
-        HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle_io, completion_port, 0, NULL);
+        HANDLE hProcessIO = CreateThread(NULL, 0, iocp_handle, completion_port, 0, NULL);
         if(hProcessIO) 
             CloseHandle(hProcessIO);
     }
@@ -324,7 +331,7 @@ int iocp_server_make()
         // 将接入的客户端和完成端口联系起来
         CreateIoCompletionPort((HANDLE)sClient, completion_port,(DWORD)PerHandleData, 0);
 
-        ZeroMemory( PerIoData, sizeof(per_io_data_t));
+        memset(PerIoData, 0, sizeof(per_io_data_t));
         PerIoData->DataBuf.buf = PerIoData->Buffer;
         PerIoData->DataBuf.len = DATA_BUFSIZE;
 
@@ -340,20 +347,20 @@ int iocp_server_make()
     //提供了与线程池中的所有线程通信的方式.
     PostQueuedCompletionStatus(completion_port, dwByteTrans, 0 , 0);  //IO操作完成时接收的字节数.
 
-    closesocket(sListen);
+    close_socket(sListen);
 
     wsa_cleanup();
-
-    printf("[MAIN: %d] exit\n", GetCurrentThreadId());
     
     return 0;
 }
 
 
-#elif __linux__ 
+#endif // WIN32
+
+#ifdef __linux__ 
 
 
-static void* epoll_handle_io(void* p)
+static void* epoll_handle(void* p)
 {	
     thread_arg* arg = (thread_arg*)p;
     long i_listenfd = arg->fd;
@@ -427,7 +434,7 @@ static void* epoll_handle_io(void* p)
 }
 
 
-extern void epoll_server_make() {
+extern void epoll_container_make() {
 
     long fd = 1;
     thread_arg* arg = malloc(sizeof(thread_arg));
@@ -436,7 +443,7 @@ extern void epoll_server_make() {
 
     for (int i = 0; i < 4; ++i) {
         pthread_t roundCheck;
-        pthread_create(&roundCheck, NULL, epoll_handle_io, (void*)arg);
+        pthread_create(&roundCheck, NULL, epoll_handle, (void*)arg);
         pthread_join(roundCheck, NULL);
     }
     
@@ -444,7 +451,7 @@ extern void epoll_server_make() {
 }
 
 
-extern int epoll_ssl_server()
+extern int epoll_ssl_container()
     {
         /*初始化socket*/
         int srvFd = create_socket_reuse();
@@ -607,4 +614,4 @@ extern int epoll_ssl_server()
         return 0;
     }
 
-#endif
+#endif // linux

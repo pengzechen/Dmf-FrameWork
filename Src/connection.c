@@ -15,11 +15,16 @@
     *  limitations under the License. 
     *
     */
-#include <dmfserver/socket.h>
-#include <dmfserver/connection.h>
 #include <dmfserver/cfg.h>
-#include <dmfserver/mpool.h>
 #include <dmfserver/common.h>
+
+#include <dmfserver/connection.h>
+#include <dmfserver/socket.h>
+#include <dmfserver/mpool.h>
+
+#ifdef __linux__
+#include <sys/epoll.h>
+#endif
 
 extern server_t g_server;
 
@@ -28,8 +33,8 @@ extern connection_tp
 new_connection () {
     connection_tp conn_ptr = (connection_tp)malloc(sizeof(connection_t));
 #ifdef __SERVER_MPOOL__
-    conn_ptr-> per_handle_data =  (per_handle_data_t*)pool_alloc(&g_server.pool_handle);
-    conn_ptr-> per_io_data = (per_io_data_t*)pool_alloc(&g_server.pool_io);
+    conn_ptr->per_handle_data =  (per_handle_data_t*) pool_alloc (&g_server.pool_handle);
+    conn_ptr->per_io_data = (per_io_data_t*) pool_alloc (&g_server.pool_io);
 #else
     conn_ptr->per_handle_data =  (per_handle_data_t*)malloc(sizeof(per_handle_data_t));
     // 建立一个Overlapped，并使用这个Overlapped结构对socket投递操作
@@ -55,7 +60,7 @@ send_next (connection_tp conn) {
     // 继续向 socket 投递WSARecv操作
     DWORD Flags = 0;
     DWORD dwRecv = 0;
-    ZeroMemory( conn->per_io_data, sizeof(per_io_data_t) );
+    memset( conn->per_io_data, 0, sizeof(per_io_data_t) );
     conn->per_io_data->DataBuf.buf = conn->per_io_data->Buffer;
     conn->per_io_data->DataBuf.len = DATA_BUFSIZE;
     WSARecv( conn->per_handle_data->Socket, &conn->per_io_data->DataBuf, 1, &dwRecv, 
@@ -77,8 +82,10 @@ connection_free_base (connection_tp conn) {
 extern void
 connection_free (connection_tp conn) {
     req_free(conn->req);
-    free(conn->req);
 
+
+
+    free(conn->req);
 #ifdef __SERVER_MPOOL__
     pool_free(&g_server.pool_io, conn->per_io_data );
     pool_free(&g_server.pool_handle, conn->per_handle_data );

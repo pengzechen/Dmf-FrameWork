@@ -50,24 +50,24 @@
 
 #ifdef __linux__ // Linux
 
-	#include <stdarg.h>
-	#include <assert.h>
-	#include <errno.h>
-	#include <fcntl.h>
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <arpa/inet.h>
-	#include <netdb.h>
-	#include <sys/epoll.h>
-	#include <openssl/crypto.h>
-	#include <openssl/rand.h>
+#include <stdarg.h>
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/epoll.h>
+#include <openssl/crypto.h>
+#include <openssl/rand.h>
 
-	typedef struct fd_ssl_map {
-		int fd;
-		SSL* ssl;
-		struct fd_ssl_map* next;
-	} fd_ssl_map ;
+typedef struct fd_ssl_map {
+	int fd;
+	SSL* ssl;
+	struct fd_ssl_map* next;
+} fd_ssl_map ;
 
 #endif  		// Linux
 
@@ -83,23 +83,23 @@ extern "C" {
 
 static SSL_CTX* get_ssl_ctx();
 
-static void req_res_handler(int acceptFd );
+static void simple_container_handler(connection_tp conn_ptr );
 
-extern void simple_server_make();
+extern void simple_container_make();
 
-extern void simple_ssl_server_make();
+extern void simple_ssl_container_make();
 
-extern void server_init ();
+extern void container_init ();
 
-extern void server_start ();
+extern void container_start ();
 
 #ifdef __WIN32__   // Windows IOCP Model
-extern int iocp_server_make();
+extern int iocp_container_make();
 #endif  		   // Windows
 
 #ifdef __linux__   // linux epool Model
-extern void epoll_server_make();
-extern int epoll_ssl_server();
+extern void epoll_container_make();
+extern int epoll_ssl_container();
 #endif  		   // linux
 
 #ifdef __cplusplus

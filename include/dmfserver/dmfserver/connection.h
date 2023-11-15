@@ -18,14 +18,11 @@
 
 #ifndef __CONNECTION_INCLUDE__
 #define __CONNECTION_INCLUDE__
-#ifdef __linux__
-#include <sys/epoll.h>
-#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <dmfserver/request.h>
-#include <dmfserver/mpool.h>
 
 #define DATA_BUFSIZE 2048
 

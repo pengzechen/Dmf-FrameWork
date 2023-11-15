@@ -26,18 +26,16 @@
     *       (4) clean up resource
     */
 
-#include <dmfserver/server.h>
+#include <dmfserver/container.h>
 
-#include <dmfserver/session.h>			// 初始化 session
+#include <dmfserver/session.h>			    // 初始化 session
 #include <dmfserver/cpool.h>				// 初始化 mysqlpool
 #include <dmfserver/conf/conf.h>			// 初始化 全局配置
 
-#include <dmfserver/elr_mpl/elr_mpl.h>	// 初始化 内存池
+#include <dmfserver/elr_mpl/elr_mpl.h>	    // 初始化 内存池
 #include <dmfserver/mpool.h>
 #include <dmfserver/mdb/mdb_operate.h>
 #include <dmfserver/utility/dm_map.h>
-
-#include <stdlib.h>
 
 
 #include "./testviews/session.c"
@@ -47,18 +45,13 @@
 #include "./testviews/mdb.c"
 #include "./testviews/ws.c"
 
-
-#define OVECCOUNT 30 /* should be a multiple of 3 */
-#define EBUFLEN 128
-#define BUFLEN 1024
-
 typedef void (*worker_function)();
 void multi_process_init(worker_function _wf);
 
-
-int main(int argc, char* argv[]) 
+int main(int argc, char ** argv) 
 {
 #if 1
+
 	#ifdef __WIN32__
 		// system("cls");
 		// system("tasklist /nh | find /i \"mysqld.exe\"");
@@ -90,8 +83,8 @@ int main(int argc, char* argv[])
     mdb();
     ws();
 
-    server_init();
-    server_start();
+    container_init();
+    container_start();
 
 
     // 平滑退出时做相应的清理工作

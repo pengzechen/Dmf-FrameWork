@@ -9,6 +9,7 @@
 #include <jansson/jansson.h>
 #include <pcre/pcre.h>
 #endif
+#define OVECCOUNT 30 /* should be a multiple of 3 */
 
 int pcre_test() 
 {
