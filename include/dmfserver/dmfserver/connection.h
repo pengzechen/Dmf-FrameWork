@@ -66,6 +66,9 @@ typedef struct _connection_t {
 extern "C" {
 #endif
 
+
+
+
 extern connection_tp 
 new_connection ();
 

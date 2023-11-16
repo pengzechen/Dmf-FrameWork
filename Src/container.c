@@ -24,10 +24,6 @@
 server_t g_server;
 _Atomic int all = 0;
 
-
-#define SERVER_MPOOL_NUM 8192
-
-
 static SSL_CTX * get_ssl_ctx()
 {
     SSL_CTX * ctx ;
@@ -280,7 +276,6 @@ DWORD WINAPI iocp_handle(LPVOID lpParam)
     return 0;
 }
 
-
 int iocp_container_make() 
 {
 
@@ -353,7 +348,6 @@ int iocp_container_make()
     
     return 0;
 }
-
 
 #endif // WIN32
 
