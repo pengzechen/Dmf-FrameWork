@@ -1,0 +1,68 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+}
+fieldset, img {
+	border: 0;
+}
+address, caption, cite, code, dfn, em, th, var {
+	font-style: normal;
+	font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+caption, th {
+	text-align: left;
+}
+q:before, q:after {
+	content: '';
+}
+abbr, acronym {
+	border: 0;
+}
+/*通用父子盒子嵌套浮动问题解决，开始*/
+.clear {
+	margin: 0px auto;
+	width: 100%;
+	height: 1px;
+	font-size: 1px;
+	clear: both;
+	background: none;
+	overflow: hidden;
+}
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+/*通用父子盒子嵌套浮动问题解决，结束*/
+/*间隙层开始*/
+.space_hx { /*横向间隙*/
+	clear: both;
+	width: 100%;
+	height: 20px;
+	font-size: 1px;
+	overflow: hidden;
+}
+.space_zx { /*纵向间隙*/
+	float: left;
+	width: 10px;
+	font-size: 1px;
+	overflow: hidden;
+}
+/*间隙层结束*/

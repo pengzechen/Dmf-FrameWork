@@ -1,0 +1,194 @@
+@media screen and (max-width:1200px){
+.header .head,.banner,.i_ma,.i_mb,.friend,.fn_bg .f_nav,.scd{width:960px;}
+.head .nav_m{ width:615px; margin-left:0;}
+.head .nav li a{ padding:0 9px;}
+.er_m .hx i{ left:215px;}
+.i_ma ul li{ margin-right:10px;}
+.i_ma ul li,.i_ma ul li a{ width:149px; height:149px;}
+.i_ma ul li img{ width:72px; height:48px; margin-top:15px;}
+.i_ma ul li h6{ height:40px; line-height:40px;}
+.i_mb .i_mbl{ width:268px;}
+.i_mbl .b_head span, .i_mbr .b_head span{ margin-left:10px;}
+.i_mbl ul li p{ margin-left:28px;}
+.i_mbl ul li:hover{ background-position:10px center;}
+.i_mb .i_mbc{ margin-left:10px;}
+.i_mb .i_mbr{ width:240px;}
+.i_mb .i_mbc{ width:428px;}
+.i_mbc1 dl{ width:325px;}
+.i_mbc1 dl dt{ margin-left:10px;}
+.i_mbc1 dl dd{ width:200px;}
+.i_mbc1 dl dd .m_search{ width:180px;}
+.i_mbc1 dl dd .m_search input[type="text"]{ width:140px;}
+.i_mbc .i_mbc1 .sq,.i_mbc .i_mbc1 .sq a{ width:102px;}
+.i_mbc ul li,.i_mbc ul li a{ width:142px;}
+.i_mbc ul li img{ margin-right:5px;}
+.header .head .head_r{ width:755px;}
+.join_a dd,.join_a dt,.news .news_l,.news .news_r,.mainPhoto,.mainPhoto .go li{ width:465px;}
+.join_b li{ margin-right:10px; margin-bottom:10px;}
+.join_b li,.join_b li img{ width:149px; height:100px;}
+.news .n_m .title p{ width:355px;}
+.mainPhoto .go li .tu, .mainPhoto .go li .tu img{ width:465px; height:249px;}
+.mainPhoto .go li .n_m .title{ width:415px;}
+.mainPhoto .n_m .title p{ width:315px;}
+.mainPhoto .n_m .des{ width:420px;}
+.scd_m .scd_ml{ width:650px; padding-right:30px;}
+.scd_m .scd_ml .ctn .des p{ width:620px;}
+.join_d li{ width:470px;}
+.join_d li .tu,.join_d li .tu img{ width:470px; height:333px;}
+.join_d li .wen{ top:263px;}
+.join_d li .wen .title{ width:400px; height:70px; line-height:70px;}
+.join_d li .wen .des{ width:400px; padding:18px 0;}
+.book li .li_r{ width:800px;}
+}
+@media screen and (max-width:990px){
+.header .head,.banner,.i_ma,.i_mb,.friend,.fn_bg .f_nav,.scd{width:740px;}
+.fn_bg .f_nav li{ margin:0 10px 25px;}
+.head .search{ margin-top:20px;}
+.header .head .head_r{ width:545px;}
+.head .nav_m{ width:100%;}
+.nav_m .er_m{ display:none !important;}
+.nav_m .n_icon{ display:block;}
+.head .nav{ position:absolute; width:740px; height:30px; right:0; top:51px; text-align:right; background:rgba(0,0,0,0.7); display:none; z-index:9999;}
+.head .nav li a{ margin-top:6px;}
+.head .nav li{ height:30px;}
+.i_ma ul li, .i_ma ul li a{ width:205px; height:180px;}
+.i_ma ul li{ margin:0 19px 20px;}
+.i_ma ul li img{ width:91px; height:60px; margin-top:25px;}
+.i_mb .i_mbl{ width:378px; margin-left:19px;}
+.i_mb .i_mbr{ width:280px; margin-right:22px;}
+.i_mb .i_mbc{ width:702px; margin-left:19px; margin-top:35px;}
+.i_mbc ul li, .i_mbc ul li a{ width:233px;}
+.i_mbc1 dl{ width:599px;}
+.i_mbc1 dl dd .m_search{ width:440px;}
+.i_mbc1 dl dd .m_search input[type="text"]{ width:400px;}
+.scd .scd_top .s_nav{ width:60%;}
+.scd .scd_top .pst{ width:40%;}
+.join_a dd,.join_a dt,.news .news_l,.news .news_r,.mainPhoto,.mainPhoto .go li{ width:355px;}
+.join_b li,.join_b li img{ width:168px; height:113px;}
+.join_b li{ margin:7px !important;}
+.news .n_m .title p{ width:255px;}
+.scd .news .scd_top .pst{ width:60%;}
+.news .n_m{ padding-bottom:15px; margin-bottom:15px;}
+.mainPhoto .go li .tu, .mainPhoto .go li .tu img{ width:355px; height:190px;}
+.mainPhoto span.goleft, .mainPhoto span.goright{ margin-top:-75px;}
+.mainPhoto .go li .n_m .title{ width:325px; padding:20px 15px 5px;}
+.mainPhoto .n_m .title p{ width:230px;}
+.mainPhoto .n_m .title p a{ font-size:16px;}
+.mainPhoto .n_m .des{ width:335px; margin-left:15px;}
+.mainPhoto{ height:372px;}
+.scd_m .scd_ml{ width:455px; padding-right:20px;}
+.scd_m .scd_ml .ctn .des p{ width:415px;}
+.scd_m .scd_ml .time .font{ width:100%; text-align:left; position:static; margin-top:10px;}
+.scd_m .scd_ml .time{ height:auto;}
+.scd .scd_top .s_nav{ width:100%;}
+.scd .scd_top{ margin-bottom:50px;}
+.scd .scd_top .pst{ width:100%; text-align:left; border-bottom:1px dashed #ddd; top:45px;}
+.scd .scd_top .s_nav a span{ font-size:16px;}
+.scd .scd_top .s_nav a{ margin-right:25px;}
+.join_d li{ width:360px;}
+.join_d li .tu,.join_d li .tu img{ width:360px; height:255px;}
+.join_d li .wen{ top:200px;}
+.join_d li .wen .title{ width:330px; height:55px; line-height:55px;}
+.join_d li .wen .des{ width:330px; padding:10px 0; height:155px;}
+.join_d li .wen .des p{ font-size:14px;}
+.book li .li_r{ width:600px;}
+}
+@media screen and (max-width:770px) {
+.header .head,.banner,.i_ma,.i_mb,.friend,.fn_bg .f_nav,.scd{width:480px;}
+.header .head .head_r{ width:280px;}
+.head .nav{ width:100px; height:auto;}
+.head .nav li{ width:100%; height:30px; line-height:30px; border:0;}
+.head .nav li a{ width:90%; padding:0 5%; text-align:center; border:0;}
+.i_ma ul li, .i_ma ul li a{ width:148px; height:148px;}
+.i_ma ul li{ margin:0 5px 15px;}
+.i_ma ul li img{ width:72px; height:48px; margin-top:15px;}
+.i_mb .i_mbl{ width:265px; margin-left:5px;}
+.i_mb .i_mbr{ width:193px; margin-right:5px;}
+.tabBox .tabCont .videoRow-box,.videoImg img{ width:183px; height:106px;}
+.tabBox .tabNav li{ padding:0 10px;}
+.tabBox .tabNav{ bottom:20px;}
+.i_mb .i_mbc{ width:470px; margin-left:5px;}
+.i_mbc1 dl{ width:367px;}
+.i_mbc1 dl dd .m_search{ width:215px;}
+.i_mbc1 dl dd .m_search input[type="text"]{ width:170px;}
+.i_mbc ul li, .i_mbc ul li a{ width:156px;}
+.fn_bg .f_nav{ text-align:left;}
+.fn_bg .f_nav li{ margin:0 35px 25px 0;}
+.join_a dd,.join_a dt,.news .news_l,.news .news_r,.mainPhoto{ width:100%;}
+.mainPhoto .go li{ width:480px;}
+.join_c a{ width:223px; margin-right:10px; margin-bottom:20px;}
+.join_c a img{ margin:18px 15px 18px 20px;}
+.join_b li,.join_b li img{ width:149px; height:100px;}
+.join_b li{ margin:4px !important;}
+.scd .news .scd_top .pst{ width:100%;}
+.scd .news_r .scd_top{ margin-bottom:0;}
+.mainPhoto .go li .tu, .mainPhoto .go li .tu img{ width:480px; height:256px;}
+.news .n_m .title p{ width:365px;}
+.mainPhoto .n_m .title p{ width:325px;}
+.mainPhoto .go li .n_m .title{ width:450px;}
+.mainPhoto .n_m .des{ width:455px;}
+.scd_m .scd_ml,.scd_m .scd_mr{ width:100%; padding:0; float:none; border:0;}
+.scd_m .scd_mr{ margin-top:30px;}
+.scd_m .scd_ml h1{ padding:20px 0;}
+.scd_m .scd_ml .ctn .des p{ width:450px;}
+.scd .scd_top .s_nav a{ width:80px; margin-right:5px;}
+.join_d li{ width:480px; margin-right:0;}
+.join_d li .tu,.join_d li .tu img{ width:480px; height:340px;}
+.join_d li .wen{ top:265px;}
+.join_d li .wen .title{ width:400px; height:75px; line-height:75px;}
+.join_d li .wen .des{ width:400px; padding:20px 0; height:155px;}
+.join_d li .wen .des p{ font-size:14px;}
+.invite th,.invite td{ width:auto !important;}
+.attrct li .name,.attrct li .des{ padding-left:30px; background-position:3px;}
+.attrct li .des{ background-position:3px top;}
+.book li{ line-height:175%;}
+.book li .title{ width:100%; text-align:left;}
+.book li .li_r{ width:100%; margin-left:0;}
+.book li .li_r .chang{ width:460px;}
+}
+@media screen and (max-width:510px) {
+.header .head,.banner,.i_ma,.i_mb,.friend,.fn_bg .f_nav,.scd{width:320px;}
+.head .logo img,.head .logo{ width:154px; height:42px;}
+.head .logo{ margin-top:23px;}
+.header .head .head_r{ width:150px;}
+.head .nav{ width:100px;}
+.head .nav li a{ text-align:center;}
+.i_mb .i_mbl{ width:308px;}
+.i_mb .i_mbr{ width:308px; margin-top:35px;}
+.tabBox .tabNav{ bottom:0;}
+.tabBox .tabCont .videoRow-box, .videoImg img{ width:224px; height:130px;}
+.i_mb .i_mbc{ width:310px; height:auto;}
+.i_mbc .i_mbc1 .sq, .i_mbc .i_mbc1 .sq a{ width:59px;}
+.i_mbc .i_mbc1 .sq a{ line-height:19px; height:58px; width:39px; padding:20px 10px;}
+.i_mbc1 dl{ width:250px;}
+.i_mbc1 dl dd{ width:130px;}
+.i_mbc1 dl dd .m_search{ width:125px; margin-left:0;}
+.i_mbc1 dl dd .m_search input[type="text"]{ width:90px;}
+.i_mbc ul li, .i_mbc ul li a{ width:102px; height:101px;}
+.i_mbc ul li span{ margin-top:0;}
+.scd .scd_top .s_nav a{ margin-right:0;}
+.scd .scd_top .s_nav a span{ font-size:14px;}
+.news .n_m .title p{ width:215px;}
+.pages a{ margin:0 2px;}
+.mainPhoto .go li .tu, .mainPhoto .go li .tu img{ width:320px; height:170px;}
+.mainPhoto .n_m .des{ width:300px;}
+.mainPhoto{ height:292px;}
+.scd_m .scd_ml .ctn .des p{ width:300px;}
+.mainPhoto .go li{ width:320px;}
+.join_d li{ width:320px; margin-right:0;}
+.join_d li .tu,.join_d li .tu img{ width:320px; height:226px;}
+.join_d li .wen{ top:0;}
+.join_d li .wen .title{ width:300px; height:55px; line-height:55px;}
+.join_d li .wen .des{ width:300px; padding:10px 0; height:155px;}
+.join_d li .wen .des p{ font-size:14px;}
+.scd .scd_top{ margin-bottom:0;}
+.scd .scd_top .s_nav,.scd .scd_top{ height:auto;}
+.scd .scd_top .pst{ position:static; border:0; border-top:1px dashed #ddd;}
+.invite table{ display:none;}
+.invite .zp{ display:block;}
+.attrct li .name,.attrct li .des{ width:290px; font-size:13px;}
+.attrct li .name a{ font-size:14px;}
+.attrct li .des p{ font-size:13px;}
+.book li{ font-size:14px;}
+.book li .li_r input,.book li .li_r .chang{ width:318px;}
+}
