@@ -85,27 +85,21 @@ void router_handle(connection_tp conn, request_t *req)
 		
 		if( strcmp(req->path, g_cmp.keys[i]) == 0) {
 			func_view = g_cmp.cf[i];
-
 			func_view(conn, req);
-			
-			flag = 1;	// 回调函数找到了
+			return;	// 回调函数找到了
+		}
+	}
+
+	// char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
+	// int num = search_local_file(local_path);
+	for(int i=0; i <= g_num_files; i++) {
+		if( strcmp(req->path, g_file_list[i].url) == 0) {
+			res_static(conn, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
+			return;	// 静态资源找到了
 		}
 	}
 	
-	if(flag == 0) {
-	
-		// char* local_path[ STATIC_FILES_MAX_NUM ] = {NULL};
-		// int num = search_local_file(local_path);
-		for(int i=0; i <= g_num_files; i++) {
-			if( strcmp(req->path, g_file_list[i].url) == 0) {
-				res_static(conn, g_file_list[i].path, g_file_list[i].size, g_file_list[i].ext, g_file_list[i].content_type);
-				flag = 1;	// 静态资源找到了
-			}
-		}
-		if(flag == 0){	
-			res_notfound(conn);   // 返回404Not Found
-		}
-	}
+	res_notfound(conn);   // 返回404Not Found
 }
 
 

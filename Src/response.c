@@ -191,8 +191,7 @@ extern void res_parse_send(response_t* res)
 // 以下是静态文件响应函数
 // *************************************************************************
 
-extern void res_static(connection_tp conn, char* path, unsigned int size, 
-						char* ext, char* content_type) 
+extern void res_static(connection_tp conn, char* path, unsigned int size, char* ext, char* content_type) 
 {
 	// int acceptFd = conn->per_handle_data->Socket;
 	if(size > 1024*1024*1) {			//  文件大于 1Mb 调用文件handle

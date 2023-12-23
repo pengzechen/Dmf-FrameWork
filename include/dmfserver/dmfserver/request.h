@@ -98,16 +98,16 @@ struct http_body_t {
 
 
 struct req {
-	char 			method		[ HTTP_METHOD_MAX ];
-	char 			path		[ HTTP_URI_MAX];
-	char 			protocol	[ HTTP_PROTOCOL_MAX ];
+	char 			method		[ HTTP_METHOD_MAX  ];
+	char 			path		[ HTTP_URI_MAX     ];
+	char 			protocol	[ HTTP_PROTOCOL_MAX];
 	char 			version		[ HTTP_VERSION_MAX ];
 	hashmap_tp     query;
 	hashmap_tp     params;
 	struct http_body_t 		body;
 
 	int 			multi_part_num;
-	struct Multipart * multi[ MULTI_PART_MAX_NUM ];
+	struct Multipart * multi    [ MULTI_PART_MAX_NUM];
 };
 
 typedef struct req request_t;

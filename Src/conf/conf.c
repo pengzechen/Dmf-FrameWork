@@ -85,7 +85,7 @@ void conf_init()
     xmlFreeDoc(doc);
 
 
-    g_server_conf_all._conf_server.port = 80;
+    g_server_conf_all._conf_server.port = 8080;
     strcpy(g_server_conf_all._conf_server.host, "localhost");
     strcpy(g_server_conf_all._conf_server.cert_public, "./cert/localhost.pem");
     strcpy(g_server_conf_all._conf_server.cert_private, "./cert/localhost-key.pem");

@@ -20,7 +20,7 @@
 #define __CFG_INCLUDE__
 
 
-#define __SERVER_MPOOL__		// 启用server内存池
+// #define __SERVER_MPOOL__		// 启用server内存池
 
 #ifdef __SERVER_MPOOL__
 #define SERVER_MPOOL_NUM 8192

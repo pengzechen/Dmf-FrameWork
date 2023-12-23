@@ -269,7 +269,6 @@ DWORD WINAPI iocp_handle(LPVOID lpParam)
             *在view函数中必须调用response模块进行返回
             */
         router_handle(conn_ptr, conn_ptr->req);
-        
 
     }
 
